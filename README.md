@@ -18,3 +18,5 @@ Kontakt pochodzi z aktualnej korespondencji Sandry Białkowskiej, profil Instagr
 
 ## Hero — bieżący krok
 Nowy hero zajmuje pierwszy ekran. Wycentrowany kadr wnętrza, animowane cienie, dwa przyciski po lewej i hasło przy lewej dolnej krawędzi. Zgodnie z nowym wycinkiem briefu tylko hero używa Playfair Display + Manrope bez kursywy. Style tego kroku: dist/hero.css. Pozostałe sekcje pozostają do dalszej osobnej pracy.
+
+Aktualizacja hero: oryginalne logo u góry, hasło nad przyciskami, przyciski bez strzałek. Usunięto animowaną kopię fotografii; porusza się wyłącznie tekstura cienia, zdjęcie pozostaje nieruchome.

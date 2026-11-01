@@ -7,3 +7,5 @@ Wszystkie obrazy zapisano jako WebP w `dist/assets/`. Zastosowane jako materiał
 - `bathroom-v2.webp`: kadr łazienki według sekcji porównania na makiecie. Wisząca gruba umywalka trawertynowa, czarny dozownik, ciemna armatura, lustro, jasny brązowy kamień po lewej, ciemny marmur i natrysk po prawej, orzechowy detal. Miękkie światło z lewej, bez tekstu, UI, roślin i ludzi.
 - `books-v2.webp`: fotografia trzech poziomo ułożonych książek taupe na kamiennym biurku, płyta kamienna po lewej, fragment srebrnego laptopa po prawej. Tytuły na grzbietach: pCon.planner, Poradnik Projektanta, Zrozum wnętrza. Matowe płótno, naturalne światło, żadnych unoszących się lub ukośnych okładek i ozdobnej grafiki.
 - `shadow.webp`: tekstura z https://github.com/jakubskrzypiec/mothiform/blob/main/assets/shadow-texture-v6.png. Animowana tylko jako dekoracyjny cień w koncepcyjnym detalu.
+
+- logo-white.svg: oryginalny PNG dostarczony przez użytkownika, osadzony bez przerysowywania w masce luminancji SVG. Czarne tło jest przezroczyste, obszar dopasowano do granic znaku i napisów. Nie użyto wygenerowanego przerysowania logo.
