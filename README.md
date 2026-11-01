@@ -31,3 +31,7 @@ Portfolio ma trzy puste kadry z logo widocznym po najechaniu lub fokusie klawiat
 ## Ruch i social media
 Kwadratowa karuzela projektów płynie w pętli bez strzałek. Cienie hero i przerywnika mają mocniejszy ruch; liście są przycięte do okna fotografii. Usunięto porównanie wizualizacja–realizacja. Pod kontaktem dodano sekcję Instagram z odnośnikiem do @dobry.uklad. Preferencja ograniczenia animacji wyłącza ruch.
 
+
+## Układ zgodny ze screenem briefu — 02.11.2026
+Dodano dokładny podtytuł hero i przejście do opisu studia. Sekcja studia jest krótsza, portfolio ma duże asymetryczne miejsca na rzeczywiste prace, a po trzech pakietach przywrócono suwak wizualizacja–realizacja. Suwak pokazuje wyraźnie opisane miejsca na parę materiałów, bez fikcyjnego porównania. Bezpośrednio pod nim są cztery miejsca na autentyczne opinie. Trzy kafelki sklepu są mniejsze, jako subtelna zapowiedź materiałów. Zachowano kontakt, social media i czarną stopkę.
+
