@@ -23,3 +23,7 @@ Aktualizacja hero: oryginalne logo u góry, hasło nad przyciskami, przyciski be
 
 ## Sekcje pod hero
 Sekcja O nas: tekst po lewej i podpisane miejsce na zdjęcie studia po prawej. Portfolio: trzy duże kadry i galeria. Dalej pełnoekranowy przerywnik z osobną animacją cienia i CTA, trzy wysokie karty oferty zgodnie z referencją, porównanie, opinie, sklep i kontakt. Style: dist/home.css. Hero zachowano bez zmian. Zdjęcie zespołu, autentyczne opinie i dopasowana para porównania nadal wymagają materiałów studia.
+
+## Aktualizacja: karuzela i kontakt
+Portfolio ma trzy puste kadry z logo widocznym po najechaniu lub fokusie klawiatury. Karuzela obsługuje strzałki i przewijanie dotykowe. Przerywnik jest wyśrodkowany, porównanie poszerzone, sklep ma trzy miejsca na kursy. Formularz na stronie oraz w oknie kontaktu przygotowuje wiadomość mailto; nie ma serwera wysyłającego pocztę. Rozbudowana stopka ma czarne tło.
+
