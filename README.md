@@ -27,3 +27,7 @@ Sekcja O nas: tekst po lewej i podpisane miejsce na zdjęcie studia po prawej. P
 ## Aktualizacja: karuzela i kontakt
 Portfolio ma trzy puste kadry z logo widocznym po najechaniu lub fokusie klawiatury. Karuzela obsługuje strzałki i przewijanie dotykowe. Przerywnik jest wyśrodkowany, porównanie poszerzone, sklep ma trzy miejsca na kursy. Formularz na stronie oraz w oknie kontaktu przygotowuje wiadomość mailto; nie ma serwera wysyłającego pocztę. Rozbudowana stopka ma czarne tło.
 
+
+## Ruch i social media
+Kwadratowa karuzela projektów płynie w pętli bez strzałek. Cienie hero i przerywnika mają mocniejszy ruch; liście są przycięte do okna fotografii. Usunięto porównanie wizualizacja–realizacja. Pod kontaktem dodano sekcję Instagram z odnośnikiem do @dobry.uklad. Preferencja ograniczenia animacji wyłącza ruch.
+
