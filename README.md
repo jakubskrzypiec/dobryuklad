@@ -35,3 +35,7 @@ Kwadratowa karuzela projektów płynie w pętli bez strzałek. Cienie hero i prz
 ## Układ zgodny ze screenem briefu — 02.11.2026
 Dodano dokładny podtytuł hero i przejście do opisu studia. Sekcja studia jest krótsza, portfolio ma duże asymetryczne miejsca na rzeczywiste prace, a po trzech pakietach przywrócono suwak wizualizacja–realizacja. Suwak pokazuje wyraźnie opisane miejsca na parę materiałów, bez fikcyjnego porównania. Bezpośrednio pod nim są cztery miejsca na autentyczne opinie. Trzy kafelki sklepu są mniejsze, jako subtelna zapowiedź materiałów. Zachowano kontakt, social media i czarną stopkę.
 
+
+## Portfolio, kursy i Facebook
+Przywrócono płynącą karuzelę kwadratowych projektów bez strzałek. Kafelki kursów mają duże zdjęcia w proporcji 1:1; na telefonie układają się pionowo. Sekcja social mediów oraz stopka zawierają Instagram i Facebook studia.
+
