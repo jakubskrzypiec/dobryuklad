@@ -15,3 +15,6 @@ Nie dodano fikcyjnych opinii ani fałszywej pary przed/po. Cztery sloty opinii c
 Formularz waliduje dane i przygotowuje wiadomość w aplikacji pocztowej. Sam nie wysyła ani nie zapisuje danych. Rzut i inspiracje można dodać w aplikacji pocztowej. Płatności, koszyk, konta użytkownika, CMS/WordPress i panel administracyjny nie zostały wdrożone w tym etapie. Witryna jest oznaczona noindex.
 
 Kontakt pochodzi z aktualnej korespondencji Sandry Białkowskiej, profil Instagram z obecnej witryny https://studiodobryuklad.pl/. Główne źródła: PDF z 01.11.2026 oraz https://github.com/jakubskrzypiec/mothiform.
+
+## Hero — bieżący krok
+Nowy hero zajmuje pierwszy ekran. Wycentrowany kadr wnętrza, animowane cienie, dwa przyciski po lewej i hasło przy lewej dolnej krawędzi. Zgodnie z nowym wycinkiem briefu tylko hero używa Playfair Display + Manrope bez kursywy. Style tego kroku: dist/hero.css. Pozostałe sekcje pozostają do dalszej osobnej pracy.
