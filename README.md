@@ -20,3 +20,6 @@ Kontakt pochodzi z aktualnej korespondencji Sandry Białkowskiej, profil Instagr
 Nowy hero zajmuje pierwszy ekran. Wycentrowany kadr wnętrza, animowane cienie, dwa przyciski po lewej i hasło przy lewej dolnej krawędzi. Zgodnie z nowym wycinkiem briefu tylko hero używa Playfair Display + Manrope bez kursywy. Style tego kroku: dist/hero.css. Pozostałe sekcje pozostają do dalszej osobnej pracy.
 
 Aktualizacja hero: oryginalne logo u góry, hasło nad przyciskami, przyciski bez strzałek. Usunięto animowaną kopię fotografii; porusza się wyłącznie tekstura cienia, zdjęcie pozostaje nieruchome.
+
+## Sekcje pod hero
+Sekcja O nas: tekst po lewej i podpisane miejsce na zdjęcie studia po prawej. Portfolio: trzy duże kadry i galeria. Dalej pełnoekranowy przerywnik z osobną animacją cienia i CTA, trzy wysokie karty oferty zgodnie z referencją, porównanie, opinie, sklep i kontakt. Style: dist/home.css. Hero zachowano bez zmian. Zdjęcie zespołu, autentyczne opinie i dopasowana para porównania nadal wymagają materiałów studia.

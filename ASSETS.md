@@ -9,3 +9,5 @@ Wszystkie obrazy zapisano jako WebP w `dist/assets/`. Zastosowane jako materiał
 - `shadow.webp`: tekstura z https://github.com/jakubskrzypiec/mothiform/blob/main/assets/shadow-texture-v6.png. Animowana tylko jako dekoracyjny cień w koncepcyjnym detalu.
 
 - logo-white.svg: oryginalny PNG dostarczony przez użytkownika, osadzony bez przerysowywania w masce luminancji SVG. Czarne tło jest przezroczyste, obszar dopasowano do granic znaku i napisów. Nie użyto wygenerowanego przerysowania logo.
+
+- portfolio-divider-v3.webp: przerywnik wygenerowany wbudowanym imagegen. Prompt: szeroka fotografia architektoniczna 2400x1050, neutralna ściana taupe zajmująca lewą część, drzwi po prawej odsłaniające fotel i kamienny postument, orzechowe drewno, grafit, cienie liści z okna, spokojne światło dzienne. Bez napisów, interfejsu, ludzi, roślin i złotych ozdób. Ruch dodano wyłącznie do osobnej tekstury cienia w CSS; architektura pozostaje nieruchoma.
