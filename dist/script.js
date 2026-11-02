@@ -9,4 +9,4 @@ document.querySelectorAll('#contact-form,#contact-form-inline').forEach(form=>fo
 document.querySelectorAll('[data-scope]').forEach(button=>button.addEventListener('click',()=>{document.querySelector('#contact-form [name="scope"]').value=button.dataset.scope;}));
 
 
-document.querySelector('.brief-compare input').addEventListener('input',e=>{e.currentTarget.closest('.brief-compare').style.setProperty('--split',e.currentTarget.value+'%');e.currentTarget.setAttribute('aria-valuetext',e.currentTarget.value+' procent');});
+document.querySelector('.brief-compare input')?.addEventListener('input',e=>{e.currentTarget.closest('.brief-compare').style.setProperty('--split',e.currentTarget.value+'%');e.currentTarget.setAttribute('aria-valuetext',e.currentTarget.value+' procent');});

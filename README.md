@@ -4,6 +4,8 @@ Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
+[Podstrona O nas](https://jakubskrzypiec.github.io/dobryuklad/o-nas.html) — dwa zdjęcia Sandry, trzy zespołowe, osiem portretów i kontakt. Fotografie oraz podpisy portretów czekają na materiały studia.
+
 ## Pliki i publikowanie
 
 Strona znajduje się w katalogu `dist/`. Nie wymaga instalowania zależności ani kompilacji.
