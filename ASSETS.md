@@ -43,3 +43,7 @@ Aktualne kafelki używają ilustracji zamiast fotografii: `dist/assets/offer-fun
 ## Ilustracje zakresów po analizie ofert pracowni
 
 Aktualne pliki kafelków: `dist/assets/offer-functional-scope-v2.webp`, `dist/assets/offer-complete-scope-v2.webp`, `dist/assets/offer-supervision-scope-v2.webp`. Wbudowane image_gen, 1122 × 1402. Tematy: warianty rzutu 2D; komplet dokumentacji, wizualizacja i materiały; sprawdzanie prac z dokumentacją na miejscu realizacji. [Źródła, założenia, ścieżki i pełne prompty](OFFER_VISUAL_RESEARCH.md).
+
+## Zmieniona druga ilustracja i mniejsze kafelki
+
+Drugi kafelek używa teraz `dist/assets/offer-complete-workstation-v3.webp`: stanowisko z wizualizacją i próbkami materiałów, wyraźnie odmienne od rzutu 2D. Wygenerowano wbudowanym image_gen. [Prompt i zapisane ścieżki](IMAGE_PROMPT_OFFER_WORKSTATION.md). Pierwsza i trzecia ilustracja zakresów pozostają bez zmian.
