@@ -43,3 +43,6 @@ Przywrócono płynącą karuzelę kwadratowych projektów bez strzałek. Kafelki
 ## Uspokojenie animacji i dopracowanie detali
 Cienie mają małą amplitudę i cykle 19–21 sekund. Karuzela biegnie od krawędzi do krawędzi ekranu bez maski wygaszającej. Karty oferty mają rysunki architektoniczne oraz czytelne listy zakresu. W social mediach są wyraźne nazwy platform, nowe ikony i brak strzałek.
 
+
+Przywrócono wcześniejszą estetykę i treść kart oferty, bez rysunków i dodatkowych list.
+
