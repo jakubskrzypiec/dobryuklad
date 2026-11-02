@@ -35,3 +35,7 @@ Photorealistic-natural architectural editorial photograph, ultra wide 2.5:1, for
 ## Duże kafelki oferty
 
 Trzy nowe obrazy koncepcyjne, wygenerowane wbudowanym image_gen: `dist/assets/offer-functional-v1.webp`, `dist/assets/offer-complete-v1.webp`, `dist/assets/offer-supervision-v1.webp` (1122 × 1402). Pełne prompty oraz zapisane ścieżki: [IMAGE_PROMPTS_OFFER_CARDS.md](IMAGE_PROMPTS_OFFER_CARDS.md).
+
+## Tematyczne rysunki oferty
+
+Aktualne kafelki używają ilustracji zamiast fotografii: `dist/assets/offer-functional-drawing-v1.webp`, `dist/assets/offer-complete-drawing-v1.webp`, `dist/assets/offer-supervision-drawing-v1.webp`. Wygenerowano wbudowanym image_gen; rozmiar 1122 × 1402. Tematy: układ mieszkania, kompletny projekt wnętrza, detal wykonawczy. [Pełne prompty i ścieżki](IMAGE_PROMPTS_OFFER_DRAWINGS.md). Ilustracje nie stanowią dokumentacji technicznej ani prac studia.
