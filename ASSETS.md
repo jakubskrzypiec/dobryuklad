@@ -59,3 +59,6 @@ Drugi kafelek używa teraz `dist/assets/offer-complete-workstation-v3.webp`: sta
 ## Realistyczniejsze wnętrze i fotograficzny finał
 
 `dist/assets/interior-marble-v2.webp`, `dist/assets/interior-floor-v2.webp`, `dist/assets/interior-linen-v2.webp` — mapy marmuru, podłogi i tapicerki 1024 × 1024, wygenerowane wbudowanym image_gen. [Prompty i pliki źródłowe](IMAGE_PROMPTS_INTERIOR_REALISM.md). Kamera kończy na kadrze dopasowanym kompozycyjnie do istniejącego hero, a przenikanie odsłania jego oryginalną fotografię i treść.
+
+## Aktualny finał spaceru
+Od wersji room-3 hero w wejscie.html pozostaje sceną 3D. Usunięto obraz hero-v2.webp z tej sekcji; jego użycie na standardowej stronie głównej pozostaje bez zmian. Detale narzuty i zasłony to autorska geometria, bez nowych obrazów.

@@ -1,14 +1,15 @@
-/* A physical walkthrough ends in the unchanged, photographic homepage hero. */
+/* One continuous 3D scene; hero copy appears after the camera stops. */
 .walkthrough-sequence{position:relative;background:#211d17}
 .walkthrough-stage{position:relative;height:100svh;min-height:620px;overflow:hidden;isolation:isolate;background:#211d17;color:#fff}
 .walkthrough-canvas{position:absolute;inset:0;z-index:-2}.walkthrough-canvas canvas{display:block;width:100%;height:100%}
 .walkthrough-stage:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(180deg,#100c0766,transparent 25%,transparent 70%,#100c0755)}
 .walkthrough-final{position:absolute;inset:0;z-index:2;opacity:1}
-.walkthrough-final .hero.hero-v3{position:absolute;inset:0;height:100%;min-height:0;width:100%}
+.walkthrough-final .hero.hero-v3{position:absolute;inset:0;height:100%;min-height:0;width:100%;background:transparent}
+.walkthrough-final .hero.hero-v3:after{display:none}
 .walkthrough-active .walkthrough-final{opacity:var(--hero-reveal,0);will-change:opacity}
 .walkthrough-active .walkthrough-final[inert]{pointer-events:none}
 .walkthrough-active .header{position:fixed;will-change:transform}.walkthrough-active.menu-open .header{transform:none!important}
-.walkthrough-active .walkthrough-sequence{height:520svh}.walkthrough-active .walkthrough-stage{position:sticky;top:0;min-height:0}
+.walkthrough-active .walkthrough-sequence{height:1150svh}.walkthrough-active .walkthrough-stage{position:sticky;top:0;min-height:0}
 .walkthrough-caption,.walkthrough-guide,.walkthrough-classic{display:none}
 .walkthrough-active .walkthrough-caption{display:block;position:absolute;left:6.5%;bottom:10%;z-index:3;font:500 10px/1.8 'Manrope',Arial,sans-serif;letter-spacing:.12em;pointer-events:none}
 .walkthrough-active .walkthrough-guide{display:block;position:absolute;left:50%;bottom:4%;transform:translateX(-50%);z-index:3;text-align:center;font:500 11px/1.8 'Manrope',Arial,sans-serif;letter-spacing:.02em;white-space:nowrap}
@@ -18,7 +19,7 @@
 .walkthrough-loading{position:absolute;top:50%;left:50%;z-index:4;transform:translate(-50%,-50%);background:#25231fd9;padding:14px 25px;font:400 14px/1.8 'Manrope',Arial,sans-serif}.walkthrough-loading[hidden]{display:none}
 .walkthrough-stage.is-hero .walkthrough-caption,.walkthrough-stage.is-hero .walkthrough-guide,.walkthrough-stage.is-hero .walkthrough-classic{display:none}
 .walkthrough-stage button:focus-visible,.walkthrough-stage a:focus-visible{outline:2px solid #f3e9dc;outline-offset:5px}
-@media(max-width:760px){.walkthrough-active .walkthrough-sequence{height:400svh}.walkthrough-stage{min-height:560px}.walkthrough-active .walkthrough-stage{min-height:0}.walkthrough-active .walkthrough-caption{left:7%;bottom:16%;font-size:9px}.walkthrough-active .walkthrough-guide{font-size:10px;bottom:9%;width:90%;max-width:90%;white-space:normal}.walkthrough-guide progress{margin-top:9px;width:130px}.walkthrough-active .walkthrough-classic{left:7%;font-size:10px;bottom:3%}.walkthrough-skip:not([hidden]){right:7%;bottom:2%;font-size:11px}}
+@media(max-width:760px){.walkthrough-active .walkthrough-sequence{height:950svh}.walkthrough-stage{min-height:560px}.walkthrough-active .walkthrough-stage{min-height:0}.walkthrough-active .walkthrough-caption{left:7%;bottom:16%;font-size:9px}.walkthrough-active .walkthrough-guide{font-size:10px;bottom:9%;width:90%;max-width:90%;white-space:normal}.walkthrough-guide progress{margin-top:9px;width:130px}.walkthrough-active .walkthrough-classic{left:7%;font-size:10px;bottom:3%}.walkthrough-skip:not([hidden]){right:7%;bottom:2%;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.walkthrough-active .walkthrough-sequence{height:100svh}.walkthrough-active .walkthrough-stage{position:relative}.walkthrough-caption,.walkthrough-guide,.walkthrough-skip,.walkthrough-classic{display:none!important}.walkthrough-final{opacity:1!important}.walkthrough-active .header{position:absolute;transform:none!important}}
 @media print{.walkthrough-active .walkthrough-sequence{height:auto}.walkthrough-active .walkthrough-stage{position:relative}.walkthrough-final{opacity:1!important}.walkthrough-active .header{position:absolute;transform:none!important}.walkthrough-caption,.walkthrough-guide,.walkthrough-skip,.walkthrough-classic{display:none!important}}
 

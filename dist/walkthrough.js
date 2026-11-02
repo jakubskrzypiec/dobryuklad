@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {createInterior} from './interior-scene.js';
-import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js';
+import {createInterior} from './interior-scene.js?v=room-3';
+import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=room-3';
 import {EffectComposer} from './vendor/three/postprocessing/EffectComposer.js';
 import {RenderPass} from './vendor/three/postprocessing/RenderPass.js';
 import {SSAOPass} from './vendor/three/postprocessing/SSAOPass.js';
@@ -9,8 +9,10 @@ import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';
 const sequence=document.querySelector('.walkthrough-sequence'),stage=sequence.querySelector('.walkthrough-stage'),container=stage.querySelector('.walkthrough-canvas'),final=stage.querySelector('.walkthrough-final'),status=stage.querySelector('.walkthrough-loading'),header=document.querySelector('.header'),skip=stage.querySelector('.walkthrough-skip'),progress=stage.querySelector('progress');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
 let renderer,scene,camera,composer,ao,raf=0,target=0,current=0,last=0,visible=true,ready=false,range=1,origin=0;
-const route=new THREE.CatmullRomCurve3([[3.8,1.62,11.0],[3.8,1.6,8.8],[3.75,1.55,6.6],[2.25,1.48,4.7],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.12);
-const gaze=new THREE.CatmullRomCurve3([[3.8,1.4,-2],[3.5,1.4,-2.4],[1.8,1.4,-2.5],[.4,1.4,-2.1],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.12);
+// Slow entry, a window-side arc, a look back across the lounge, then the final hero.
+const route=new THREE.CatmullRomCurve3([[3.8,1.62,11],[3.8,1.6,8.5],[3.8,1.57,6.6],[3.5,1.52,4.7],[1.2,1.48,3.55],[-2.0,1.48,3.35],[-4.9,1.5,2.9],[-5.05,1.54,-.5],[-4.8,1.55,-3.35],[-2,1.53,-3.5],[.65,1.51,-3.35],[.85,1.47,-.25],[1.15,1.44,2.65],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.1);
+const gaze=new THREE.CatmullRomCurve3([[3.8,1.4,-2],[3.6,1.4,-2],[2.7,1.35,-2.1],[1.3,1.15,-1.6],[-.6,1,-.7],[-1.1,.95,-.4],[-1,.95,-.35],[-.5,1.1,-1.7],[1.7,1.3,-2.7],[2.7,1.15,-2.5],[-1.5,1,-.4],[-2,.9,.3],[.25,1.2,-2],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.1);
+// Use the same route parameter for position and gaze so every turn has its intended target.
 function revealHero(alpha){
  stage.style.setProperty('--hero-reveal',alpha.toFixed(4));stage.style.setProperty('--tour-ui',Math.max(0,1-alpha*2).toFixed(4));
  stage.querySelector('.walkthrough-classic').inert=alpha>.4;
@@ -21,6 +23,7 @@ function staticHero(){
  const wasVisible=document.body.classList.contains('walkthrough-active')&&stage.getBoundingClientRect().top<=0&&stage.getBoundingClientRect().bottom>0;
  document.body.classList.remove('walkthrough-active');revealHero(1);skip.hidden=true;status.hidden=true;
  header.style.removeProperty('transform');header.inert=false;stage.dataset.phase='hero';
+ if(ready){current=target=1;resize();request();}
  if(wasVisible)scrollTo({top:origin,behavior:'instant'});
 }
 function scrollState(){
@@ -38,26 +41,24 @@ function resize(){
  camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();scrollState();
 }
 function render(time){
- raf=0;if(!ready||!visible||document.hidden||reduce.matches)return;
+ raf=0;if(!ready||!visible||document.hidden)return;
  const dt=Math.min((time-last)/1000||.016,.05);last=time;current+=(target-current)*(1-Math.exp(-dt*10));if(Math.abs(target-current)<.0002)current=target;
- const phase=walkthroughPhases(current);camera.position.copy(route.getPointAt(phase.travel));camera.lookAt(gaze.getPointAt(phase.travel));
+ const phase=walkthroughPhases(current);camera.position.copy(route.getPoint(phase.travel));camera.lookAt(gaze.getPoint(phase.travel));
  camera.fov=THREE.MathUtils.lerp(innerWidth<760?78:60,52,phase.travel);camera.updateProjectionMatrix();
  revealHero(phase.hero);
- // Once the photograph is fully opaque the GPU no longer renders the hidden scene.
- if(phase.hero<.999)composer.render();
+ // Render the same room at the final pose; no photograph replaces the model.
+ composer.render();
  stage.dataset.cameraProgress=current.toFixed(4);stage.dataset.cameraTravel=phase.travel.toFixed(4);stage.dataset.heroOpacity=phase.hero.toFixed(4);stage.dataset.cameraPosition=camera.position.toArray().map(n=>n.toFixed(3)).join(',');stage.dataset.phase=phase.hold?'hero':phase.hero>0?'blend':'walk';
  if(current!==target)request();
 }
-function request(){if(ready&&visible&&!document.hidden&&!reduce.matches&&!raf)raf=requestAnimationFrame(render);}
+function request(){if(ready&&visible&&!document.hidden&&!raf)raf=requestAnimationFrame(render);}
 function mode(){if(reduce.matches){if(raf)cancelAnimationFrame(raf);raf=0;staticHero();}else if(ready){document.body.classList.add('walkthrough-active');resize();}else boot();}
 function fail(error){ready=false;if(raf)cancelAnimationFrame(raf);raf=0;staticHero();if(error)console.error('Interior preview could not start:',error);}
 let booting=false;
 async function boot(){
- if(booting||ready)return;if(reduce.matches){staticHero();return;}booting=true;
+ if(booting||ready)return;booting=true;
  try{
-  // Decode the exact final photograph before showing the 3D entry.
-  await final.querySelector('.hero-photo').decode().catch(()=>{});
-  renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+  renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;renderer.domElement.setAttribute('aria-hidden','true');container.replaceChildren(renderer.domElement);
   camera=new THREE.PerspectiveCamera(60,1,.06,70);const interior=await createInterior();scene=interior.scene;
   // Capture the actual room for coloured, rough reflections instead of a white studio preset.
@@ -70,6 +71,6 @@ async function boot(){
  }catch(error){fail(error);}finally{booting=false;}
 }
 skip.addEventListener('click',()=>{if(!ready)return;current=target=HERO_STOP;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();});
-final.addEventListener('focusin',()=>{if(ready&&!reduce.matches&&current<.81){current=target=HERO_STOP;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();}});
+final.addEventListener('focusin',()=>{if(ready&&!reduce.matches&&current<.945){current=target=HERO_STOP;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();}});
 addEventListener('scroll',scrollState,{passive:true});addEventListener('resize',resize,{passive:true});addEventListener('pageshow',resize);document.addEventListener('visibilitychange',()=>{last=0;request();});reduce.addEventListener('change',mode);
 await boot();
