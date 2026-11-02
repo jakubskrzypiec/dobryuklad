@@ -31,3 +31,7 @@ Prompty końcowe:
 Prompt końcowy:
 
 Photorealistic-natural architectural editorial photograph, ultra wide 2.5:1, for a high-end Polish interior studio contact banner. A quiet sculptural limestone staircase ascending on the far left, matte dark taupe plaster wall occupying the calm center and right, slim walnut doorway at the far right and restrained soft daylight with broad window shadows falling over stone steps. Contemporary European interior, tactile real honed stone and matte plaster, rigorous straight verticals, sophisticated understated magazine photography. Palette graphite, neutral taupe, off-white stone and dark walnut. Keep the center visually uncluttered and dark enough for centered white HTML title to be added later. No furniture, no vases, no plants, no people, no text, no logo, no UI, no orange or golden cast. New conceptual interior, not a real client project.
+
+## Duże kafelki oferty
+
+Trzy nowe obrazy koncepcyjne, wygenerowane wbudowanym image_gen: `dist/assets/offer-functional-v1.webp`, `dist/assets/offer-complete-v1.webp`, `dist/assets/offer-supervision-v1.webp` (1122 × 1402). Pełne prompty oraz zapisane ścieżki: [IMAGE_PROMPTS_OFFER_CARDS.md](IMAGE_PROMPTS_OFFER_CARDS.md).

@@ -37,3 +37,20 @@
 }
 /* Keep visually hidden table labels inside its own scrolling area. */
 .offer-table-scroll{position:relative;min-width:0;max-width:100%}
+/* Large photographic service cards, with the same brand typefaces. */
+.offer-packages-section{padding:85px 3% 75px}.offer-section-heading{display:block;margin-bottom:42px}.offer-section-heading h2{margin:0}.offer-packages{gap:24px}
+.offer-package{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:650px;height:clamp(650px,43vw,800px);overflow:hidden;background:#25211d;color:#fff}
+.offer-package>img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:center;z-index:-2;transition:transform .8s ease}.offer-package:first-child>img,.offer-package:nth-child(3)>img{object-position:center}
+.offer-package:after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#1111 0%,#1112 25%,#111b 61%,#080808ed 100%);pointer-events:none}
+.offer-package>.package-number{position:absolute;left:28px;right:auto;top:28px;font:500 10px/1.6 var(--sans);letter-spacing:.1em;color:#fff}
+.package-copy{padding:170px 28px 25px;display:flex;flex-direction:column}.package-tag{font:400 10px/1.8 var(--sans);color:#eee7df;margin-bottom:17px}.package-copy>h3{font:400 clamp(29px,2.7vw,44px)/1.13 var(--serif);letter-spacing:-.04em;color:#fff;max-width:450px;text-wrap:balance}
+.package-copy>.package-description{font-size:13px;line-height:1.9;color:#f0ebe5;margin-top:20px;min-height:115px;max-width:450px}
+.package-contact{display:block;border-top:1px solid #ffffff50;padding-top:20px;margin-top:30px;font:500 10px/1.8 var(--sans);color:#fff;align-self:stretch;transition:border-color .25s}.package-contact:hover{border-color:#fff}.offer-package:hover>img{transform:scale(1.025)}.offer-package:focus-within{outline:2px solid #a99c8f;outline-offset:5px}
+.offer-comparison-section{display:block}.offer-comparison-content{padding:75px var(--offer-gutter) 65px;max-width:1600px;margin:0 auto}.offer-comparison-content h2{margin-bottom:40px}
+.offer-process-section>h2{margin-top:0}.offer-process-track{margin-top:60px}
+@media(min-width:1750px){.offer-packages-section{padding-left:3%;padding-right:3%}.package-copy{padding:200px 38px 32px}.offer-package>.package-number{left:38px;top:34px}.package-copy>.package-description{font-size:14px;min-height:110px}.package-contact{font-size:11px;padding-top:23px;margin-top:35px}.package-tag{font-size:11px}}
+@media(max-width:1150px) and (min-width:761px){.offer-packages-section{padding-left:3%;padding-right:3%}.offer-packages{gap:18px}.package-copy{padding-left:22px;padding-right:22px}.offer-package>.package-number{left:22px}.package-copy>h3{font-size:29px}.package-copy>.package-description{font-size:12px;min-height:135px}.package-tag{font-size:9px}.offer-package{min-height:650px}}
+@media(max-width:760px){.offer-packages-section{padding:55px 7% 60px}.offer-section-heading{margin-bottom:30px}.offer-packages{gap:26px}.offer-package{height:auto;min-height:590px}.offer-package>img{height:100%;aspect-ratio:auto}.offer-package>.package-number{left:25px;top:25px;font-size:10px}.package-copy{padding:200px 25px 25px}.package-tag{font-size:10px;margin-bottom:16px}.package-copy>h3{font-size:34px;max-width:100%}.package-copy>.package-description{font-size:13px;line-height:1.9;min-height:0;margin-top:20px}.package-contact{font-size:10px;padding-top:19px;margin-top:30px}.offer-comparison-content{padding:55px 7%}.offer-comparison-content h2{margin-bottom:25px}.offer-process-track{margin-top:38px}}
+@media(prefers-reduced-motion:reduce){.offer-package>img{transition:none}.offer-package:hover>img{transform:none}}
+.package-copy>h3{min-height:2.26em}
+@media(max-width:760px){.package-copy>h3{min-height:0}}
