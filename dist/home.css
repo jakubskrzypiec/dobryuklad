@@ -159,3 +159,19 @@ footer.site-footer{display:block;background:#080808;color:#f2efeb;padding:75px 6
 .quote-interlude-shadows img{position:absolute;width:135%;max-width:none;height:125%;object-fit:cover;left:-16%;top:-12%;filter:blur(2px);transform-origin:25% 20%;animation:quoteShadowDrift 24s ease-in-out infinite;will-change:transform}
 @keyframes quoteShadowDrift{0%,100%{transform:translate3d(-1.6%,.3%,0) rotate(-.6deg) scale(1.04)}50%{transform:translate3d(1.6%,-.3%,0) rotate(.6deg) scale(1.04)}}
 @media(prefers-reduced-motion:reduce){.quote-interlude-shadows img{animation:none;will-change:auto}}
+
+/* Shared typography and photographic interludes. Motion timing is unchanged. */
+:root{--section-heading-size:clamp(40px,4.1vw,64px);--interlude-height:520px}
+.home-section h2,.home-social h2,.project-interlude h2,.quote-interlude h2{font-family:'Playfair Display',Georgia,serif;font-size:var(--section-heading-size);font-weight:400;font-style:normal;line-height:1.14;letter-spacing:-.045em}
+.project-interlude,.quote-interlude{display:grid;place-items:center;height:var(--interlude-height);min-height:var(--interlude-height);background:#27231e}
+.project-interlude-copy,.quote-interlude-copy{width:100%;max-width:none;padding:72px 6.5%;text-align:center;z-index:1}
+.project-interlude h2,.quote-interlude h2{max-width:1000px;margin-left:auto;margin-right:auto;text-wrap:balance}
+.project-interlude-copy .home-kicker,.quote-interlude-copy .home-kicker{font-family:'Manrope',Arial,sans-serif;font-size:8px;line-height:1.8;letter-spacing:.2em;color:#e8e3df;margin-bottom:28px}
+.project-interlude:after,.quote-interlude:before{background:linear-gradient(180deg,rgba(17,17,16,.38),rgba(17,17,16,.52))}
+.project-interlude-photo,.quote-interlude-photo{filter:saturate(.8) contrast(1.03)}
+.project-interlude-shadows,.quote-interlude-shadows{inset:-8%;opacity:.55;mask-image:linear-gradient(180deg,#000 0 70%,transparent)}
+.hero-canopy{opacity:.55}
+.hero-canopy img,.project-interlude-shadows img,.quote-interlude-shadows img{filter:contrast(1.6) blur(1.2px)}
+.header nav{font-size:13px;gap:30px;letter-spacing:.11em;font-weight:500}
+@media(max-width:1150px) and (min-width:761px){.header nav{font-size:12px;gap:20px;letter-spacing:.08em}}
+@media(max-width:760px){:root{--section-heading-size:36px;--interlude-height:430px}.project-interlude-copy,.quote-interlude-copy{padding:60px 7%}.project-interlude-copy .home-kicker,.quote-interlude-copy .home-kicker{font-size:7px;letter-spacing:.13em;margin-bottom:26px}.header nav.open{font-family:'Manrope',Arial,sans-serif;font-size:30px}}
