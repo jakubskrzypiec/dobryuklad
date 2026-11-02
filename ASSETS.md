@@ -11,3 +11,15 @@ Wszystkie obrazy zapisano jako WebP w `dist/assets/`. Zastosowane jako materiał
 - logo-white.svg: oryginalny PNG dostarczony przez użytkownika, osadzony bez przerysowywania w masce luminancji SVG. Czarne tło jest przezroczyste, obszar dopasowano do granic znaku i napisów. Nie użyto wygenerowanego przerysowania logo.
 
 - portfolio-divider-v3.webp: przerywnik wygenerowany wbudowanym imagegen. Prompt: szeroka fotografia architektoniczna 2400x1050, neutralna ściana taupe zajmująca lewą część, drzwi po prawej odsłaniające fotel i kamienny postument, orzechowe drewno, grafit, cienie liści z okna, spokojne światło dzienne. Bez napisów, interfejsu, ludzi, roślin i złotych ozdób. Ruch dodano wyłącznie do osobnej tekstury cienia w CSS; architektura pozostaje nieruchoma.
+
+## O nas — nowe kadry, 02.11.2026
+
+Wbudowane narzędzie image_gen. To koncepcyjne obrazy wnętrz, nie realizacje studia. Pliki PNG pozostawiono w katalogu wygenerowanych obrazów; kopie WebP umieszczono w projekcie. Nie generowano twarzy ani zdjęć zespołu.
+
+- `dist/assets/about-hero-v2.webp` — szeroki kadr 1983 × 793, grafitowa ściana, trawertynowa konsola po prawej, czarna misa, orzech i lniana zasłona. Pusta lewa część pod tytuł, spokojne światło i cień okna.
+- `dist/assets/about-contact-v2.webp` — szeroki kadr 1983 × 793, miękki jasny fotel po lewej, neutralna ściana, kamienna podłoga i zasłona; spokojny środek pod wyśrodkowany tekst.
+
+Prompty końcowe:
+
+1. Photorealistic natural architectural photograph for a high-end Polish interior studio About hero, 2.5:1. Empty charcoal mineral plaster wall on the left two thirds; pale travertine console, low black ceramic bowl, dark walnut panel and translucent linen curtain on the far right. Neutral taupe, graphite, off-white, deep walnut; no orange or golden cast. Broad soft window shadow, tactile matte materials, straight verticals, editorial magazine photography. Generous negative space. No people, faces, plants, text, logos or UI.
+2. Photorealistic natural architectural editorial contact banner, 2.5:1. Curved ivory bouclé chair on the left third, honed limestone floor, quiet dark taupe plaster wall at center and right, translucent linen curtain at the far right, diffused diagonal daylight. Calm medium-dark center for centered white HTML typography. Graphite, neutral taupe, off-white, muted walnut. No orange, gold, dining table, kitchen, vase, branches, plants, people, faces, text, logos or UI.
