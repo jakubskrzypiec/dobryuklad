@@ -42,3 +42,5 @@ Czytelność tekstów jest wspólna dla strony głównej, O nas i Oferty: `dist/
 [Sklep dla architektów](https://jakubskrzypiec.github.io/dobryuklad/sklep.html) — katalog siedmiu produktów i osobne karty, bez płatności na etapie podglądu. [Zakres i uzupełnienie materiałów](SHOP.md).
 
 [Kontakt](https://jakubskrzypiec.github.io/dobryuklad/kontakt.html) — formularz zapytania z informacjami o inwestycji i przygotowaniem szkicu wiadomości z załącznikami. [Zakres działania](CONTACT.md).
+
+[Spacer przez wnętrze 3D — podgląd](https://jakubskrzypiec.github.io/dobryuklad/wejscie.html) — robocza geometria wnętrza z kamerą sterowaną scrollem. Osobny wariant; strona główna pozostaje bez zmian. [Opis modelu](WALKTHROUGH_3D.md).

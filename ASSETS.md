@@ -51,3 +51,7 @@ Drugi kafelek używa teraz `dist/assets/offer-complete-workstation-v3.webp`: sta
 ## Hero sklepu dla architektów
 
 `dist/assets/shop-hero-v1.webp` — wygenerowane wbudowanym image_gen zdjęcie koncepcyjne biurka z książkami, ołówkami i lampą. [Prompt i ścieżka oryginału](IMAGE_PROMPT_SHOP.md). Okładki sklepu to makiety typograficzne HTML/CSS, do zastąpienia zatwierdzoną oprawą produktów.
+
+## Materiały rzeczywistego modelu 3D
+
+`dist/assets/walkthrough-walnut.webp` i `dist/assets/walkthrough-stone.webp` — tekstury drewna i kamienia wygenerowane wbudowanym image_gen, po 1024 × 1024 px. [Pełne prompty i ścieżki](IMAGE_PROMPTS_WALKTHROUGH.md). Geometria wnętrza jest własną sceną koncepcyjną, a nie realizacją studia.
