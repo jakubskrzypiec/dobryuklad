@@ -30,6 +30,3 @@ Następnie otwórz `http://localhost:4173`.
 - Obrazy koncepcyjne opisano w `ASSETS.md`; nie są realizacjami studia.
 - Formularz przygotowuje wiadomość w aplikacji pocztowej. Nie wysyła jej samodzielnie.
 - Bez płatności, koszyka, kont użytkowników i CMS na tym etapie.
-
-Paleta powierzchni i przycisków jest zebrana w dist/palette.css: biel, czerń #111110, grafit #353330, taupe #a99e95 i beż #e8e3df, pobrane z referencji klientki.
-
