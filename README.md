@@ -32,3 +32,5 @@ Następnie otwórz `http://localhost:4173`.
 - Obrazy koncepcyjne opisano w `ASSETS.md`; nie są realizacjami studia.
 - Formularz przygotowuje wiadomość w aplikacji pocztowej. Nie wysyła jej samodzielnie.
 - Bez płatności, koszyka, kont użytkowników i CMS na tym etapie.
+
+[Podstrona Oferta](https://jakubskrzypiec.github.io/dobryuklad/oferta.html) — trzy pakiety, tabela zakresów i osiem etapów procesu z nawrotem. Dane rozliczeń bez cen, do potwierdzenia w indywidualnej ofercie i umowie.
