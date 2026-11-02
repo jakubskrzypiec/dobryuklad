@@ -1,48 +1,32 @@
-# DOBRY UKŁAD — koncepcja strony głównej
+# DOBRY UKŁAD
 
-Wersja 2 po ponownej analizie wszystkich 36 stron PDF. Wizualnym wzorcem strony głównej jest makieta ze strony 5; zakres i treści określa strona 6. Fonty na bezpośrednie polecenie użytkownika: **Libre Caslon Display + DM Sans**, identyczne jak w MOTHI.form, bez kursywy. Biel #fff, czerń, grafit i taupe. Pozostałe podstrony są poza bieżącym zakresem.
+Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
-Uruchomienie: dowolny serwer HTTP z katalogiem `dist`, np. `python -m http.server 4173 --directory dist`. Brak zależności i kompilacji.
+**[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
-Strona zawiera krótką prezentację studia, szeroki kadr portfolio, trzy pakiety, suwak, cztery miejsca na autentyczne opinie, niską zapowiedź sklepu i fotograficzny pasek kontaktu. Informacje uzupełniające i formularz są w oknach dialogowych. Menu, galeria, przełączanie kadrów, klawiatura, pauza animacji cienia oraz ograniczenie ruchu są obsługiwane.
+## Pliki i publikowanie
 
-## Materiały i ograniczenia
+Strona znajduje się w katalogu `dist/`. Nie wymaga instalowania zależności ani kompilacji.
 
-Cztery obrazy `dist/assets/hero-v2.webp`, `dining-v2.webp`, `bathroom-v2.webp`, `books-v2.webp` wygenerowano wbudowanym narzędziem imagegen, zgodnie z koncepcyjnymi fotografiami makiety. To ilustracje, nie realizacje ani finalne okładki studia. Prompty i pochodzenie opisano w ASSETS.md. Tekstura `shadow.webp` pochodzi z repozytorium MOTHI.form.
+Każdy push zmian w `dist/` na `main` uruchamia GitHub Actions i publikuje stronę w GitHub Pages. Konfiguracja: `.github/workflows/pages.yml`.
 
-Nie dodano fikcyjnych opinii ani fałszywej pary przed/po. Cztery sloty opinii czekają na cytaty właścicielki. Suwak wykorzystuje ten sam koncepcyjny kadr po obu stronach, do zastąpienia dopasowaną wizualizacją i zdjęciem realizacji.
+Pracujemy bezpośrednio w tym repozytorium. Podgląd i publikowanie odbywają się przez GitHub Pages.
 
-Formularz waliduje dane i przygotowuje wiadomość w aplikacji pocztowej. Sam nie wysyła ani nie zapisuje danych. Rzut i inspiracje można dodać w aplikacji pocztowej. Płatności, koszyk, konta użytkownika, CMS/WordPress i panel administracyjny nie zostały wdrożone w tym etapie. Witryna jest oznaczona noindex.
+## Uruchomienie lokalne
 
-Kontakt pochodzi z aktualnej korespondencji Sandry Białkowskiej, profil Instagram z obecnej witryny https://studiodobryuklad.pl/. Główne źródła: PDF z 01.11.2026 oraz https://github.com/jakubskrzypiec/mothiform.
+Uruchom dowolny serwer HTTP z katalogiem `dist`, np.:
 
-## Hero — bieżący krok
-Nowy hero zajmuje pierwszy ekran. Wycentrowany kadr wnętrza, animowane cienie, dwa przyciski po lewej i hasło przy lewej dolnej krawędzi. Zgodnie z nowym wycinkiem briefu tylko hero używa Playfair Display + Manrope bez kursywy. Style tego kroku: dist/hero.css. Pozostałe sekcje pozostają do dalszej osobnej pracy.
+```sh
+python -m http.server 4173 --directory dist
+```
 
-Aktualizacja hero: oryginalne logo u góry, hasło nad przyciskami, przyciski bez strzałek. Usunięto animowaną kopię fotografii; porusza się wyłącznie tekstura cienia, zdjęcie pozostaje nieruchome.
+Następnie otwórz `http://localhost:4173`.
 
-## Sekcje pod hero
-Sekcja O nas: tekst po lewej i podpisane miejsce na zdjęcie studia po prawej. Portfolio: trzy duże kadry i galeria. Dalej pełnoekranowy przerywnik z osobną animacją cienia i CTA, trzy wysokie karty oferty zgodnie z referencją, porównanie, opinie, sklep i kontakt. Style: dist/home.css. Hero zachowano bez zmian. Zdjęcie zespołu, autentyczne opinie i dopasowana para porównania nadal wymagają materiałów studia.
+## Stan projektu
 
-## Aktualizacja: karuzela i kontakt
-Portfolio ma trzy puste kadry z logo widocznym po najechaniu lub fokusie klawiatury. Karuzela obsługuje strzałki i przewijanie dotykowe. Przerywnik jest wyśrodkowany, porównanie poszerzone, sklep ma trzy miejsca na kursy. Formularz na stronie oraz w oknie kontaktu przygotowuje wiadomość mailto; nie ma serwera wysyłającego pocztę. Rozbudowana stopka ma czarne tło.
-
-
-## Ruch i social media
-Kwadratowa karuzela projektów płynie w pętli bez strzałek. Cienie hero i przerywnika mają mocniejszy ruch; liście są przycięte do okna fotografii. Usunięto porównanie wizualizacja–realizacja. Pod kontaktem dodano sekcję Instagram z odnośnikiem do @dobry.uklad. Preferencja ograniczenia animacji wyłącza ruch.
-
-
-## Układ zgodny ze screenem briefu — 02.11.2026
-Dodano dokładny podtytuł hero i przejście do opisu studia. Sekcja studia jest krótsza, portfolio ma duże asymetryczne miejsca na rzeczywiste prace, a po trzech pakietach przywrócono suwak wizualizacja–realizacja. Suwak pokazuje wyraźnie opisane miejsca na parę materiałów, bez fikcyjnego porównania. Bezpośrednio pod nim są cztery miejsca na autentyczne opinie. Trzy kafelki sklepu są mniejsze, jako subtelna zapowiedź materiałów. Zachowano kontakt, social media i czarną stopkę.
-
-
-## Portfolio, kursy i Facebook
-Przywrócono płynącą karuzelę kwadratowych projektów bez strzałek. Kafelki kursów mają duże zdjęcia w proporcji 1:1; na telefonie układają się pionowo. Sekcja social mediów oraz stopka zawierają Instagram i Facebook studia.
-
-
-## Uspokojenie animacji i dopracowanie detali
-Cienie mają małą amplitudę i cykle 19–21 sekund. Karuzela biegnie od krawędzi do krawędzi ekranu bez maski wygaszającej. Karty oferty mają rysunki architektoniczne oraz czytelne listy zakresu. W social mediach są wyraźne nazwy platform, nowe ikony i brak strzałek.
-
-
-Przywrócono wcześniejszą estetykę i treść kart oferty, bez rysunków i dodatkowych list.
-
+- Jasna paleta z grafitem i taupe; Playfair Display i Manrope, bez kursywy.
+- Hero z animowanymi cieniami, opis studia, karuzela portfolio, trzy pakiety, porównanie, opinie, kursy, kontakt i social media.
+- Zdjęcia projektów, portret studia, dopasowana para wizualizacja–realizacja i cztery autentyczne opinie czekają na materiały od studia.
+- Obrazy koncepcyjne opisano w `ASSETS.md`; nie są realizacjami studia.
+- Formularz przygotowuje wiadomość w aplikacji pocztowej. Nie wysyła jej samodzielnie.
+- Bez płatności, koszyka, kont użytkowników i CMS na tym etapie.
