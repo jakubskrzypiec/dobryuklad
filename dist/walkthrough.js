@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import {createInterior} from './interior-scene.js?v=room-3';
-import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=room-3';
+import {createInterior} from './interior-scene.js?v=smooth-4';
+import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=smooth-4';
+import {createInteriorTrack,advanceProgress} from './walkthrough-motion.js?v=smooth-4';
 import {EffectComposer} from './vendor/three/postprocessing/EffectComposer.js';
 import {RenderPass} from './vendor/three/postprocessing/RenderPass.js';
 import {SSAOPass} from './vendor/three/postprocessing/SSAOPass.js';
@@ -9,10 +10,7 @@ import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';
 const sequence=document.querySelector('.walkthrough-sequence'),stage=sequence.querySelector('.walkthrough-stage'),container=stage.querySelector('.walkthrough-canvas'),final=stage.querySelector('.walkthrough-final'),status=stage.querySelector('.walkthrough-loading'),header=document.querySelector('.header'),skip=stage.querySelector('.walkthrough-skip'),progress=stage.querySelector('progress');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
 let renderer,scene,camera,composer,ao,raf=0,target=0,current=0,last=0,visible=true,ready=false,range=1,origin=0;
-// Slow entry, a window-side arc, a look back across the lounge, then the final hero.
-const route=new THREE.CatmullRomCurve3([[3.8,1.62,11],[3.8,1.6,8.5],[3.8,1.57,6.6],[3.5,1.52,4.7],[1.2,1.48,3.55],[-2.0,1.48,3.35],[-4.9,1.5,2.9],[-5.05,1.54,-.5],[-4.8,1.55,-3.35],[-2,1.53,-3.5],[.65,1.51,-3.35],[.85,1.47,-.25],[1.15,1.44,2.65],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.1);
-const gaze=new THREE.CatmullRomCurve3([[3.8,1.4,-2],[3.6,1.4,-2],[2.7,1.35,-2.1],[1.3,1.15,-1.6],[-.6,1,-.7],[-1.1,.95,-.4],[-1,.95,-.35],[-.5,1.1,-1.7],[1.7,1.3,-2.7],[2.7,1.15,-2.5],[-1.5,1,-.4],[-2,.9,.3],[.25,1.2,-2],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.1);
-// Use the same route parameter for position and gaze so every turn has its intended target.
+const cameraTrack=createInteriorTrack(),motion={value:0,velocity:0};
 function revealHero(alpha){
  stage.style.setProperty('--hero-reveal',alpha.toFixed(4));stage.style.setProperty('--tour-ui',Math.max(0,1-alpha*2).toFixed(4));
  stage.querySelector('.walkthrough-classic').inert=alpha>.4;
@@ -23,7 +21,7 @@ function staticHero(){
  const wasVisible=document.body.classList.contains('walkthrough-active')&&stage.getBoundingClientRect().top<=0&&stage.getBoundingClientRect().bottom>0;
  document.body.classList.remove('walkthrough-active');revealHero(1);skip.hidden=true;status.hidden=true;
  header.style.removeProperty('transform');header.inert=false;stage.dataset.phase='hero';
- if(ready){current=target=1;resize();request();}
+ if(ready){current=target=motion.value=1;motion.velocity=0;resize();request();}
  if(wasVisible)scrollTo({top:origin,behavior:'instant'});
 }
 function scrollState(){
@@ -42,8 +40,8 @@ function resize(){
 }
 function render(time){
  raf=0;if(!ready||!visible||document.hidden)return;
- const dt=Math.min((time-last)/1000||.016,.05);last=time;current+=(target-current)*(1-Math.exp(-dt*10));if(Math.abs(target-current)<.0002)current=target;
- const phase=walkthroughPhases(current);camera.position.copy(route.getPoint(phase.travel));camera.lookAt(gaze.getPoint(phase.travel));
+ const dt=Math.min((time-last)/1000||.016,.05);last=time;current=advanceProgress(motion,target,dt);
+ const phase=walkthroughPhases(current);cameraTrack.sample(phase.travel,camera.position,camera.quaternion);
  camera.fov=THREE.MathUtils.lerp(innerWidth<760?78:60,52,phase.travel);camera.updateProjectionMatrix();
  revealHero(phase.hero);
  // Render the same room at the final pose; no photograph replaces the model.
@@ -59,18 +57,18 @@ async function boot(){
  if(booting||ready)return;booting=true;
  try{
   renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;renderer.domElement.setAttribute('aria-hidden','true');container.replaceChildren(renderer.domElement);
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.domElement.setAttribute('aria-hidden','true');container.replaceChildren(renderer.domElement);
   camera=new THREE.PerspectiveCamera(60,1,.06,70);const interior=await createInterior();scene=interior.scene;
   // Capture the actual room for coloured, rough reflections instead of a white studio preset.
-  const capture=new THREE.WebGLCubeRenderTarget(256,{type:THREE.HalfFloatType}),cube=new THREE.CubeCamera(.1,60,capture);cube.position.copy(interior.capturePosition);renderer.shadowMap.needsUpdate=true;cube.update(renderer,scene);
+  const capture=new THREE.WebGLCubeRenderTarget(innerWidth<760?256:512,{type:THREE.HalfFloatType}),cube=new THREE.CubeCamera(.1,60,capture);cube.position.copy(interior.capturePosition);renderer.shadowMap.needsUpdate=true;cube.update(renderer,scene);
   const pmrem=new THREE.PMREMGenerator(renderer),environment=pmrem.fromCubemap(capture.texture);scene.environment=environment.texture;scene.environmentIntensity=.6;capture.dispose();pmrem.dispose();
   composer=new EffectComposer(renderer,new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:4}));composer.addPass(new RenderPass(scene,camera));ao=new SSAOPass(scene,camera,stage.clientWidth,stage.clientHeight,24);ao.kernelRadius=.34;ao.minDistance=.0003;ao.maxDistance=.03;composer.addPass(ao);composer.addPass(new OutputPass());
-  ready=true;current=target=0;status.hidden=true;mode();
+  ready=true;current=target=motion.value=0;motion.velocity=0;status.hidden=true;mode();
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){last=0;request();}},{rootMargin:'120px'}).observe(stage);
   renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();fail();});
  }catch(error){fail(error);}finally{booting=false;}
 }
-skip.addEventListener('click',()=>{if(!ready)return;current=target=HERO_STOP;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();});
-final.addEventListener('focusin',()=>{if(ready&&!reduce.matches&&current<.945){current=target=HERO_STOP;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();}});
+skip.addEventListener('click',()=>{if(!ready)return;current=target=motion.value=HERO_STOP;motion.velocity=0;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();});
+final.addEventListener('focusin',()=>{if(ready&&!reduce.matches&&current<.945){current=target=motion.value=HERO_STOP;motion.velocity=0;scrollTo({top:origin+range*HERO_STOP,behavior:'instant'});request();}});
 addEventListener('scroll',scrollState,{passive:true});addEventListener('resize',resize,{passive:true});addEventListener('pageshow',resize);document.addEventListener('visibilitychange',()=>{last=0;request();});reduce.addEventListener('change',mode);
 await boot();

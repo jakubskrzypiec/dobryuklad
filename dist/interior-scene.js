@@ -10,12 +10,19 @@ export async function createInterior(){
  const files=['walkthrough-walnut.webp','interior-marble-v2.webp','interior-floor-v2.webp','interior-linen-v2.webp'];
  const sources=await Promise.all(files.map(file=>loader.loadAsync(new URL('./assets/'+file,import.meta.url).href).catch(()=>null)));
  function texture(index,x=1,y=1,bump=false){if(!sources[index])return null;const t=sources[index].clone();t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(x,y);t.colorSpace=bump?THREE.NoColorSpace:THREE.SRGBColorSpace;t.anisotropy=8;t.needsUpdate=true;return t;}
+ // Keep roughness variation in a restrained physical range instead of a uniform plastic sheen.
+ function roughness(index,x=1,y=1){
+  if(!sources[index])return null;const canvas=document.createElement('canvas');canvas.width=canvas.height=512;
+  const context=canvas.getContext('2d',{willReadFrequently:true});context.drawImage(sources[index].image,0,0,512,512);const data=context.getImageData(0,0,512,512);
+  for(let p=0;p<data.data.length;p+=4){const l=(data.data[p]+data.data[p+1]+data.data[p+2])/765,v=Math.round(208+47*l);data.data[p]=data.data[p+1]=data.data[p+2]=v;}
+  context.putImageData(data,0,0);const map=new THREE.CanvasTexture(canvas);map.wrapS=map.wrapT=THREE.RepeatWrapping;map.repeat.set(x,y);map.anisotropy=8;return map;
+ }
  let seed=781;function random(){seed=(seed*16807)%2147483647;return(seed-1)/2147483646;}
  const physical=(color,extra={})=>new THREE.MeshPhysicalMaterial({color,roughness:.7,...extra});
- const oak=physical('#b8afa2',{map:texture(0),bumpMap:texture(0,1,1,true),bumpScale:.001,roughness:.57});
- const marble=physical('#e1dacf',{map:texture(1),bumpMap:texture(1,1,1,true),bumpScale:.0005,roughness:.34,clearcoat:.18,clearcoatRoughness:.32});
- const floor=physical('#c3b9ab',{map:texture(2,2.2,3.8),bumpMap:texture(2,2.2,3.8,true),bumpScale:.0008,roughness:.38,clearcoat:.12,clearcoatRoughness:.4});
- const linen=physical('#e5ded0',{map:texture(3,4,4),bumpMap:texture(3,4,4,true),bumpScale:.0012,roughness:.93,sheen:1,sheenColor:new THREE.Color('#d4c9b8'),sheenRoughness:.82});
+ const oak=physical('#b8afa2',{map:texture(0),roughnessMap:roughness(0),bumpMap:texture(0,1,1,true),bumpScale:.001,roughness:.57});
+ const marble=physical('#e1dacf',{map:texture(1),roughnessMap:roughness(1),bumpMap:texture(1,1,1,true),bumpScale:.0005,roughness:.39,clearcoat:.12,clearcoatRoughness:.32});
+ const floor=physical('#c3b9ab',{map:texture(2,2.2,3.8),roughnessMap:roughness(2,2.2,3.8),bumpMap:texture(2,2.2,3.8,true),bumpScale:.0008,roughness:.45,clearcoat:.08,clearcoatRoughness:.4});
+ const linen=physical('#e5ded0',{map:texture(3,4,4),roughnessMap:roughness(3,4,4),bumpMap:texture(3,4,4,true),bumpScale:.0012,roughness:.93,sheen:1,sheenColor:new THREE.Color('#d4c9b8'),sheenRoughness:.82});
  const pillowMaterial=linen.clone();pillowMaterial.color.set('#c9bda8');
  const dark=new THREE.MeshStandardMaterial({color:'#191a17',roughness:.6});
  const metal=physical('#282822',{metalness:.9,roughness:.26});
@@ -34,7 +41,7 @@ export async function createInterior(){
   for(let i=0;i<positions.count;i++){
    let px=positions.getX(i),py=positions.getY(i),pz=positions.getZ(i);const nx=px/(w*.5),ny=py/(h*.5),nz=pz/(d*.5);
    if(pillow){const bulge=Math.max(0,1-nx*nx)*Math.max(0,1-ny*ny);pz+=Math.sign(nz)*.027*bulge;const crease=Math.exp(-Math.pow((Math.abs(nx)-.72)*12,2))*.006;pz-=crease*Math.sin(ny*8);}
-   else{const centre=Math.max(0,1-nx*nx)*Math.max(0,1-nz*nz);py-=Math.max(0,ny)*.024*centre;py+=.004*Math.sin(px*28)*Math.exp(-Math.pow((Math.abs(nz)-.87)*13,2));}
+   else{const centre=Math.max(0,1-nx*nx)*Math.max(0,1-nz*nz);py-=Math.max(0,ny)*.024*centre;py+=.003*Math.sin(px*28)*Math.exp(-Math.pow((Math.abs(nz)-.87)*13,2));}
    positions.setXYZ(i,px,py,pz);
   }geometry.computeVertexNormals();const mesh=new THREE.Mesh(geometry,material);mesh.position.set(x,y,z);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;
  }
@@ -97,8 +104,8 @@ export async function createInterior(){
   cp.setXYZ(i,-1.48+u+.035*Math.sin(v*12),.724-fall*.58+.008*(Math.sin(u*39+v*3)+.45*Math.sin(u*67-v*5))*(1+fall),.65+Math.min(v/.67,1)*.93+fall*.045);
  }cloth.computeVertexNormals();const throwMesh=new THREE.Mesh(cloth,throwMaterial);throwMesh.castShadow=throwMesh.receiveShadow=true;sofa.add(throwMesh);
  // Fine upholstered back seams also read naturally during the reverse view.
- for(const x of [-.67,.67])tube([[x,.43,-.835],[x,.72,-.84],[x,1.12,-.81]],.002,seamMaterial(),sofa);
- function seamMaterial(){const m=linen.clone();m.color.multiplyScalar(.86);return m;}
+ for(const x of [-.67,.67])tube([[x,.43,-.835],[x,.72,-.84],[x,1.12,-.81]],.0015,seamMaterial(),sofa);
+ function seamMaterial(){const m=linen.clone();m.color.multiplyScalar(.58);return m;}
  // A sheer folded curtain filters the edge of the glazing.
  const curtainMaterial=physical('#d3cbbd',{map:texture(3,3,7),roughness:1,side:THREE.DoubleSide,transparent:true,opacity:.68});
  const curtain=new THREE.PlaneGeometry(1.05,3.45,56,36),curtainPositions=curtain.attributes.position;
@@ -119,7 +126,7 @@ export async function createInterior(){
  lathe([[0,0],[.12,0],[.24,.035],[.3,.1],[.3,.13],[.28,.135],[.23,.08],[0,.045]],metal,-.89,.67,1.08);
  // Metallic vase and branched seed stems, matching the scale of the hero still life.
  lathe([[.12,0],[.14,.02],[.14,.43],[.12,.46],[.1,.46],[.105,.42]],bronze,2.8,1.04,-2.5);
- const stemMat=new THREE.MeshStandardMaterial({color:'#a08353',roughness:.7});const seeds=new THREE.InstancedMesh(new THREE.SphereGeometry(1,6,5),stemMat,168),dummy=new THREE.Object3D();let instance=0;
+ const stemMat=new THREE.MeshStandardMaterial({color:'#796047',roughness:.87});const seeds=new THREE.InstancedMesh(new THREE.SphereGeometry(1,6,5),stemMat,168),dummy=new THREE.Object3D();let instance=0;
  for(let i=0;i<14;i++){
   const a=i*2.4,r=.25+random()*.8,ex=2.8+Math.cos(a)*r,ey=1.9+random()*.85,ez=-2.5+Math.sin(a)*r*.5;
   tube([[2.8,1.42,-2.5],[2.8+(ex-2.8)*.4,1.74,-2.5+(ez+2.5)*.4],[ex,ey,ez]],.004,stemMat);
@@ -136,9 +143,9 @@ export async function createInterior(){
  const canvas=document.createElement('canvas');canvas.width=canvas.height=128;const ctx=canvas.getContext('2d'),gradient=ctx.createRadialGradient(64,64,0,64,64,64);gradient.addColorStop(0,'rgba(0,0,0,.55)');gradient.addColorStop(.6,'rgba(0,0,0,.2)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(canvas);
  for(const [x,z,w,d] of [[-1.9,-.2,5.3,3.0],[-1.05,1.1,2.8,1.8],[3.0,-2.5,3.3,2.0]]){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false,opacity:.65}));mesh.rotation.x=-Math.PI/2;mesh.position.set(x,.012,z);scene.add(mesh);}
  scene.add(new THREE.HemisphereLight('#d8d9d4','#393127',.78));scene.add(new THREE.AmbientLight('#b5a38a',.08));
- const sun=new THREE.DirectionalLight('#ffe4b7',2.8);sun.position.set(-13,6,1);sun.target.position.set(1,0,-2);sun.castShadow=true;sun.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(sun.shadow.camera,{left:-8,right:8,top:9,bottom:-9,near:1,far:35});sun.shadow.bias=-.0001;sun.shadow.normalBias=.012;sun.shadow.radius=3;scene.add(sun,sun.target);
+ const sun=new THREE.DirectionalLight('#ffe4b7',2.8);sun.position.set(-13,6,1);sun.target.position.set(1,0,-2);sun.castShadow=true;sun.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(sun.shadow.camera,{left:-8,right:8,top:9,bottom:-9,near:1,far:35});sun.shadow.bias=-.0001;sun.shadow.normalBias=.004;sun.shadow.radius=3;sun.shadow.blurSamples=12;scene.add(sun,sun.target);
  const windowLight=new THREE.RectAreaLight('#dfe6eb',3.0,7.2,3.1);windowLight.position.set(-6.1,1.9,-.7);windowLight.lookAt(0,1.2,-1.0);scene.add(windowLight);
- const fill=new THREE.RectAreaLight('#d5c7b4',.8,5,2);fill.position.set(.4,2.4,5.8);fill.lookAt(-1,1,-1);scene.add(fill);
+ const fill=new THREE.RectAreaLight('#d5c7b4',1.25,5,2);fill.position.set(.4,2.4,5.8);fill.lookAt(-1,1,-1);scene.add(fill);
  const splash=new THREE.RectAreaLight('#ffce8c',3.5,4.0,.25);splash.position.set(3.9,1.72,-5.75);splash.lookAt(3.9,1.25,-5.8);scene.add(splash);
  const islandFill=new THREE.RectAreaLight('#ffe6bf',1.9,2.7,.08);islandFill.position.set(4.45,2.59,-2.6);islandFill.lookAt(4.45,0,-2.6);scene.add(islandFill);
  const hallLight=new THREE.PointLight('#ffe0b0',12,8,2);hallLight.position.set(3.8,3.1,9.2);scene.add(hallLight);
