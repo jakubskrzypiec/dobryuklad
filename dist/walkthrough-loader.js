@@ -1,6 +1,6 @@
-// Import failures also leave a usable classic view instead of an endless loader.
-import('./walkthrough.js?v=1').catch(error=>{
+// A module or GPU failure leaves the complete photographic hero usable.
+import('./walkthrough.js?v=hero-2').catch(error=>{
  console.error('Could not load the interior preview:',error);
- const status=document.querySelector('.walkthrough-loading');
- if(status){status.hidden=false;status.textContent='Podgląd wnętrza jest niedostępny. Możesz otworzyć klasyczny widok strony.';}
+ document.body.classList.remove('walkthrough-active');
+ const status=document.querySelector('.walkthrough-loading');if(status)status.hidden=true;
 });

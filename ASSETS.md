@@ -55,3 +55,7 @@ Drugi kafelek używa teraz `dist/assets/offer-complete-workstation-v3.webp`: sta
 ## Materiały rzeczywistego modelu 3D
 
 `dist/assets/walkthrough-walnut.webp` i `dist/assets/walkthrough-stone.webp` — tekstury drewna i kamienia wygenerowane wbudowanym image_gen, po 1024 × 1024 px. [Pełne prompty i ścieżki](IMAGE_PROMPTS_WALKTHROUGH.md). Geometria wnętrza jest własną sceną koncepcyjną, a nie realizacją studia.
+
+## Realistyczniejsze wnętrze i fotograficzny finał
+
+`dist/assets/interior-marble-v2.webp`, `dist/assets/interior-floor-v2.webp`, `dist/assets/interior-linen-v2.webp` — mapy marmuru, podłogi i tapicerki 1024 × 1024, wygenerowane wbudowanym image_gen. [Prompty i pliki źródłowe](IMAGE_PROMPTS_INTERIOR_REALISM.md). Kamera kończy na kadrze dopasowanym kompozycyjnie do istniejącego hero, a przenikanie odsłania jego oryginalną fotografię i treść.
