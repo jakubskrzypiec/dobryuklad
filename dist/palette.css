@@ -1,0 +1,141 @@
+/* Studio palette sampled directly from the supplied reference. */
+:root {
+  --studio-white: #fff;
+  --studio-black: #111110;
+  --studio-graphite: #353330;
+  --studio-taupe: #a99e95;
+  --studio-beige: #e8e3df;
+}
+
+/* Alternate generous white surfaces with distinct warm sections. */
+.home-about,
+.home-reviews,
+.home-contact,
+.home-social {
+  background: var(--studio-beige);
+}
+.home-portfolio,
+.brief-comparison,
+.home-shop {
+  background: var(--studio-white);
+}
+.home-offer {
+  background: var(--studio-taupe);
+}
+.home-offer-card {
+  background: var(--studio-white);
+}
+.studio-photo-placeholder {
+  background: var(--studio-white);
+  border-color: var(--studio-taupe);
+}
+.course-photo {
+  background: var(--studio-beige);
+}
+.course-caption,
+.home-signature {
+  border-color: var(--studio-taupe);
+}
+.brief-compare-before {
+  background: var(--studio-beige);
+}
+
+/* Button fills supply the stronger accents; typography keeps its colors. */
+.hero-button-solid {
+  background: var(--studio-taupe);
+  border-color: var(--studio-taupe);
+}
+.hero-button-outline {
+  background: var(--studio-graphite);
+  border-color: var(--studio-graphite);
+}
+.hero-button-solid:hover {
+  background: var(--studio-beige);
+  border-color: var(--studio-beige);
+}
+.hero-button-outline:hover {
+  background: var(--studio-beige);
+  border-color: var(--studio-beige);
+}
+.home-card-link {
+  background: var(--studio-taupe);
+  border: 1px solid var(--studio-taupe);
+  padding: 13px 22px;
+  transition: background .25s, border-color .25s;
+}
+.home-card-link:hover {
+  background: var(--studio-beige);
+  border-color: var(--studio-taupe);
+}
+.home-cta {
+  background: var(--studio-beige);
+  border-color: var(--studio-taupe);
+}
+.home-cta:hover {
+  background: var(--studio-graphite);
+  border-color: var(--studio-graphite);
+}
+.home-cta-light {
+  background: var(--studio-graphite);
+  border-color: var(--studio-graphite);
+}
+.home-cta-light:hover {
+  background: var(--studio-white);
+  border-color: var(--studio-white);
+}
+.home-offer-footer .home-cta {
+  background: var(--studio-white);
+  padding: 14px 26px;
+}
+.home-offer-footer .home-cta:hover {
+  background: var(--studio-graphite);
+}
+.home-contact form .button,
+.button.dark {
+  background: var(--studio-graphite);
+  border-color: var(--studio-graphite);
+}
+.home-contact form .button:hover,
+.button.dark:hover {
+  background: var(--studio-black);
+  border-color: var(--studio-black);
+}
+.home-contact form input,
+.home-contact form select,
+.home-contact form textarea {
+  background: var(--studio-white);
+  border-color: var(--studio-taupe);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* White profile rows stay readable against the beige section. */
+.social-profiles .social-profile {
+  background: var(--studio-white);
+  border-color: var(--studio-taupe);
+  padding-left: 22px;
+  padding-right: 22px;
+}
+.social-profiles .social-profile + .social-profile {
+  margin-top: 14px;
+}
+.social-profile > .social-icon {
+  background: var(--studio-beige);
+}
+.social-profile:hover .social-icon {
+  background: var(--studio-graphite);
+}
+footer.site-footer {
+  background: var(--studio-black);
+}
+
+@media (max-width: 760px) {
+  .home-card-link { padding: 12px 18px; }
+  .social-profiles .social-profile {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-card-link { transition: none; }
+}
