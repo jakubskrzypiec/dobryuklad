@@ -39,3 +39,7 @@ Trzy nowe obrazy koncepcyjne, wygenerowane wbudowanym image_gen: `dist/assets/of
 ## Tematyczne rysunki oferty
 
 Aktualne kafelki używają ilustracji zamiast fotografii: `dist/assets/offer-functional-drawing-v1.webp`, `dist/assets/offer-complete-drawing-v1.webp`, `dist/assets/offer-supervision-drawing-v1.webp`. Wygenerowano wbudowanym image_gen; rozmiar 1122 × 1402. Tematy: układ mieszkania, kompletny projekt wnętrza, detal wykonawczy. [Pełne prompty i ścieżki](IMAGE_PROMPTS_OFFER_DRAWINGS.md). Ilustracje nie stanowią dokumentacji technicznej ani prac studia.
+
+## Ilustracje zakresów po analizie ofert pracowni
+
+Aktualne pliki kafelków: `dist/assets/offer-functional-scope-v2.webp`, `dist/assets/offer-complete-scope-v2.webp`, `dist/assets/offer-supervision-scope-v2.webp`. Wbudowane image_gen, 1122 × 1402. Tematy: warianty rzutu 2D; komplet dokumentacji, wizualizacja i materiały; sprawdzanie prac z dokumentacją na miejscu realizacji. [Źródła, założenia, ścieżki i pełne prompty](OFFER_VISUAL_RESEARCH.md).
