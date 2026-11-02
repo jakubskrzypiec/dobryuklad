@@ -1,0 +1,197 @@
+[
+  {
+    "id": "kurs-podstawowy",
+    "name": "Kurs podstawowy pCon.planner",
+    "cover": "pCon.planner",
+    "subtitle": "Kurs podstawowy",
+    "kind": "Szkolenie online",
+    "categories": [
+      "szkolenia"
+    ],
+    "visual": "screen",
+    "tone": "graphite",
+    "short": "Od poznania interfejsu po samodzielny układ i pierwszy model wnętrza 3D.",
+    "lead": "Projektuj wnętrza w pCon.planner — od pierwszego modelu do układu funkcjonalnego.",
+    "description": "Autorski kurs bazuje na metodach pracy DOBREGO UKŁADU. To nie tylko prezentacja przycisków, lecz sposób wykorzystania narzędzia przy tworzeniu projektów wnętrz. Krok po kroku uczestnik poznaje interfejs, modelowanie pomieszczenia, import zasobów i pracę z projektem 3D.",
+    "contentsTitle": "Program szkolenia",
+    "contents": [
+      "Możliwości programu i wprowadzenie do interfejsu.",
+      "Tworzenie ścian, otworów, drzwi, okien, skosów i schodów.",
+      "Praca z kursorem, paskiem właściwości, edycją i wymiarowaniem.",
+      "Warstwy, widoki, prezentacje, otoczenie i kamery.",
+      "Import rzutów, modeli 3D i materiałów.",
+      "Projekt układu funkcjonalnego oraz model sypialni i prostych zabudów na wymiar."
+    ],
+    "audience": [
+      "Początkujący projektanci i studenci kierunków projektowych.",
+      "Osoby szukające praktycznego wprowadzenia do pCon.planner."
+    ],
+    "review": "Potwierdzić zgodność z bieżącą wersją programu, liczbę lekcji, sposób i okres dostępu.",
+    "group": "training"
+  },
+  {
+    "id": "kurs-zaawansowany",
+    "name": "Kurs zaawansowany pCon.planner",
+    "cover": "3D / światło",
+    "subtitle": "Kurs zaawansowany",
+    "kind": "Szkolenie online",
+    "categories": [
+      "szkolenia"
+    ],
+    "visual": "screen",
+    "tone": "taupe",
+    "short": "Modelowanie detali, projekt kuchni, materiały, światło i tworzenie wizualizacji.",
+    "lead": "Zaawansowane modelowanie, praca ze światłem i wizualizacje 3D.",
+    "description": "Szkolenie jest przeznaczone dla osób znających podstawy programu, które chcą przejść do bardziej złożonych scen. Pokazuje techniki wykorzystywane w pracy studia: projektowanie detali architektonicznych, modelowanie mebli i kuchni, materiały, oświetlenie, renderowanie i prezentację panoram 360°.",
+    "contentsTitle": "Program szkolenia",
+    "contents": [
+      "Sztukaterie, listwy, sufity podwieszane i ścianki dekoracyjne.",
+      "Fronty meblowe: proste, frezowane, szklane; odtwarzanie modeli na podstawie produktu.",
+      "Modelowanie kuchni od podstaw.",
+      "Oświetlenie sceny i kamery: pion, poziom, widok z góry, rozmycie.",
+      "Tworzenie własnych tekstur i ustawienia materiałów.",
+      "Ustawienia silnika renderującego, wizualizacje i panoramy 360°.",
+      "Postprodukcja i narzędzia wspierające obróbkę."
+    ],
+    "audience": [
+      "Projektanci pracujący już z pCon.planner.",
+      "Osoby rozwijające umiejętności przygotowania modeli i prezentacji projektów."
+    ],
+    "review": "Potwierdzić oryginalny pakiet. Nie podawać długości kursu ani bonusów bez weryfikacji.",
+    "group": "training"
+  },
+  {
+    "id": "pakiet-pcon",
+    "name": "Pakiet pCon.planner",
+    "cover": "pCon.planner",
+    "subtitle": "Podstawowy + zaawansowany",
+    "kind": "Pakiet dwóch kursów",
+    "categories": [
+      "pakiety"
+    ],
+    "visual": "bundle",
+    "tone": "graphite",
+    "short": "Spójna ścieżka nauki — od pierwszego projektu po bardziej złożone wizualizacje.",
+    "lead": "Dwa poziomy szkolenia w jednej, spójnej ścieżce rozwoju.",
+    "description": "Pakiet łączy kurs podstawowy i zaawansowany. Uczestnik zaczyna od interfejsu, modelowania pomieszczeń i układów funkcjonalnych, następnie poznaje zaawansowane bryły, meble na wymiar, tekstury, oświetlenie i renderowanie.",
+    "contentsTitle": "W pakiecie",
+    "contents": [
+      "Zawartość kursu podstawowego pCon.planner.",
+      "Zawartość kursu zaawansowanego pCon.planner."
+    ],
+    "audience": [
+      "Osoby zaczynające od zera, które chcą rozwijać warsztat projektowy krok po kroku.",
+      "Projektanci planujący przejść od prostych modeli do zaawansowanych wizualizacji."
+    ],
+    "review": "Potwierdzić cenę zestawu, zakres i warunki dostępu. Nie wprowadzać historycznego cennika.",
+    "group": "training"
+  },
+  {
+    "id": "poradnik-projektanta",
+    "name": "Poradnik Projektanta",
+    "cover": "Poradnik Projektanta",
+    "subtitle": "Proces / dokumentacja / praktyka",
+    "kind": "E-book",
+    "categories": [
+      "ebooki"
+    ],
+    "visual": "book",
+    "tone": "graphite",
+    "short": "Proces projektowy, współpraca z klientem, dokumentacja i organizacja pracy.",
+    "lead": "Nie wystarczy umieć projektować. Warto wiedzieć, jak prowadzić projekt profesjonalnie.",
+    "description": "Autorski poradnik oparty na doświadczeniu pracy w studiu DOBRY UKŁAD. Porządkuje wiedzę o procesie projektowym, dokumentacji, komunikacji z klientem i odpowiedzialności zawodowej. Skierowany jest do osób, które chcą rozwijać standard własnych usług, a nie tylko umiejętność tworzenia wizualizacji.",
+    "contentsTitle": "Główne zagadnienia",
+    "contents": [
+      "Zakresy usług i etapy projektowania wnętrz.",
+      "Rozpoznawanie potrzeb klienta i prowadzenie współpracy.",
+      "Standard dokumentacji i przykłady z praktyki projektowej.",
+      "Podział odpowiedzialności w procesie realizacji.",
+      "Jakość usług, wycena i organizacja pracy."
+    ],
+    "audience": [
+      "Początkujący projektanci wnętrz i właściciele pracowni.",
+      "Osoby chcące uporządkować dokumentację, komunikację i proces pracy."
+    ],
+    "review": "Zweryfikować aktualny oryginalny PDF, liczbę stron, spis treści i zawartość przykładów.",
+    "group": "publications"
+  },
+  {
+    "id": "poradnik-dwg",
+    "name": "Poradnik Projektanta + pliki DWG",
+    "cover": "Poradnik Projektanta",
+    "subtitle": "+ pliki DWG",
+    "kind": "E-book + pliki",
+    "categories": [
+      "ebooki",
+      "narzedzia"
+    ],
+    "visual": "book",
+    "tone": "ivory",
+    "short": "Rozszerzony wariant poradnika z materiałami projektowymi w formacie DWG.",
+    "lead": "Wiedza o procesie projektowym i dodatkowe materiały do pracy z dokumentacją.",
+    "description": "Wariant rozszerzony Poradnika Projektanta. Łączy publikację o standardach prowadzenia projektu z wybranymi plikami w formacie DWG, pozwalającymi przyjrzeć się przykładowym elementom dokumentacji studia.",
+    "contentsTitle": "Co otrzymujesz",
+    "contents": [
+      "E-book „Poradnik Projektanta”.",
+      "Dodatkowe pliki DWG — szczegółowa lista zostanie podana wraz z finalnym pakietem."
+    ],
+    "audience": [
+      "Architekci i projektanci szukający materiałów wspierających opracowanie dokumentacji.",
+      "Osoby rozwijające system szablonów, rysunków i standardów pracowni."
+    ],
+    "review": "Potwierdzić listę plików, możliwość modyfikacji, kompatybilność i licencję. Ramki i symbole tylko po potwierdzeniu.",
+    "group": "publications"
+  },
+  {
+    "id": "zrozum-wnetrza",
+    "name": "Zrozum wnętrza",
+    "cover": "Zrozum wnętrza",
+    "subtitle": "Psychologia i komunikacja w projektowaniu",
+    "kind": "E-book",
+    "categories": [
+      "ebooki"
+    ],
+    "visual": "book",
+    "tone": "taupe",
+    "short": "Publikacja o psychologicznym wymiarze projektowania i komunikacji z inwestorem.",
+    "lead": "Psychologia i komunikacja w projektowaniu wnętrz.",
+    "description": "Projektowanie jest pracą z człowiekiem, nie tylko z materiałami, proporcjami i światłem. Publikacja dotyczy znaczenia psychologii i komunikacji w rozumieniu indywidualnych potrzeb inwestora oraz odbioru przestrzeni.",
+    "contentsTitle": "Zawartość publikacji",
+    "contents": [],
+    "audience": [
+      "Projektanci chcący rozwijać sposób rozumienia potrzeb klientów.",
+      "Osoby zainteresowane rolą emocji i komunikacji w procesie projektowym."
+    ],
+    "review": "Oryginalny plik i spis treści niepotwierdzone. Nie publikować hipotetycznych rozdziałów. Opis otwierający jest propozycją z briefu.",
+    "group": "publications"
+  },
+  {
+    "id": "ankieta-wnetrza",
+    "name": "Ankieta do projektu wnętrza",
+    "cover": "Ankieta do projektu wnętrza",
+    "subtitle": "Dobry projekt zaczyna się od pytań",
+    "kind": "Narzędzie cyfrowe",
+    "categories": [
+      "narzedzia"
+    ],
+    "visual": "tablet",
+    "tone": "ivory",
+    "short": "Rozbudowany wywiad o funkcji, stylu życia, estetyce i potrzebach mieszkańców.",
+    "lead": "Dobry projekt zaczyna się od właściwych pytań.",
+    "description": "Rozbudowana ankieta projektowa studia DOBRY UKŁAD łączy szczegółowy wywiad funkcjonalny i techniczny z pytaniami o emocje, codzienne nawyki, skojarzenia sensoryczne i indywidualny sposób doświadczania przestrzeni. Ma pomóc projektantowi zebrać rzetelny brief przed rozpoczęciem opracowania.",
+    "contentsTitle": "Zakres ankiety",
+    "contents": [
+      "Domownicy, codzienny rytm i styl życia.",
+      "Emocje, potrzeby, komfort i poczucie bezpieczeństwa.",
+      "Stylistyka, kolorystyka, faktury, wyposażenie i kwestie techniczne.",
+      "Salon, jadalnia, kuchnia, sypialnie, garderoby i łazienki.",
+      "Pomieszczenia dodatkowe i zaplecze domowe.",
+      "Podsumowanie priorytetów i indywidualnych uwag klienta."
+    ],
+    "audience": [
+      "Projektanci wnętrz chcący prowadzić bardziej pogłębiony i uporządkowany wywiad z inwestorem."
+    ],
+    "review": "Do publikacji wybrać czystą wersję bez danych klientów. Potwierdzić finalny format, zakres i licencję.",
+    "group": "publications"
+  }
+]

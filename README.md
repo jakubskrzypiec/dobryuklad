@@ -38,3 +38,5 @@ Następnie otwórz `http://localhost:4173`.
 Czytelność tekstów jest wspólna dla strony głównej, O nas i Oferty: `dist/readability.css`. Opisy 16 px, przyciski i teksty pomocnicze 14 px, z zachowaniem większych nagłówków. Temat ilustracji oferty zweryfikowano przed generowaniem; źródła i prompty są w `OFFER_VISUAL_RESEARCH.md`.
 
 [Portfolio](https://jakubskrzypiec.github.io/dobryuklad/portfolio.html) — osobne galerie Projektów i Realizacji oraz szablon karty inwestycji. Białe pola zdjęć i demonstracyjne filtry; [opis uzupełnienia materiałów](PORTFOLIO.md).
+
+[Sklep dla architektów](https://jakubskrzypiec.github.io/dobryuklad/sklep.html) — katalog siedmiu produktów i osobne karty, bez płatności na etapie podglądu. [Zakres i uzupełnienie materiałów](SHOP.md).

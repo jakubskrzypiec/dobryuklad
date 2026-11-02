@@ -47,3 +47,7 @@ Aktualne pliki kafelków: `dist/assets/offer-functional-scope-v2.webp`, `dist/as
 ## Zmieniona druga ilustracja i mniejsze kafelki
 
 Drugi kafelek używa teraz `dist/assets/offer-complete-workstation-v3.webp`: stanowisko z wizualizacją i próbkami materiałów, wyraźnie odmienne od rzutu 2D. Wygenerowano wbudowanym image_gen. [Prompt i zapisane ścieżki](IMAGE_PROMPT_OFFER_WORKSTATION.md). Pierwsza i trzecia ilustracja zakresów pozostają bez zmian.
+
+## Hero sklepu dla architektów
+
+`dist/assets/shop-hero-v1.webp` — wygenerowane wbudowanym image_gen zdjęcie koncepcyjne biurka z książkami, ołówkami i lampą. [Prompt i ścieżka oryginału](IMAGE_PROMPT_SHOP.md). Okładki sklepu to makiety typograficzne HTML/CSS, do zastąpienia zatwierdzoną oprawą produktów.
