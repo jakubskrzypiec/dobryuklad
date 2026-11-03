@@ -1,0 +1,5 @@
+Modele 3D, tekstury i HDRI w tym katalogu pochodzą z Poly Haven (https://polyhaven.com)
+i są udostępnione na licencji CC0 (domena publiczna).
+Modele: modern_coffee_table_01, ceramic_vase_02, ceramic_vase_03, brass_vase_04, potted_plant_04,
+mid_century_lounge_chair, dry_branches_medium_01. Tekstury: white_plaster_rough_01, oak_veneer_01.
+HDRI: brown_photostudio_02.
