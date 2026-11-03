@@ -1,5 +1,7 @@
 # DOBRY UKŁAD
 
+**Strona główna (gałąź `claude/koszalin-mapa`).** Jasna kula obraca się w stronę Polski, kamera zjeżdża nad Koszalin pokazany jak zwykła mapa (ląd, Bałtyk, Jezioro Jamno, zieleń, główne drogi, podpisy: Koszalin, Mielno, Sianów, Góra Chełmska; dane © OpenStreetMap). Napisy najpierw z boku, potem na środku („Poznaj naszą pracownię w Koszalinie.”, „Stąd projektujemy wnętrza w całej Polsce.”). Następnie biały błysk i od razu jasne hero ze zdjęciem — bez przejścia przez wnętrze. Pod całą stroną żywe tło 3D w beżach i brązach (`dist/tlo.js`, `dist/tlo.css`). Pliki: `dist/planeta-koszalin.js`, `dist/koszalin.css`; przebudowa: `node scripts/build-home-koszalin.cjs`. Moduły miasta i wnętrza (`home-city.js`, `home-interior.js`, `home-journey-motion.js`) zostają w repo dla testów, strona główna ich nie ładuje.
+
 Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
 **Aktualna strona główna.** Jasny globus w odcieniach kamienia i beżu przechodzi przez chmury w koncepcyjną zabudowę, lot do budynku oraz wejście przez korytarz do jasnego salonu. Po zatrzymaniu kamery pojawia się dopasowane fotograficzne hero z jasnym dębem, kremowym kamieniem i naturalnym lnem. Podpis i plansza Koszalina zostały pominięte. Przy cytacie pozostaje jasny globus z granicami Natural Earth oraz miastami studia. [Opis połączenia i testów](HOME_JOURNEY.md), [źródło nowego hero i prompt](references/IMAGE_PROMPT_HERO_DAYLIGHT.md).
