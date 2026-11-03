@@ -8,7 +8,7 @@ Fazy w dist/walkthrough-timing.js: kamera kończy przy 89% przewinięcia. Od 89%
 
 Przy ograniczonym ruchu systemowym model od razu jest renderowany w docelowej pozycji, bez spaceru. Bez WebGL dostępne pozostają tekst i przyciski na neutralnym ciemnym tle. Na telefonie ograniczono DPR i wyłączono SSAO. Na komputerze są SSAO, MSAA i dokładniejsza mapa cieni.
 
-Materiały używają wcześniejszych wygenerowanych map orzecha, marmuru, kamienia i lnu. Zmniejszono nadmierną wysokość mikrofaktury, rozjaśniono światło pośrednie i złagodzono kontrast słońca. Dodano odkształconą narzutę z fałdami, półprzezroczystą zasłonę, szwy tapicerki widoczne z tyłu, zlew i drobne przedmioty kuchenne. Odbicia są oparte na przechwyconym otoczeniu modelu. Nowych obrazów nie generowano.
+Aktualne materiały używają fotograficznych map orzecha i lnu z Poly Haven oraz wcześniejszych autorskich map marmuru i kamienia. Zmniejszono nadmierną wysokość mikrofaktury, rozjaśniono światło pośrednie i złagodzono kontrast słońca. Dodano odkształconą narzutę z fałdami, półprzezroczystą zasłonę, szwy tapicerki widoczne z tyłu, zlew i drobne przedmioty kuchenne. Odbicia są oparte na przechwyconym otoczeniu modelu. Nowych obrazów nie generowano.
 
 Scena jest koncepcyjną wizualizacją czasu rzeczywistego, nie fotografią ani realizacją klientki. Nadal występują uproszczenia geometrii i oświetlenia względem pełnego renderingu architektonicznego.
 
@@ -20,3 +20,14 @@ Prompty wcześniejszych map: IMAGE_PROMPTS_WALKTHROUGH.md oraz IMAGE_PROMPTS_INT
 Tor ma tablicę 1600 próbek pozycji i orientacji. Czas przejścia uwzględnia dystans oraz kąt obrotu (3,6 m równoważnika na radian), więc zakręt otrzymuje odpowiednią długość scrollowania. Orientacja jest interpolowana kwaternionem. Zamiast gwałtownego przyspieszenia w środku całego spaceru zastosowano prawie równomierne tempo, z krótkimi rampami na początku i końcu. Postęp ma tłumienie krytyczne, limit prędkości i ochronę przed przestrzeleniem celu. Test regresji: node scripts/check-walkthrough-motion.mjs — 3001 próbek trasy, kolizje, wielkość obrotów, przód/tył i 30/60/120 fps.
 
 Realizm: filtrowane cienie VSM, jaśniejsze światło odbite, 512-pikselowe przechwycenie otoczenia na komputerze, spokojniejszy połysk kamienia i delikatne zróżnicowanie szorstkości powierzchni drewna, marmuru, podłogi i lnu. Finał nadal pozostaje tym samym modelem 3D.
+
+## Przebudowa atelier-5
+Tapicerka ma zamknięte siatki superelipsoidalne, zmienne wyoblenia, nieregularne fałdy oraz rzeczywiste wypustki. Wygładzanie normalnych na szwach UV usuwa fasetowanie po deformacji. UV splotu poduszek używają skali metrycznej. Zmieniono bryłę i krawędź stolika, zamknięto tył sofy i dodano nóżki. W książkach oddzielono okładki, grzbiety, blok i krawędzie kartek. Narzuta i dywan mają frędzle/obszycie. Hokery mają wyściełane oparcia i podnóżki.
+
+Blat kuchenny ma fizyczny otwór w geometrii, oddzielną komorę zlewu, odpływ oraz detale baterii. Szafki mają cofnięty cokół i uchwyty; górna zabudowa łączy się z obniżeniem sufitu, a półki znajdują się we wnęce. Przewody lampy sięgają sufitu. Okna mają uszczelki i kamienny parapet. Ceramiczne naczynia mają wewnętrzne ścianki. Drobne gałązki i zakrzywione liście zastępują wcześniejsze proste patyki i bryłki.
+
+Leśna panorama HDR jest rzeczywistym otoczeniem za oknem. Służy też do wstępnego oświetlenia i przechwycenia odbić wewnątrz pomieszczenia. LightProbe dodaje niskoczęstotliwościowe światło rozproszone na podstawie radiancji przechwyconej w pokoju. To przybliżenie odbicia światła, nie path tracing.
+
+Statyczne elementy o wspólnym materiale są łączone z zachowaniem światowego położenia, UV i cieni. W sprawdzonym ujęciu liczbę siatek zredukowano z 298 do 75 przed ostatnimi drobnymi zmianami. Test check-interior-craft.mjs weryfikuje skończoność geometrii/UV/normalnych, rzeczywisty otwór zlewu oraz zachowanie granic sceny po łączeniu. Oba testy działają też przed publikacją Pages.
+
+Źródła: [INTERIOR_ASSET_SOURCES.md](INTERIOR_ASSET_SOURCES.md).

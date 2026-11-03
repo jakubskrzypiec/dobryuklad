@@ -1,14 +1,16 @@
 import * as THREE from 'three';
-import {createInterior} from './interior-scene.js?v=smooth-4';
-import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=smooth-4';
-import {createInteriorTrack,advanceProgress} from './walkthrough-motion.js?v=smooth-4';
+import {createInterior} from './interior-scene.js?v=atelier-5';
+import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=atelier-5';
+import {createInteriorTrack,advanceProgress} from './walkthrough-motion.js?v=atelier-5';
 import {EffectComposer} from './vendor/three/postprocessing/EffectComposer.js';
 import {RenderPass} from './vendor/three/postprocessing/RenderPass.js';
 import {SSAOPass} from './vendor/three/postprocessing/SSAOPass.js';
+import {LightProbeGenerator} from './vendor/three/lights/LightProbeGenerator.js';
 import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';
 
 const sequence=document.querySelector('.walkthrough-sequence'),stage=sequence.querySelector('.walkthrough-stage'),container=stage.querySelector('.walkthrough-canvas'),final=stage.querySelector('.walkthrough-final'),status=stage.querySelector('.walkthrough-loading'),header=document.querySelector('.header'),skip=stage.querySelector('.walkthrough-skip'),progress=stage.querySelector('progress');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+let frameAverage=16.7;
 let renderer,scene,camera,composer,ao,raf=0,target=0,current=0,last=0,visible=true,ready=false,range=1,origin=0;
 const cameraTrack=createInteriorTrack(),motion={value:0,velocity:0};
 function revealHero(alpha){
@@ -40,12 +42,12 @@ function resize(){
 }
 function render(time){
  raf=0;if(!ready||!visible||document.hidden)return;
- const dt=Math.min((time-last)/1000||.016,.05);last=time;current=advanceProgress(motion,target,dt);
+ const elapsed=time-last;if(last&&elapsed<250)frameAverage=frameAverage*.9+elapsed*.1;const dt=Math.min(elapsed/1000||.016,.05);last=time;current=advanceProgress(motion,target,dt);
  const phase=walkthroughPhases(current);cameraTrack.sample(phase.travel,camera.position,camera.quaternion);
  camera.fov=THREE.MathUtils.lerp(innerWidth<760?78:60,52,phase.travel);camera.updateProjectionMatrix();
  revealHero(phase.hero);
  // Render the same room at the final pose; no photograph replaces the model.
- composer.render();
+ renderer.info.reset();composer.render();stage.dataset.drawCalls=renderer.info.render.calls;stage.dataset.frameMs=frameAverage.toFixed(1);
  stage.dataset.cameraProgress=current.toFixed(4);stage.dataset.cameraTravel=phase.travel.toFixed(4);stage.dataset.heroOpacity=phase.hero.toFixed(4);stage.dataset.cameraPosition=camera.position.toArray().map(n=>n.toFixed(3)).join(',');stage.dataset.phase=phase.hold?'hero':phase.hero>0?'blend':'walk';
  if(current!==target)request();
 }
@@ -56,12 +58,15 @@ let booting=false;
 async function boot(){
  if(booting||ready)return;booting=true;
  try{
-  renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+  renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.info.autoReset=false;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.24;
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.domElement.setAttribute('aria-hidden','true');container.replaceChildren(renderer.domElement);
-  camera=new THREE.PerspectiveCamera(60,1,.06,70);const interior=await createInterior();scene=interior.scene;
-  // Capture the actual room for coloured, rough reflections instead of a white studio preset.
+  camera=new THREE.PerspectiveCamera(60,1,.06,70);const interior=await createInterior();scene=interior.scene;stage.dataset.meshes=JSON.stringify(scene.userData.meshStats);
+  // Seed the room with measured sky radiance, then capture local reflections and diffuse bounce.
+  const pmrem=new THREE.PMREMGenerator(renderer);let skyEnvironment;
+  if(interior.landscape){skyEnvironment=pmrem.fromEquirectangular(interior.landscape);scene.environment=skyEnvironment.texture;scene.environmentIntensity=.14;scene.environmentRotation.y=1.3;}
   const capture=new THREE.WebGLCubeRenderTarget(innerWidth<760?256:512,{type:THREE.HalfFloatType}),cube=new THREE.CubeCamera(.1,60,capture);cube.position.copy(interior.capturePosition);renderer.shadowMap.needsUpdate=true;cube.update(renderer,scene);
-  const pmrem=new THREE.PMREMGenerator(renderer),environment=pmrem.fromCubemap(capture.texture);scene.environment=environment.texture;scene.environmentIntensity=.6;capture.dispose();pmrem.dispose();
+  const bounce=await LightProbeGenerator.fromCubeRenderTarget(renderer,capture);if(bounce.sh.coefficients.every(v=>Number.isFinite(v.x)&&Number.isFinite(v.y)&&Number.isFinite(v.z))){bounce.intensity=.28;scene.add(bounce);}
+  const environment=pmrem.fromCubemap(capture.texture);scene.environment=environment.texture;scene.environmentIntensity=.75;scene.environmentRotation.set(0,0,0);capture.dispose();skyEnvironment?.dispose();pmrem.dispose();
   composer=new EffectComposer(renderer,new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:4}));composer.addPass(new RenderPass(scene,camera));ao=new SSAOPass(scene,camera,stage.clientWidth,stage.clientHeight,24);ao.kernelRadius=.34;ao.minDistance=.0003;ao.maxDistance=.03;composer.addPass(ao);composer.addPass(new OutputPass());
   ready=true;current=target=motion.value=0;motion.velocity=0;status.hidden=true;mode();
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){last=0;request();}},{rootMargin:'120px'}).observe(stage);

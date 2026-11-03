@@ -1,0 +1,125 @@
+{
+  "license": "CC0 1.0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "assets": [
+    {
+      "id": "black_walnut_veneer_02",
+      "author": "Jenelle van Heerden",
+      "page": "https://polyhaven.com/a/black_walnut_veneer_02",
+      "maps": [
+        [
+          "walnut-color.webp",
+          "Diffuse",
+          "2k",
+          "jpg",
+          "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/black_walnut_veneer_02/black_walnut_veneer_02_diff_2k.jpg"
+        ],
+        [
+          "walnut-normal.webp",
+          "nor_gl",
+          "1k",
+          "png",
+          "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/black_walnut_veneer_02/black_walnut_veneer_02_nor_gl_1k.png"
+        ],
+        [
+          "walnut-roughness.webp",
+          "Rough",
+          "1k",
+          "jpg",
+          "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/black_walnut_veneer_02/black_walnut_veneer_02_rough_1k.jpg"
+        ]
+      ]
+    },
+    {
+      "id": "rough_linen",
+      "author": "colormass (Photography), Rico Cilliers (Processing)",
+      "page": "https://polyhaven.com/a/rough_linen",
+      "maps": [
+        [
+          "linen-color.webp",
+          "Diffuse",
+          "2k",
+          "jpg",
+          "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rough_linen/rough_linen_diff_2k.jpg"
+        ],
+        [
+          "linen-normal.webp",
+          "nor_gl",
+          "1k",
+          "png",
+          "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/rough_linen/rough_linen_nor_gl_1k.png"
+        ],
+        [
+          "linen-roughness.webp",
+          "Rough",
+          "1k",
+          "jpg",
+          "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rough_linen/rough_linen_rough_1k.jpg"
+        ]
+      ]
+    },
+    {
+      "id": "forest_slope",
+      "author": "Andreas Mischok",
+      "page": "https://polyhaven.com/a/forest_slope",
+      "maps": [
+        [
+          "forest-slope-1k.hdr",
+          "HDRI",
+          "1k",
+          "hdr",
+          "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/forest_slope_1k.hdr"
+        ],
+        [
+          "forest-slope-2k.hdr",
+          "HDRI",
+          "2k",
+          "hdr",
+          "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/forest_slope_2k.hdr"
+        ]
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "dist/assets/interior/forest-slope-1k.hdr",
+      "bytes": 1911073,
+      "sha256": "926a6bb81897919b2924f42407162b8d54be91eab2da3fe7fe19daf308cfa09a"
+    },
+    {
+      "file": "dist/assets/interior/forest-slope-2k.hdr",
+      "bytes": 7562873,
+      "sha256": "aa76871c301a2ea5977043e48036b53bb3f26eff0d96fa833789a7738569c279"
+    },
+    {
+      "file": "dist/assets/interior/linen-color.webp",
+      "bytes": 1794692,
+      "sha256": "b5e3307bd36db4c4fb27ef4852568ddb704deee76beccf1c12378f981f34364a"
+    },
+    {
+      "file": "dist/assets/interior/linen-normal.webp",
+      "bytes": 1783800,
+      "sha256": "50e2618f3ba5752043d741ba78e22f8afe7ca0fc0e5ebb577d48b01c3b3b40d8"
+    },
+    {
+      "file": "dist/assets/interior/linen-roughness.webp",
+      "bytes": 604406,
+      "sha256": "4d3d0e5f8d1a04efff781a046b66434b9f0bd7ad0c502348b073e301d32605c4"
+    },
+    {
+      "file": "dist/assets/interior/walnut-color.webp",
+      "bytes": 854710,
+      "sha256": "8802d93d7cbdd3b9bcbc51245427361eb94491d27eb606abbfd844406c0ed436"
+    },
+    {
+      "file": "dist/assets/interior/walnut-normal.webp",
+      "bytes": 703540,
+      "sha256": "7fa474a4058c05dceb53d8f3f9c86469c4a38abe86039388bbeccec4dce4e40f"
+    },
+    {
+      "file": "dist/assets/interior/walnut-roughness.webp",
+      "bytes": 314926,
+      "sha256": "e0ca812fe7ef7da2726efd67e04c38adf6f2a0d543a3cbf06511aa4e43de0aa8"
+    }
+  ]
+}

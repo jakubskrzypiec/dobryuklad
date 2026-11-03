@@ -62,3 +62,6 @@ Drugi kafelek używa teraz `dist/assets/offer-complete-workstation-v3.webp`: sta
 
 ## Aktualny finał spaceru
 Od wersji room-3 hero w wejscie.html pozostaje sceną 3D. Usunięto obraz hero-v2.webp z tej sekcji; jego użycie na standardowej stronie głównej pozostaje bez zmian. Detale narzuty i zasłony to autorska geometria, bez nowych obrazów.
+
+## Atelier-5 — fotograficzne mapy powierzchni i HDR
+Bieżący model używa map lnu i orzecha oraz panoramy Forest Slope z Poly Haven (CC0), lokalnie w dist/assets/interior. Pełne źródła i autorzy: [INTERIOR_ASSET_SOURCES.md](INTERIOR_ASSET_SOURCES.md). Narzuta, detale sofy, zlew, książki, rośliny, profile stolika i wykończenia są własną geometrią 3D.

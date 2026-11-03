@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'dist/**'
+      - 'scripts/check-*.mjs'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -28,6 +29,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Check JavaScript
         run: for script in dist/*.js; do node --check "$script"; done
+      - name: Check camera motion and interior geometry
+        run: |
+          node scripts/check-walkthrough-motion.mjs
+          node scripts/check-interior-craft.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload website
