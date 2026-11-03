@@ -1,0 +1,8 @@
+/* Żywe tło 3D pod całą stroną; sekcje stają się przezroczyste, karty lekko szklane. */
+.tlo-3d{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;background:#f3eee6}
+.tlo-on main,.tlo-on .site-footer{position:relative;z-index:1}
+.tlo-on .planet-sequence{position:relative;z-index:2}
+.tlo-on .home-section,.tlo-on .home-offer,.tlo-on .home-shop,.tlo-on .home-contact,.tlo-on .home-social,.tlo-on .home-reviews{background:transparent!important}
+.tlo-on .home-offer-card{background:rgba(255,253,249,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.tlo-on .studio-photo-placeholder,.tlo-on .project-slide,.tlo-on .course-photo,.tlo-on .brief-compare{background-color:rgba(232,226,218,.75)}
+@media print{.tlo-3d{display:none}}
