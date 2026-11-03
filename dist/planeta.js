@@ -616,6 +616,8 @@ function start() {
   const clock = new THREE.Timer();
   if (location.hash === '#debug') window.__planet = { state, camera, K, KM }; // tylko do podglądu stanu kamery
   let lastChapter = -1;
+  const toDay = seq.classList.contains('planet-to-day');
+  let dayMode = false;
 
   function frame() {
     if (!state.running) return;
@@ -701,6 +703,14 @@ function start() {
     stage.style.setProperty('--blur', `${(blur * 22).toFixed(2)}px`);
     stage.style.setProperty('--zoom', (1 + blur * 0.08).toFixed(4));
     stage.style.setProperty('--photo', photo.toFixed(3));
+    // wariant „od nocy do dnia”: po rozjaśnieniu nagłówek przechodzi na ciemny tusz
+    if (toDay) {
+      const day = photo > 0.55;
+      if (day !== dayMode) {
+        dayMode = day;
+        body.classList.toggle('planet-day', day);
+      }
+    }
     stage.style.setProperty('--hero-text', smooth(0.9, 0.96, p).toFixed(3));
     stage.style.setProperty('--ui', (1 - smooth(0.84, 0.9, p)).toFixed(3));
     if (finalLayer) {
@@ -761,7 +771,7 @@ function start() {
     tl.to(cap, { autoAlpha: 0, y: -24, filter: 'blur(6px)', duration: 0.025 }, b);
     tl.set(cap, { y: 0, filter: 'none' }, b + 0.026);
   });
-  const heroBits = finalLayer ? finalLayer.querySelectorAll('.hero-left > *') : [];
+  const heroBits = finalLayer ? finalLayer.querySelectorAll('.hero-left > *, [data-hero-bit]') : [];
   if (heroBits.length) tl.fromTo(heroBits, { y: 28, filter: 'blur(8px)' }, { y: 0, filter: 'blur(0px)', duration: 0.05, stagger: 0.012 }, 0.9);
   tl.to({}, { duration: 0.001 }, 1);
 

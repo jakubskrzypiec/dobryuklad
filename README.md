@@ -2,7 +2,7 @@
 
 Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
-**Strona główna nocą (gałąź `claude/nocna-strona`).** Hero to przelot nocą nad Koszalin: czarne niebo z gwiazdami, Ziemia w czerni i złocie, przelot przez chmury, Koszalin z wysokości i przejście w fotograficzne hero. Pod nim cała strona na czarnym tle z gwiazdami (paralaksa, spadające gwiazdy), złote akcenty i karty z głębią. Przerywnik portfolio to orbita kadrów wnętrz wokół złotej planety, a cytat „Dobre wnętrze…” stoi obok globusa z Koszalinem (studio) i miastami realizacji połączonymi złotymi łukami — lista miast do potwierdzenia przez studio. Treści sekcji bez zmian. Pliki: `dist/noc.css`, `dist/noc.js`, `dist/planeta.css`, `dist/planeta.js`; przebudowa jednorazowa skryptem `scripts/build-noc.cjs` (z `planeta.html`). Uwaga: `scripts/build-walkthrough.cjs` zakłada dawne hero strony głównej — `wejscie.html` zostaje w zbudowanej wersji.
+**Strona główna „od nocy do dnia” (gałąź `claude/jasna-strona`).** Wejście to nocny przelot nad Koszalin (czarne niebo, Ziemia w czerni i złocie, chmury, miasto świateł), który rozjaśnia się w nowe jasne hero: ciepła biel, nagłówek „Przestrzeń ma znaczenie.”, zdjęcie salonu w dziennym świetle i mały kadr detalu w złotej ramce. Dalej oryginalna jasna strona z płynniejszym ruchem nagłówków i kart; cytat „Dobre wnętrze…” stoi obok jasnego globusa-mapy z Koszalinem (studio) i miastami realizacji (lista do potwierdzenia). Treści sekcji bez zmian. Pliki: `dist/dzien.css`, `dist/dzien.js`, `dist/planeta.css`, `dist/planeta.js`; przebudowa jednorazowa skryptem `scripts/build-dzien.cjs` na klasycznym `index.html`.
 
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
