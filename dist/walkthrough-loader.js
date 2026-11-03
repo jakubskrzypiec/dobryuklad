@@ -1,5 +1,5 @@
 // Keep text and links usable on module failure, without substituting a photograph.
-import('./walkthrough.js?v=corridor-10').catch(error=>{
+import('./walkthrough.js?v=natural-13').catch(error=>{
  console.error('Could not load the interior preview:',error);
  document.body.classList.remove('walkthrough-active');
  const stage=document.querySelector('.walkthrough-stage');if(stage)stage.style.setProperty('--photo-reveal','1');

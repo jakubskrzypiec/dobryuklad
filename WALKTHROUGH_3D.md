@@ -2,10 +2,10 @@
 
 Bieżący wariant: dist/wejscie.html, budowany poleceniem node scripts/build-walkthrough.cjs z zatwierdzonej strony głównej. Standardowy dist/index.html pozostaje bez zmian.
 
-## Trzy etapy corridor-10
+## Trzy etapy natural-13
 
 1. Projekt: od razu widoczna jest przestrzenna, biała makieta z góry, z wyraźną wysokością ścian i mebli. Etap płaskiego rzutu został usunięty także z renderowanej sceny. Napisy SALON, KUCHNIA i WEJŚCIE zostały usunięte.
-2. Wizualizacja: makieta spokojnie nabiera pełnej wysokości, kamera opada bez obrotu wokół osi widoku. Białe powierzchnie przechodzą w materiały i światło. Kamera schodzi do korytarza (x=3,8; z=9,3), przejeżdża przez istniejący otwór wejściowy i skręca w lewo na sofę. Krótki łuk wraca do dopasowanego finału.
+2. Wizualizacja: makieta spokojnie nabiera pełnej wysokości, kamera opada bez obrotu wokół osi widoku. Białe powierzchnie przechodzą w materiały i światło. Kamera schodzi do korytarza (x=3,8; z=9,3), przejeżdża przez istniejący otwór wejściowy i skręca w lewo na sofę. Jedna monotoniczna krzywa prowadzi od wejścia wprost do kadru hero: kamera nie wjeżdża na bok ani za sofę, nie zawraca.
 3. Efekt końcowy: kamera zatrzymuje się w kadrze dopasowanym do wygenerowanego obrazu, a scroll powoli odsłania fotorealistyczne hero. Następnie pojawiają się hasło i przyciski. To koncepcja, nie zdjęcie realizacji studia.
 
 ## Podział scrolla
@@ -28,17 +28,18 @@ Pomiń spacer prowadzi do pełnego końcowego hero. Dalsze przewijanie przechodz
 
 ### Przerywnik z firanami przed Wiedzą z praktyki
 
-Wariant `wejscie.html#firany` zachowuje cytat i istniejącą fotografię jadalni. Natywny scroll powiększa kadr, miesza go z modelowaną jadalnią, kieruje kamerę w lewo, a następnie rozsuwa dwie geometryczne firany. Za nimi odsłania się sekcja sklepu. Przejście działa wstecz; nie przechwytuje kółka ani dotyku. Początek strony i przerywnik są niezależnymi scenami, renderowanymi wyłącznie na żądanie w pobliżu ekranu.
+Wariant `wejscie.html#firany` zachowuje cytat i istniejącą fotografię jadalni. Natywny scroll powiększa kadr, miesza go z fotograficzną warstwą głębi jadalni, kieruje kamerę w lewo, a następnie rozsuwa dwie geometryczne firany. Za nimi odsłania się sekcja sklepu. Przejście działa wstecz; nie przechwytuje kółka ani dotyku. Początek strony i przerywnik są niezależnymi scenami, renderowanymi wyłącznie na żądanie w pobliżu ekranu.
 
-- `curtain-motion.js`: fazy i deformacja plisowanej tkaniny, z kompresją fałd i stabilnym brzegiem.
-- `curtain-scene.js`: osobna jadalnia, kamienny stół, tapicerowane krzesła, drewniana ściana i firany; lokalne tekstury z istniejących zasobów.
+- `curtain-motion.js`: fazy i deformacja nieregularnie plisowanej tkaniny. Przy otwarciu zbiera się ona na boki, zachowując szerokość i objętość fałd. Pionowy zapas geometrii pozostawia jej krawędzie poza kadrem także przy patrzeniu pod kątem.
+- `curtain-scene.js`: fotograficzne wnętrze na powierzchni z głębią i niezależne firany 3D ze skanowaną fakturą lnu, miękkimi nieregularnymi fałdami, taśmą i obszyciami.
+- Wnętrze przerywnika jest fotograficzną projekcją 2.5D, nie pełnym pokojem do swobodnego zwiedzania. Dystans kamery od punktu referencyjnego ograniczono do około 0,67 m; większy ruch ujawniłby rozciąganie pojedynczego obrazu. Przed otwarciem firan scena wyrównuje się z oknem i wygasza tło. Test porównuje projekcję każdego wierzchołka z UV źródła. Fotografia i skan lnu pochodzą z istniejących zasobów projektu; nie wygenerowano nowych obrazów.
 - `curtain.js` i `curtain.css`: leniwe uruchomienie WebGL, responsywny kadr, odwracalne przewijanie i przycisk pominięcia. Preferencja ograniczonego ruchu, druk i błąd WebGL zachowują statyczny przerywnik.
 - Wizualny podgląd następnej sekcji ma `aria-hidden` i `inert`, nie powiela identyfikatorów. Docelowa sekcja pozostaje zwykłym HTML; fokus na jej linku kończy animację.
 - `check-curtain-transition.mjs` sprawdza skończone współrzędne i normalne tkaniny, kompresję i powrót fałd, kolejność obrotu/otwarcia i ciągłość faz.
 
 - interior-project.js: biała kopia tej samej geometrii bez nazw pomieszczeń. Płaskie linie planu nie są generowane. Sufity oraz otoczenie są pomijane w makiecie. Oryginalne materiały i scena pozostają nienaruszone. Zewnętrzne elementy oraz sufity mają oddzielne znaczniki zachowywane przez łączenie statycznych geometrii.
 - interior-stage-pass.js: zgodne kadry makiety i materiałów są mieszane w przybliżeniu percepcyjnym. Podwójny render działa wyłącznie podczas pojawiania się materiałów.
-- walkthrough-motion.js: osobny tor z góry kończy się dokładnie na początku skróconej trasy pieszej. Główna trasa nadal rozkłada postęp według drogi i kąta obrotu, z interpolacją kwaternionów, tłumieniem krytycznym i limitem szybkości.
+- walkthrough-motion.js: osobny tor z góry kończy się dokładnie na początku bezpośredniej trasy pieszej. Główna trasa nadal rozkłada postęp według drogi i kąta obrotu, z interpolacją kwaternionów, tłumieniem krytycznym i limitem szybkości.
 - walkthrough-timing.js: fazy, wzrost geometrii, materiały, fotografia i tekst.
 - walkthrough.js: sterowanie renderem, rozmiarem i kontrastem menu oraz aktywnymi podpisami etapów. DPR jest ograniczony, a renderowanie modelu zatrzymuje się po pełnym odsłonięciu fotografii i poza widoczną sekcją.
 

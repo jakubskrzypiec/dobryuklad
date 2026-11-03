@@ -24,9 +24,9 @@ for(const aspect of [.44,1,1.757,2.5]){
 }
 assert.equal(walkthroughPhases(0).growth,.72);assert.equal(walkthroughPhases(0).materials,0);assert.equal(walkthroughPhases(.18).growth,1);assert.equal(walkthroughPhases(.35).intro,1);assert.equal(walkthroughPhases(.35).materials,1);
 for(let p=0;p<=1;p+=.001){const phase=walkthroughPhases(p);if(phase.photo>0)assert.equal(phase.travel,1);if(phase.materials>0)assert.equal(phase.growth,1);}
-assert.ok(walking.length<35&&walking.length>15,'walking arc should be materially shorter than the former 54-unit circuit');
+assert.ok(walking.length<18&&walking.length>5,'direct corridor approach must not include the old sofa circuit');
 for(const aspect of [.44,1.757,2.5]){
  const intro=createProjectIntroTrack(aspect),a=new THREE.Vector3(),b=new THREE.Vector3(),qa=new THREE.Quaternion(),qb=new THREE.Quaternion();
  for(const p of [.27,.34,.72]){const left=walkthroughPhases(p-.00001),right=walkthroughPhases(p+.00001);if(left.intro<1)intro.sample(left.intro,a,qa);else walking.sample(left.travel,a,qa);if(right.intro<1)intro.sample(right.intro,b,qb);else walking.sample(right.travel,b,qb);assert.ok(a.distanceTo(b)<.003&&qa.angleTo(qb)<.003,'no pose jump at timeline joins');}
 }
-console.log('PASS: raised 3D opening without paper linework, short side arc, zero-roll descent, seamless joins, responsive framing, safe material handoff and stage order.');
+console.log('PASS: raised 3D opening without labels, direct corridor-to-hero approach, zero-roll descent, seamless joins, responsive framing, safe material handoff and stage order.');

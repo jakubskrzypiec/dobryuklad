@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {advanceProgress} from './walkthrough-motion.js?v=corridor-10';
-import {curtainPhases,curtainCamera,curtainOpening} from './curtain-motion.js?v=corridor-10';
-import {createCurtainScene} from './curtain-scene.js?v=corridor-10';
+import {advanceProgress} from './walkthrough-motion.js?v=natural-13';
+import {curtainPhases,curtainCamera,curtainOpening} from './curtain-motion.js?v=natural-13';
+import {createCurtainScene} from './curtain-scene.js?v=natural-13';
 
 const sequence=document.querySelector('.curtain-sequence'),stage=sequence?.querySelector('.curtain-stage'),reduce=matchMedia('(prefers-reduced-motion: reduce)');
 let renderer,interior,camera,ready=false,booting=false,visible=false,raf=0,last=0,target=0,range=1,origin=0;
@@ -12,7 +12,7 @@ function resize(){if(!ready)return;origin=sequence.getBoundingClientRect().top+s
 function render(time){
  raf=0;if(!ready||!visible||document.hidden||reduce.matches)return;
  const dt=Math.min((time-last)/1000||.016,.05);last=time;const p=advanceProgress(motion,target,dt),phase=curtainPhases(p),pose=curtainCamera(phase.turn,camera.aspect);
- camera.position.copy(pose.position);camera.lookAt(pose.target);camera.fov=pose.fov;camera.updateProjectionMatrix();interior.update(curtainOpening(phase.open,camera.aspect),phase.room);
+ camera.position.copy(pose.position);camera.lookAt(pose.target);camera.fov=pose.fov;camera.updateProjectionMatrix();interior.update(curtainOpening(phase.open,camera.aspect),phase.room,phase.turn);
  stage.style.setProperty('--curtain-expand',phase.expand.toFixed(5));stage.style.setProperty('--curtain-image',phase.image.toFixed(5));stage.style.setProperty('--curtain-copy',phase.copy.toFixed(5));stage.style.setProperty('--curtain-room',phase.room.toFixed(5));stage.style.setProperty('--curtain-page',phase.page.toFixed(5));stage.querySelector('.curtain-skip').hidden=p>.95;
  stage.dataset.progress=p.toFixed(4);stage.dataset.open=phase.open.toFixed(4);stage.dataset.turn=phase.turn.toFixed(4);
  renderer.render(interior.scene,camera);if(p!==target)request();

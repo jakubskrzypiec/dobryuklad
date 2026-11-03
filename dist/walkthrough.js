@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {createInterior} from './interior-scene.js?v=corridor-10';
-import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=corridor-10';
-import {createInteriorTrack,createProjectIntroTrack,advanceProgress,matchedHeroFov} from './walkthrough-motion.js?v=corridor-10';
+import {createInterior} from './interior-scene.js?v=natural-13';
+import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=natural-13';
+import {createInteriorTrack,createProjectIntroTrack,advanceProgress,matchedHeroFov} from './walkthrough-motion.js?v=natural-13';
 import {EffectComposer} from './vendor/three/postprocessing/EffectComposer.js';
-import {createProjectStage} from './interior-project.js?v=corridor-10';
-import {InteriorStagePass} from './interior-stage-pass.js?v=corridor-10';
+import {createProjectStage} from './interior-project.js?v=natural-13';
+import {InteriorStagePass} from './interior-stage-pass.js?v=natural-13';
 import {SSAOPass} from './vendor/three/postprocessing/SSAOPass.js';
 import {LightProbeGenerator} from './vendor/three/lights/LightProbeGenerator.js';
 import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';

@@ -30,8 +30,8 @@ export function advanceProgress(state,target,dt){
 
 export function createInteriorTrack(){
 // Follow the centre of the entrance tunnel before turning left towards the sofa.
-const route=new THREE.CatmullRomCurve3([[3.8,1.52,9.3],[3.8,1.52,7.4],[3.8,1.52,5.1],[2.4,1.5,4.0],[.3,1.48,3.8],[-2.4,1.48,3.3],[-4.6,1.5,3],[-3,1.45,5],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.22);
-const gaze=new THREE.CatmullRomCurve3([[3.8,1.42,3.8],[3.7,1.4,2.8],[1.5,1.2,.2],[-.6,1.05,-.4],[-1.1,1,-.4],[-1.1,.98,-.4],[-1,.98,-.35],[-.3,1.2,-1.4],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.22);
+const route=new THREE.CubicBezierCurve3(...[[3.8,1.52,9.3],[3.8,1.52,6.65],[3.8,1.44,5.2],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)));
+const gaze=new THREE.CatmullRomCurve3([[3.8,1.42,3.8],[3.8,1.4,2.5],[3.7,1.3,1.8],[2.8,1.3,.2],[-.8,1.3,-.6],[0,1.4,-2],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.15);
 return createCameraTrack(route,gaze);
 
 }
