@@ -1,0 +1,146 @@
+/* DOBRY UKŁAD — strona główna nocą: czarne tło z gwiazdami, złoto, beż i ciepła biel.
+   Nadpisuje kolory home.css / readability.css, nie zmienia treści ani układu sekcji. */
+.noc{
+  --noc-bg:#050403;
+  --noc-ink:#f3eadb;
+  --noc-soft:#d8cbb6;
+  --noc-muted:#a3957f;
+  --noc-gold:#d9a75a;
+  --noc-gold-soft:#d9a75a33;
+  --noc-line:#d9a75a26;
+  --noc-panel:rgba(18,14,10,.62);
+  --home-ink:var(--noc-ink);
+  --home-muted:var(--noc-muted);
+  --home-line:var(--noc-line);
+  --readable-muted:var(--noc-muted);
+  background:var(--noc-bg);
+  color:var(--noc-ink);
+}
+.noc ::selection{background:var(--noc-gold);color:#120d08}
+.noc-stars{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block}
+.noc main,.noc .site-footer{position:relative;z-index:1}
+.noc .planet-sequence{z-index:2}
+
+/* sekcje: przezroczyste, gwiazdy prześwitują */
+.noc .home-section,.noc .home-offer,.noc .home-shop,.noc .home-contact,.noc .home-social,.noc .home-reviews,.noc footer.site-footer{background:transparent;color:var(--noc-ink)}
+.noc .home-section h2,.noc .home-section h3,.noc .home-social h2,.noc .home-contact h2{color:#f7efe2}
+.noc .home-kicker,.noc .home-contact>.home-kicker,.noc .home-social .home-kicker{color:var(--noc-gold);letter-spacing:.16em}
+.noc .home-overline,.noc .home-heading>p,.noc .home-offer-eyebrow,.noc .brief-shop-intro,.noc .home-comparison-copy p,.noc .home-material-note,.noc .brief-compare-note{color:var(--noc-muted)}
+.noc .home-about-copy>.home-lead{color:var(--noc-soft)}
+.noc .home-about-copy>p:not(.home-overline),.noc .home-offer-description{color:var(--noc-soft)}
+
+/* linki i przyciski */
+.noc .home-card-link{color:var(--noc-ink);border-color:var(--noc-gold-soft);transition:border-color .3s,color .3s}
+.noc .home-card-link:hover{color:var(--noc-gold);border-color:var(--noc-gold)}
+.noc .home-cta{color:var(--noc-ink);border:1px solid #d9a75a80;background:transparent}
+.noc .home-cta:hover,.noc .home-cta-light:hover{background:var(--noc-gold);color:#120d08;border-color:var(--noc-gold)}
+.noc .home-offer-footer .home-cta{border:1px solid #d9a75a80}
+
+/* o nas: miejsce na zdjęcie studia jako ciemna, złota rama */
+.noc .studio-photo-placeholder{background:linear-gradient(160deg,rgba(217,167,90,.08),rgba(18,14,10,.7) 55%);border:1px solid var(--noc-line);color:var(--noc-muted)}
+.noc .studio-photo-placeholder p{color:var(--noc-soft)}
+.noc .placeholder-line{background:var(--noc-gold)}
+.noc .placeholder-top,.noc .placeholder-bottom,.noc .studio-photo-placeholder small{color:var(--noc-muted)}
+
+/* wybrane projekty */
+.noc .project-slide,.noc .project-slide:nth-child(n){background:linear-gradient(165deg,#1c150e,#0b0806 70%);border:1px solid var(--noc-line);transition:border-color .4s,box-shadow .4s}
+.noc .project-slide:nth-child(3n+2){background:linear-gradient(165deg,#241a10,#0b0806 70%)}
+.noc .project-slide:hover{border-color:#d9a75a80;box-shadow:0 30px 80px -40px rgba(217,167,90,.45)}
+.noc .project-slot,.noc .project-index{color:var(--noc-muted)}
+.noc .project-index{color:var(--noc-gold)}
+.noc .project-hover-logo{background:#0b0806}
+.noc .carousel-controls button{border-color:#d9a75a66;color:var(--noc-ink)}
+.noc .carousel-controls button:hover{background:#d9a75a22}
+.noc .carousel-count{color:var(--noc-muted)}
+
+/* oferta: szklane karty ze złotym numerem */
+.noc .home-offer-card{background:var(--noc-panel);border:1px solid var(--noc-line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .4s,box-shadow .4s;transform-style:preserve-3d}
+.noc .home-offer-card:hover{border-color:#d9a75a70;box-shadow:0 40px 90px -50px rgba(217,167,90,.5)}
+.noc .home-offer-number{color:var(--noc-gold)}
+
+/* porównanie */
+.noc .brief-compare{background:#0d0a07;border:1px solid var(--noc-line)}
+.noc .brief-compare-after{background:linear-gradient(160deg,#20180f,#0c0906)}
+.noc .brief-compare-before{background:linear-gradient(160deg,#2c2115,#120d08)}
+.noc .brief-compare-panel>span,.noc .brief-compare-panel small{color:var(--noc-soft)}
+.noc .brief-compare-panel small{color:var(--noc-muted)}
+.noc .brief-compare-divider{background:var(--noc-gold)}
+.noc .brief-compare-divider>span{background:var(--noc-gold);color:#120d08}
+
+/* opinie */
+.noc .home-reviews-grid article{border-color:var(--noc-line)}
+.noc .home-reviews-grid article>span{color:var(--noc-gold)}
+.noc .home-reviews-grid p{color:var(--noc-soft)}
+.noc .home-reviews-grid small{color:var(--noc-muted)}
+
+/* sklep */
+.noc .course-photo{background:linear-gradient(165deg,#1d160e,#0b0806 75%);border:1px solid var(--noc-line);color:var(--noc-muted)}
+.noc .home-shop .course-photo span{color:var(--noc-muted)}
+.noc .course-caption{border-top-color:var(--noc-line)}
+.noc .course-caption>span{color:var(--noc-gold)}
+
+/* kontakt */
+.noc .home-contact{background:linear-gradient(180deg,transparent,rgba(18,14,10,.55) 30%,rgba(18,14,10,.55) 70%,transparent)}
+.noc .contact-intro-new>p,.noc .contact-intro-new>a{color:var(--noc-soft)!important}
+.noc .contact-intro-new>a{border-bottom:1px solid var(--noc-gold-soft)}
+.noc .home-contact form label{color:var(--noc-muted)}
+.noc .home-contact form input,.noc .home-contact form select,.noc .home-contact form textarea{color:var(--noc-ink);border-bottom-color:#d9a75a55;background:transparent}
+.noc .home-contact form input:focus,.noc .home-contact form select:focus,.noc .home-contact form textarea:focus{border-bottom-color:var(--noc-gold);outline:none}
+.noc .home-contact form select option{background:#120d08;color:var(--noc-ink)}
+.noc .home-contact form .button{background:var(--noc-gold);color:#120d08;border-color:var(--noc-gold)}
+.noc .home-contact form .button:hover{background:#f0c27d}
+.noc .home-contact form .form-note,.noc .form-status{color:var(--noc-muted)}
+
+/* social i stopka */
+.noc .social-profile{border-bottom-color:var(--noc-line);color:var(--noc-ink)}
+.noc .social-profile>.social-icon{background:#d9a75a1f;color:var(--noc-gold)}
+.noc .social-profile:hover .social-icon{background:var(--noc-gold);color:#120d08}
+.noc .social-text strong{color:var(--noc-ink)}.noc .social-text>span{color:var(--noc-soft)}.noc .social-text small{color:var(--noc-muted)}
+.noc footer.site-footer{border-top:1px solid var(--noc-line)}
+.noc .site-footer .footer-bottom{border-top-color:var(--noc-line)}
+
+/* okna dialogowe */
+.noc .content-dialog{background:#0d0a07;color:var(--noc-ink);border:1px solid var(--noc-line)}
+.noc .content-dialog p,.noc .content-dialog label,.noc .materials p{color:var(--noc-soft)}
+.noc .content-dialog input,.noc .content-dialog select,.noc .content-dialog textarea{background:transparent;color:var(--noc-ink);border-bottom-color:#d9a75a55}
+.noc .process-track article>span{background:#0d0a07}
+
+/* nagłówki sekcji: maska dla słów */
+.noc .nw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}.noc .nw>span{display:inline-block;will-change:transform}
+
+/* ---------------- przerywnik: orbita projektów ---------------- */
+.orbit-interlude{position:relative;min-height:110vh;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.orbit-canvas{position:absolute;inset:0;z-index:0;-webkit-mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}.orbit-canvas canvas{display:block;width:100%;height:100%}
+.orbit-copy{position:relative;z-index:2;padding:0 6.5%;max-width:620px;display:flex;flex-direction:column;align-items:flex-start;gap:22px;pointer-events:none}
+.orbit-copy a{pointer-events:auto}
+.orbit-copy h2{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(44px,4.6vw,82px);line-height:1.04;letter-spacing:-.045em;color:#f7efe2;margin:0;text-shadow:0 2px 30px rgba(5,4,3,.8)}
+.orbit-interlude:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,3,.85),rgba(5,4,3,.2) 45%,transparent 70%)}
+
+/* ---------------- przerywnik: globus z miastami ---------------- */
+.globe-interlude{position:relative;min-height:120vh;overflow:hidden;display:flex;align-items:center;isolation:isolate}
+.globe-canvas{position:absolute;inset:0;z-index:0;-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent)}.globe-canvas canvas{display:block;width:100%;height:100%}
+.globe-copy{position:relative;z-index:2;padding:0 6.5%;max-width:640px;display:flex;flex-direction:column;align-items:flex-start;gap:24px}
+.globe-copy h2{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(42px,4.4vw,78px);line-height:1.05;letter-spacing:-.045em;color:#f7efe2;margin:0;text-shadow:0 2px 30px rgba(5,4,3,.8)}
+.globe-cities{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 10px;max-width:520px}
+.globe-cities li{font:500 12px/1 'Manrope',Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--noc-soft);padding:10px 14px;border:1px solid var(--noc-line);border-radius:999px;background:rgba(18,14,10,.5)}
+.globe-cities li.is-home{color:#120d08;background:var(--noc-gold);border-color:var(--noc-gold)}
+.globe-note{margin:0;font:400 13px/1.7 'Manrope',Arial,sans-serif;color:var(--noc-muted)}
+.globe-interlude:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,3,.9),rgba(5,4,3,.35) 42%,transparent 62%)}
+.globe-labels{position:absolute;inset:0;z-index:2;pointer-events:none}
+.globe-labels span{position:absolute;left:0;top:0;font:500 11px/1 'Manrope',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#f3eadb;white-space:nowrap;opacity:0;padding-left:12px;text-shadow:0 1px 10px #000;will-change:transform,opacity}
+.globe-labels span.is-left{padding-left:0;padding-right:0;translate:-100% 0;text-align:right}
+.globe-labels span[data-city="0"]{font:400 22px/1 'Playfair Display',Georgia,serif;letter-spacing:-.01em;text-transform:none;color:#f7efe2}
+.globe-labels small{display:block;margin-top:5px;font:500 10px/1 'Manrope',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--noc-gold)}
+
+@media(max-width:760px){
+  .orbit-interlude{min-height:100svh;align-items:flex-end;padding-bottom:12vh}
+  .orbit-interlude:before{background:linear-gradient(0deg,rgba(5,4,3,.9),rgba(5,4,3,.2) 50%,transparent)}
+  .orbit-copy{padding:0 7%}
+  .globe-interlude{min-height:auto;flex-direction:column;align-items:stretch;padding:90px 0 0}
+  .globe-interlude:before{display:none}
+  .globe-canvas{position:relative;inset:auto;height:62svh;order:2}
+  .globe-labels{top:auto;bottom:0;height:62svh}
+  .globe-copy{padding:0 7%}
+  .globe-cities li{font-size:11px;padding:8px 11px}
+}
+@media(prefers-reduced-motion:reduce){.noc-stars{display:none}}
