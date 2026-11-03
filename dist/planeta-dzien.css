@@ -16,3 +16,7 @@
 .planet-daylight .header .brand-logo img{transition:filter .4s,opacity .4s}.planet-daylight .header nav a{transition:color .4s}
 .planet-ink.menu-open .header nav a{color:#151413}
 .planet-daylight .planet-stage:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;opacity:var(--ui,1);background:radial-gradient(70% 55% at 0% 100%,rgba(239,232,222,.92),rgba(239,232,222,.55) 45%,transparent 75%)}
+.planet-credit{display:none}
+.planet-daylight .planet-credit{display:block;position:absolute;left:6.5%;bottom:4%;z-index:3;margin:0;font:400 11px/1.6 'Manrope',Arial,sans-serif;color:#6f655b;opacity:var(--ui,1)}
+.planet-daylight .planet-credit a{text-decoration:underline;text-underline-offset:2px}
+@media(max-width:760px){.planet-daylight .planet-credit{left:7%;bottom:3%;font-size:10px}}

@@ -35,7 +35,7 @@ html = html.slice(0, s)
   + `<div class="planet-chapters" aria-hidden="true"><span class="is-current">01 / Ziemia</span><span>02 / Koszalin</span><span>03 / Miasto</span><span>04 / Wnętrze</span></div>`
   + `<div class="planet-guide"><span>Przewiń, aby zlecieć do Koszalina</span><progress max="1" value="0" aria-label="Postęp animacji wejścia"></progress></div>`
   + `<button class="planet-skip" type="button" hidden>Pomiń animację</button>`
-  + `<p class="planet-loading" role="status">Przygotowujemy mapę…</p>`
+  + `<p class="planet-credit">Mapa miasta © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · granice: Natural Earth</p><p class="planet-loading" role="status">Przygotowujemy mapę…</p>`
   + `</section></div>`
   + html.slice(e);
 
@@ -52,7 +52,7 @@ html = html.slice(0, s)
 
 html = html
   .replace('<link rel="preload" as="image" href="assets/hero-v2.webp">', '')
-  .replace('</head>', '<link rel="stylesheet" href="planeta.css?v=4"><link rel="stylesheet" href="planeta-dzien.css?v=2"><link rel="stylesheet" href="globus.css?v=1"><script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script></head>')
+  .replace('</head>', '<link rel="stylesheet" href="planeta.css?v=4"><link rel="stylesheet" href="planeta-dzien.css?v=3"><link rel="stylesheet" href="globus.css?v=1"><script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script></head>')
   .replace('</body>', '<script src="vendor/gsap/gsap.min.js" defer></script><script src="vendor/gsap/ScrollTrigger.min.js" defer></script><script type="module" src="planeta-dzien.js?v=2"></script><script type="module" src="globus.js?v=1"></script></body>');
 fs.writeFileSync(indexPath, html);
 console.log('Built homepage with night intro and globe interlude.');
