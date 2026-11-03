@@ -4,7 +4,7 @@ import {Pass,FullScreenQuad} from './vendor/three/postprocessing/Pass.js';
 export class InteriorStagePass extends Pass{
  constructor(projectScene,interiorScene,camera){
   super();this.needsSwap=false;this.projectScene=projectScene;this.interiorScene=interiorScene;this.camera=camera;this.mix=0;
-  this.clayTarget=new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType});this.roomTarget=this.clayTarget.clone();
+  this.clayTarget=new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:4});this.roomTarget=this.clayTarget.clone();
   this.quad=new FullScreenQuad(new THREE.ShaderMaterial({uniforms:{clay:{value:this.clayTarget.texture},room:{value:this.roomTarget.texture},blend:{value:0}},vertexShader:'varying vec2 uvScene;void main(){uvScene=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fragmentShader:'uniform sampler2D clay;uniform sampler2D room;uniform float blend;varying vec2 uvScene;void main(){vec3 a=sqrt(max(texture2D(clay,uvScene).rgb,vec3(0.0)));vec3 b=sqrt(max(texture2D(room,uvScene).rgb,vec3(0.0)));vec3 c=mix(a,b,blend);gl_FragColor=vec4(c*c,1.0);}',depthTest:false,depthWrite:false}));
  }
  setSize(w,h){this.clayTarget.setSize(w,h);this.roomTarget.setSize(w,h);}

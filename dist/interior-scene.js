@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from './vendor/three/RoundedBoxGeometry.js';
 import {upholsteryGeometry,addUpholsteryWelt,addCraftDetails,createBotanical} from './interior-craft.js?v=atelier-5';
-import {addCourtyardAndArt} from './interior-courtyard.js?v=project-7';
-import {batchStaticInterior} from './interior-batching.js?v=project-7';
+import {addCourtyardAndArt} from './interior-courtyard.js?v=clay-8';
+import {batchStaticInterior} from './interior-batching.js?v=clay-8';
 import {HDRLoader} from './vendor/three/HDRLoader.js';
 import {RectAreaLightUniformsLib} from './vendor/three/lights/RectAreaLightUniformsLib.js';
 

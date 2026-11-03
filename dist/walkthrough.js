@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {createInterior} from './interior-scene.js?v=project-7';
-import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=project-7';
-import {createInteriorTrack,createProjectIntroTrack,advanceProgress,matchedHeroFov} from './walkthrough-motion.js?v=project-7';
+import {createInterior} from './interior-scene.js?v=clay-8';
+import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=clay-8';
+import {createInteriorTrack,createProjectIntroTrack,advanceProgress,matchedHeroFov} from './walkthrough-motion.js?v=clay-8';
 import {EffectComposer} from './vendor/three/postprocessing/EffectComposer.js';
-import {createProjectStage} from './interior-project.js?v=project-7';
-import {InteriorStagePass} from './interior-stage-pass.js?v=project-7';
+import {createProjectStage} from './interior-project.js?v=clay-8';
+import {InteriorStagePass} from './interior-stage-pass.js?v=clay-8';
 import {SSAOPass} from './vendor/three/postprocessing/SSAOPass.js';
 import {LightProbeGenerator} from './vendor/three/lights/LightProbeGenerator.js';
 import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';
@@ -50,10 +50,10 @@ function render(time){
  const elapsed=time-last;if(last&&elapsed<250)frameAverage=frameAverage*.9+elapsed*.1;const dt=Math.min(elapsed/1000||.016,.05);last=time;current=advanceProgress(motion,target,dt);
  const phase=walkthroughPhases(current),startFov=innerWidth<760?78:60;
  if(phase.intro<1){introTrack.sample(phase.intro,camera.position,camera.quaternion);camera.fov=THREE.MathUtils.lerp(45,startFov,phase.intro);}else{cameraTrack.sample(phase.travel,camera.position,camera.quaternion);camera.fov=THREE.MathUtils.lerp(startFov,matchedHeroFov(camera.aspect),phase.travel);}camera.updateProjectionMatrix();
- stage.style.setProperty('--scene-shade',phase.materials.toFixed(4));project.update(phase.growth,phase.lines);stagePass.mix=phase.materials;ao.scene=phase.materials>.001?scene:project.scene;ao.enabled=innerWidth>=760&&phase.growth>.06;
+ stage.style.setProperty('--scene-shade',phase.materials.toFixed(4));project.update(phase.growth,phase.labels);stagePass.mix=phase.materials;ao.scene=phase.materials<.999?project.scene:scene;ao.enabled=innerWidth>=760&&phase.growth>.06;
  document.body.classList.toggle('walkthrough-design',phase.materials<.5&&!captureHero);
  const chapter=phase.photo>0?'effect':phase.materials>.001?'visualization':'project';for(const label of chapters)label.classList.toggle('is-current',label.dataset.chapter===chapter);
- guideLabel.textContent=phase.photo>0?'Przewiń do efektu końcowego':phase.intro<1?'Przewiń, aby wejść w projekt':'Przewiń, aby przejść przez wnętrze';
+ guideLabel.textContent=phase.photo>0?'Przewiń do efektu końcowego':phase.intro<1?'Przewiń, aby wejść do wnętrza':'Przewiń, aby przejść przez wnętrze';
  revealHero(phase.hero);stage.style.setProperty('--photo-reveal',photoReady?phase.photo.toFixed(4):'0');
  // After the camera stops, scroll gradually reveals the matched photographic rendering.
  renderer.info.reset();if(captureHero||!photoReady||phase.photo<.999)composer.render();stage.dataset.drawCalls=renderer.info.render.calls;stage.dataset.frameMs=frameAverage.toFixed(1);
