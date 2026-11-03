@@ -2,8 +2,9 @@
 
 Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
-**Strona główna (gałąź `claude/hero-globus`).** Jasne intro: beżowe niebo ze złotymi gwiazdami i Ziemia w odcieniach kamienia (tekstury 4K, wektorowe granice i wybrzeża Natural Earth), scroll prowadzi przez chmury nad Koszalin, a miasto pojawia się jako prawdziwy plan z OpenStreetMap — ulice, budynki, tory, zieleń i woda (`dist/assets/planeta/koszalin-osm.json`, © OpenStreetMap contributors, ODbL), a potem obraz przechodzi w klasyczne ciemne hero ze zdjęciem wnętrza. Reszta strony jak dotąd, jasna. Cytat „Dobre wnętrze…” stoi przy jasnym globusie z granicami państw (Natural Earth 1:50m) i kilkoma miastami: Koszalin (studio), Gdańsk, Poznań, Warszawa, Wrocław, Kraków — lista do potwierdzenia przez studio. Pliki: `dist/planeta-dzien.js`, `dist/planeta-dzien.css`, `dist/planeta.css`, `dist/globus.js`, `dist/globus.css`, `dist/assets/planeta/borders-europe.json`; przebudowa jednorazowa skryptem `scripts/build-home.cjs` na klasycznym `index.html`. Nocna wersja intro zostaje w `planeta.html`.
+**Aktualna strona główna.** Jasny globus w odcieniach kamienia i beżu przechodzi przez chmury w koncepcyjną zabudowę, lot do budynku oraz wejście przez korytarz do jasnego salonu. Po zatrzymaniu kamery pojawia się dopasowane fotograficzne hero z jasnym dębem, kremowym kamieniem i naturalnym lnem. Podpis i plansza Koszalina zostały pominięte. Przy cytacie pozostaje jasny globus z granicami Natural Earth oraz miastami studia. [Opis połączenia i testów](HOME_JOURNEY.md), [źródło nowego hero i prompt](references/IMAGE_PROMPT_HERO_DAYLIGHT.md).
 
+Materiały mapowe zachowane w repozytorium: granice i wybrzeża Natural Earth; wcześniejszy plan `dist/assets/planeta/koszalin-osm.json` — © OpenStreetMap contributors, ODbL. Bieżące wejście nie pobiera planu ulic. Nocny eksperyment pozostaje w `planeta.html`.
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
 [Podstrona O nas](https://jakubskrzypiec.github.io/dobryuklad/o-nas.html) — dwa zdjęcia Sandry, trzy zespołowe, osiem portretów i kontakt. Fotografie oraz podpisy portretów czekają na materiały studia.

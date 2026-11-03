@@ -1,10 +1,8 @@
-// Dzień nad Koszalinem — jasny wariant wejścia (strona główna).
-// Jasne niebo i Ziemia w beżach → chmury → Koszalin jako rysunek ulic → ciemne wnętrze (hero).
-// Kopia planeta.js z jasną paletą; nocna wersja pozostaje w planeta.html.
-// Czarne niebo z gwiazdami → nocna Ziemia w czerni i złocie → przelot przez chmury
-// → Koszalin nocą z wysokości → rozmycie w fotograficzne hero.
+// Jasny globus → koncepcyjna zabudowa → wejście do salonu → jasne hero.
 // Natywny scroll, działa w obie strony.
 import * as THREE from 'three';
+import {createHomeInterior} from './home-interior.js?v=city-home-3';
+import {homeJourneyPhases} from './home-journey-motion.js?v=city-home-3';
 
 const gsap = window.gsap;
 const ScrollTrigger = window.ScrollTrigger;
@@ -24,7 +22,7 @@ function webglAvailable() {
 }
 
 /* ------------------------------------------------------------------ */
-const KOSZALIN = [54.19, 16.17];
+const LANDING_COORDS = [54.19, 16.17];
 const KM = 1 / 6371; // jednostki sceny na kilometr (promień Ziemi = 1)
 const CLOUD_LAYERS = [6.5, 9.5]; // km
 
@@ -69,118 +67,15 @@ const NOISE = /* glsl */ `
 `;
 
 /* ------------------------------------------------------------------ */
-/* Koszalin nocą: światła ulic, główne drogi, okoliczne wsie (w km)      */
-/* x — wschód, z — południe (północ = -z), Bałtyk na północy             */
-/* ------------------------------------------------------------------ */
-function buildCityLights() {
-  const pos = [];
-  const col = [];
-  const size = [];
-  const amber = [1.0, 0.62, 0.26];
-  const warm = [1.0, 0.82, 0.55];
-  const cool = [0.86, 0.88, 1.0];
-  const coastZ = (x) => -11.5 + Math.sin(x * 0.09) * 1.2 + Math.sin(x * 0.31) * 0.4;
-  const push = (x, z, s, c) => {
-    if (z < coastZ(x) + 0.2) return; // nic na morzu
-    pos.push(x, 0.002 + rand() * 0.01, z);
-    col.push(...c);
-    size.push(s);
-  };
-  const pick = () => {
-    const r = rand();
-    return r < 0.72 ? amber : r < 0.95 ? warm : cool;
-  };
-  // zasięg miasta: nieregularny obrys, gęściej w środku
-  const reach = (x, z) => {
-    const ang = Math.atan2(z, x);
-    const R = 3.3 * (1 + 0.32 * Math.sin(3 * ang + 1.1) + 0.18 * Math.sin(5 * ang + 2.3) + 0.12 * Math.sin(8 * ang));
-    const r = Math.hypot(x * 0.95, z * 1.15);
-    return clamp01((R - r) / (R * 0.55));
-  };
-  // dwie siatki ulic (stare miasto i osiedla), odcinki z przerwami jak kwartały
-  const grids = [
-    [0.32, 0.15, 6.0],
-    [0.95, 0.19, 5.0],
-  ];
-  grids.forEach(([ang, spacing, half], gi) => {
-    const ca = Math.cos(ang), sa = Math.sin(ang);
-    for (const dirSwap of [false, true]) {
-      for (let line = -half; line <= half; line += spacing * (0.8 + rand() * 0.5)) {
-        let on = rand() < 0.6;
-        let next = 0.2 + rand() * 0.7;
-        const bright = rand() < 0.12; // główne ulice
-        for (let t = -half; t <= half; t += 0.042) {
-          next -= 0.042;
-          if (next <= 0) {
-            on = rand() < (bright ? 0.85 : 0.55);
-            next = 0.15 + rand() * 0.8;
-          }
-          if (!on) continue;
-          const u = dirSwap ? line : t;
-          const w = dirSwap ? t : line;
-          const x = u * ca - w * sa;
-          const z = u * sa + w * ca;
-          // druga siatka tylko na wschodzie i południu (osiedla)
-          if (gi === 1 && x + z * 0.4 < 0.6) continue;
-          if (gi === 0 && x + z * 0.4 > 1.6 && rand() < 0.7) continue;
-          const d = reach(x, z);
-          if (rand() > d * (bright ? 1.0 : 0.8)) continue;
-          push(x + (rand() - 0.5) * 0.012, z + (rand() - 0.5) * 0.012, bright ? 1.15 : 0.6 + rand() * 0.45, bright ? warm : pick());
-        }
-      }
-    }
-  });
-  // śródmieście: kilka jaśniejszych placów i ulic handlowych
-  for (let i = 0; i < 900; i++) {
-    const a = rand() * Math.PI * 2;
-    const d = Math.pow(rand(), 1.4) * 0.9;
-    push(Math.cos(a) * d * 1.3, Math.sin(a) * d, 0.7 + rand() * 0.7, rand() < 0.5 ? warm : pick());
-  }
-  // drogi wylotowe (do Kołobrzegu, Słupska, Szczecinka, Bobolic, Mielna, Sianowa)
-  const roads = [-2.6, -0.35, 0.55, 1.35, 1.95, 3.0, 3.75, 4.6, 5.4];
-  roads.forEach((ang, k) => {
-    let x = 0, z = 0;
-    let a = ang;
-    const len = 14 + rand() * 22;
-    for (let t = 0; t < len; t += 0.08) {
-      a += (rand() - 0.5) * 0.04;
-      x += Math.cos(a) * 0.08;
-      z += Math.sin(a) * 0.08;
-      if (t > 3 && rand() > 0.55) continue;
-      push(x + (rand() - 0.5) * 0.02, z + (rand() - 0.5) * 0.02, t < 3 ? 1.0 : 0.75, k % 3 ? amber : warm);
-    }
-  });
-  // obwodnica
-  for (let t = 0; t < Math.PI * 2; t += 0.012) {
-    const r = 3.6 + Math.sin(t * 3) * 0.3;
-    if (rand() > 0.7) push(Math.cos(t) * r, Math.sin(t) * r * 0.85, 0.8, amber);
-  }
-  // wsie i miasteczka w okolicy, Mielno nad samym morzem
-  const towns = [[3.0, -10.6, 0.6, 220], [-12, -6, 0.5, 160], [9, 6, 0.45, 120], [-7, 9, 0.5, 140]];
-  for (let i = 0; i < 46; i++) {
-    const a = rand() * Math.PI * 2;
-    const d = 6 + rand() * 32;
-    towns.push([Math.cos(a) * d, Math.sin(a) * d, 0.15 + rand() * 0.3, 20 + rand() * 70]);
-  }
-  towns.forEach(([cx, cz, r, n]) => {
-    for (let i = 0; i < n; i++) {
-      const a = rand() * Math.PI * 2;
-      const d = Math.pow(rand(), 0.8) * r;
-      push(cx + Math.cos(a) * d, cz + Math.sin(a) * d, 0.6 + rand() * 0.5, pick());
-    }
-  });
-  return { pos: new Float32Array(pos), col: new Float32Array(col), size: new Float32Array(size), coastZ };
-}
-
-/* ------------------------------------------------------------------ */
 function start() {
   body.classList.add('planet-active', 'planet-ink', 'planet-daylight');
   gsap.registerPlugin(ScrollTrigger);
 
   const host = stage.querySelector('.planet-canvas');
+  const interior = createHomeInterior(stage);
   const loading = stage.querySelector('.planet-loading');
+  const skipButton=stage.querySelector('.planet-skip');
   const finalLayer = stage.querySelector('.planet-final');
-  const pinLabel = stage.querySelector('.planet-pin');
   const mistEl = stage.querySelector('.planet-mist');
   const progressEl = stage.querySelector('.planet-guide progress');
   const chapters = [...stage.querySelectorAll('.planet-chapters span')];
@@ -198,7 +93,7 @@ function start() {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(38, 1, 0.001, 30);
   const C = Object.fromEntries(Object.entries(COLORS).map(([k, v]) => [k, new THREE.Color(v)]));
-  // słońce za planetą, z lewej: z przodu noc, złoty sierp na krawędzi; Koszalin po nocnej stronie
+  // Miękkie światło globusu w neutralnej palecie.
   const sunDir = new THREE.Vector3(-0.35, 0.55, 0.75).normalize();
 
   /* ---------------- tekstury ---------------- */
@@ -308,7 +203,7 @@ function start() {
 
   /* ---------------- Ziemia nocą ---------------- */
   const pivot = new THREE.Group();
-  pivot.quaternion.setFromUnitVectors(latLon(...KOSZALIN), K);
+  pivot.quaternion.setFromUnitVectors(latLon(...LANDING_COORDS), K);
   scene.add(pivot);
   const spin = new THREE.Group();
   pivot.add(spin);
@@ -431,172 +326,7 @@ function start() {
     })
     .catch(() => {});
 
-  /* ---------------- znacznik Koszalina ---------------- */
-  const pin = new THREE.Group();
-  pin.position.copy(K).multiplyScalar(1.00001);
-  const pinMat = new THREE.MeshBasicMaterial({ color: C.gold, transparent: true, depthWrite: false, toneMapped: false });
-  const pinRing = new THREE.Mesh(new THREE.RingGeometry(0.88, 1, 64), pinMat);
-  const pinPulse = new THREE.Mesh(new THREE.RingGeometry(0.95, 1, 64), pinMat.clone());
-  [pinRing, pinPulse].forEach((m) => {
-    m.rotation.x = -Math.PI / 2;
-    pin.add(m);
-  });
-  scene.add(pin);
-
-  /* ---------------- Koszalin z wysokości ---------------- */
-  const site = new THREE.Group();
-  site.position.copy(K).multiplyScalar(1.0000005);
-  site.scale.setScalar(KM);
-  scene.add(site);
-
-  const city = buildCityLights();
-  const cityGeo = new THREE.BufferGeometry();
-  cityGeo.setAttribute('position', new THREE.BufferAttribute(city.pos, 3));
-  cityGeo.setAttribute('color', new THREE.BufferAttribute(city.col, 3));
-  cityGeo.setAttribute('aSize', new THREE.BufferAttribute(city.size, 1));
-  const cityUniforms = { uTime: { value: 0 }, uDpr: { value: DPR }, uAlpha: { value: 0 }, uScale: { value: 1 } };
-  const cityLights = new THREE.Points(
-    cityGeo,
-    new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      
-      vertexColors: true,
-      uniforms: cityUniforms,
-      vertexShader: LOGDEPTH_V + /* glsl */ `
-        attribute float aSize; uniform float uTime, uDpr, uScale; varying vec3 vC; varying float vA;
-        void main(){
-          vC = color;
-          vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          float dist = -mv.z;
-          float ph = position.x * 13.7 + position.z * 7.3;
-          float tw = 0.82 + 0.18 * sin(uTime * (1.5 + fract(ph) * 3.0) + ph * 10.0);
-          // dalekie światła słabną w mgiełce
-          vA = tw * exp(-dist / (uScale * 26.0));
-          float ps = aSize * uDpr * uScale * 34.0 / max(dist, 1e-9);
-          // daleko: mniejsze niż piksel, więc ciemniejsze zamiast większych
-          vA *= clamp(ps, 0.5, 1.0);
-          gl_PointSize = clamp(ps, 1.0, 5.0 * uDpr);
-          gl_Position = projectionMatrix * mv;
-          #include <logdepthbuf_vertex>
-        }`,
-      fragmentShader: LOGDEPTH_F + /* glsl */ `
-        uniform float uAlpha; varying vec3 vC; varying float vA;
-        void main(){
-          #include <logdepthbuf_fragment>
-          float d = length(gl_PointCoord - 0.5) * 2.0;
-          float core = exp(-d * d * 12.0);
-          float halo = exp(-d * d * 4.0) * 0.04;
-          float a = clamp((core * 1.6 + halo * 4.0) * vA * 1.7, 0.0, 1.0) * uAlpha;
-          // grafit, co któryś punkt w brązie
-          gl_FragColor = vec4(mix(vec3(0.17, 0.14, 0.11), vec3(0.6, 0.45, 0.26), step(0.9, vC.b)), a);
-          #include <colorspace_fragment>
-        }`,
-    })
-  );
-  cityLights.frustumCulled = false;
-  site.add(cityLights);
-  cityLights.visible = false; // zastąpione prawdziwym planem miasta
-
-  /* ---------------- plan Koszalina z OpenStreetMap (metry → km) ---------------- */
-  const map = new THREE.Group();
-  map.scale.setScalar(0.001);
-  site.add(map);
-  const mapMats = [];
-  const fillMat = (hex, y) => {
-    const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(hex), transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
-    m.userData = { k: 1, y };
-    mapMats.push(m);
-    return m;
-  };
-  const lineMat = (hex, k) => {
-    const m = new THREE.LineBasicMaterial({ color: new THREE.Color(hex), transparent: true, opacity: 0, depthWrite: false });
-    m.userData = { k };
-    mapMats.push(m);
-    return m;
-  };
-  const fills = (polys, mat, y, order) => {
-    const shapes = [];
-    polys.forEach((c) => {
-      const n = c.length / 2;
-      if (n < 3) return;
-      // zamknięte obrysy tylko
-      if (Math.abs(c[0] - c[c.length - 2]) + Math.abs(c[1] - c[c.length - 1]) > 6) return;
-      const pts = [];
-      for (let i = 0; i < c.length; i += 2) pts.push(new THREE.Vector2(c[i], c[i + 1]));
-      shapes.push(new THREE.Shape(pts));
-    });
-    if (!shapes.length) return;
-    const g = new THREE.ShapeGeometry(shapes);
-    g.rotateX(Math.PI / 2); // (x, y) kształtu → (x, z) mapy
-    const mesh = new THREE.Mesh(g, mat);
-    mesh.position.y = y;
-    mesh.renderOrder = order;
-    mesh.frustumCulled = false;
-    map.add(mesh);
-  };
-  const lines = (polys, mat, y, order) => {
-    const pos = [];
-    polys.forEach((c) => {
-      for (let i = 0; i < c.length - 2; i += 2) pos.push(c[i], y, c[i + 1], c[i + 2], y, c[i + 3]);
-    });
-    if (!pos.length) return;
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    const l = new THREE.LineSegments(g, mat);
-    l.renderOrder = order;
-    l.frustumCulled = false;
-    map.add(l);
-  };
-  fetch('assets/planeta/koszalin-osm.json')
-    .then((r) => r.json())
-    .then((d) => {
-      fills(d.green || [], fillMat('#d6d1bd', 0.4), 0.4, 1);
-      fills(d.water || [], fillMat('#c5c8c3', 0.6), 0.6, 2);
-      lines((d.water || []), lineMat('#8c8f8a', 0.6), 0.7, 3);
-      fills(d.bld || [], fillMat('#cdbfac', 0.9), 0.9, 4);
-      lines(d.r3 || [], lineMat('#9a8c7b', 0.9), 1.4, 5);
-      lines(d.r2 || [], lineMat('#5e5145', 1), 1.5, 6);
-      lines(d.rail || [], lineMat('#2b241d', 0.8), 1.5, 6);
-      lines([...(d.r1 || []), ...(d.r0 || [])], lineMat('#7a5a2e', 1), 1.6, 7);
-      lines(d.coast || [], lineMat('#2b241d', 1), 1.6, 7);
-    })
-    .catch(() => {});
-
-  // łuna nad miastem i ciemny teren z linią brzegu
-  const groundUniforms = { uAlpha: { value: 0 }, uAmber: { value: C.amber } };
-  const ground = new THREE.Mesh(
-    new THREE.CircleGeometry(80, 96),
-    new THREE.ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      uniforms: groundUniforms,
-      vertexShader: LOGDEPTH_V + /* glsl */ `
-        varying vec2 vP;
-        void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          #include <logdepthbuf_vertex>
-        }`,
-      fragmentShader: LOGDEPTH_F + NOISE + /* glsl */ `
-        uniform float uAlpha; uniform vec3 uAmber; varying vec2 vP;
-        void main(){
-          #include <logdepthbuf_fragment>
-          // płaszczyzna leży w XZ: vP.x = wschód, -vP.y = południe
-          float x = vP.x, z = -vP.y;
-          float coast = -11.5 + sin(x * 0.09) * 1.2 + sin(x * 0.31) * 0.4;
-          float sea = smoothstep(coast + 0.3, coast - 0.3, z);
-          float r = length(vec2(x, z));
-          vec3 land = vec3(0.92, 0.88, 0.82) * (0.97 + 0.05 * fbm2(vec2(x, z) * 0.25));
-          vec3 water = vec3(0.83, 0.82, 0.79);
-          vec3 col = land;
-          col *= 1.0 - 0.04 * exp(-r * r / 18.0);
-          float edge = 1.0 - smoothstep(55.0, 80.0, r);
-          gl_FragColor = vec4(col, uAlpha * edge);
-          #include <colorspace_fragment>
-        }`,
-    })
-  );
-  ground.rotation.x = -Math.PI / 2;
-  site.add(ground);
+  const site=new THREE.Group();site.position.copy(K).multiplyScalar(1.0000005);site.scale.setScalar(KM);scene.add(site);
 
   // chmury: ciemne, od spodu podświetlone złotem miasta
   const cloudShared = { uTime: { value: 0 }, uFade: { value: 0 }, uCam: { value: new THREE.Vector3() }, uAmber: { value: C.amber } };
@@ -660,7 +390,7 @@ function start() {
 
   function cameraAt(p, intro) {
     if (p < 0.5) {
-      // z kosmosu nad Koszalin
+      // z kosmosu w kierunku zbliżenia nad miasto
       const eD = smooth(0.02, 0.3, p);
       const eT = smooth(0.04, 0.28, p);
       const k = smooth(0.03, 0.5, p);
@@ -693,21 +423,10 @@ function start() {
   const mouseS = new THREE.Vector2();
   addEventListener('pointermove', (e) => mouse.set(e.clientX / innerWidth - 0.5, e.clientY / innerHeight - 0.5));
 
-  const proj = new THREE.Vector3();
-  function place(el, worldVec, alpha) {
-    if (!el) return;
-    proj.copy(worldVec).project(camera);
-    const x = (proj.x * 0.5 + 0.5) * host.clientWidth + host.offsetLeft;
-    const y = (-proj.y * 0.5 + 0.5) * host.clientHeight + host.offsetTop;
-    el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
-    el.style.opacity = alpha.toFixed(3);
-  }
-
   const clock = new THREE.Timer();
   if (location.hash === '#debug') window.__planet = { state, camera, K, KM }; // tylko do podglądu stanu kamery
   let lastChapter = -1;
-  const toDay = true; // jasne intro: ciemny tusz do momentu wejścia w ciemne wnętrze
-  let dayMode = false;
+
 
   function frame() {
     if (!state.running) return;
@@ -723,7 +442,8 @@ function start() {
     const unwind = 1 - smooth(0.0, 0.24, p);
     spin.rotation.y = (((state.idle + Math.PI) % (Math.PI * 2)) - Math.PI) * unwind;
 
-    cameraAt(p, state.intro);
+    const journey = homeJourneyPhases(p), worldP = journey.world;
+    cameraAt(worldP, state.intro);
     const par = (1 - smooth(0.08, 0.3, p)) * 0.12;
     camPos.x += mouseS.x * par;
     camPos.y -= mouseS.y * par;
@@ -746,7 +466,7 @@ function start() {
     stars.visible = starUniforms.uAlpha.value > 0.002;
 
     // Ziemia
-    const cityA = smooth(0.28, 0.44, p);
+    const cityA = smooth(0.28, 0.44, worldP);
     earthUniforms.uCity.value = cityA;
     borderMat.opacity = (0.22 + 0.4 * smooth(0.05, 0.25, p)) * (1 - smooth(0.36, 0.5, p)) * state.intro;
     earthUniforms.uLightsFade.value = 1 - smooth(0.004, 0.02, alt);
@@ -755,26 +475,9 @@ function start() {
     halo.material.uniforms.uFade.value = smooth(0.08, 0.35, alt) * state.intro;
     earth.visible = halo.visible = p < 0.7;
 
-    // znacznik
-    const pinA = smooth(0.2, 0.28, p) * (1 - smooth(0.42, 0.48, p));
-    pin.visible = pinA > 0.001;
-    if (pin.visible) {
-      pin.scale.setScalar(alt * 0.03);
-      pinMat.opacity = pinA;
-      const pulse = (time * 0.6) % 1;
-      pinPulse.scale.setScalar(1 + pulse * 1.6);
-      pinPulse.material.opacity = pinA * (1 - pulse) * 0.8;
-    }
-    place(pinLabel, K, pinA);
-
     // miasto i chmury
-    site.visible = p > 0.26;
-    cityUniforms.uAlpha.value = cityA;
-    mapMats.forEach((m) => (m.opacity = cityA * m.userData.k));
-    cityUniforms.uTime.value = time;
-    cityUniforms.uScale.value = KM;
-    groundUniforms.uAlpha.value = cityA;
-    const cloudFade = smooth(0.44, 0.5, p) * (1 - smooth(0.64, 0.7, p));
+    site.visible = worldP > 0.26;
+    const cloudFade = smooth(0.44, 0.5, worldP) * (1 - smooth(0.64, 0.7, worldP));
     cloudShared.uFade.value = cloudFade;
     cloudShared.uTime.value = time;
     const camKm = va.copy(camPos).sub(K).divideScalar(KM);
@@ -782,38 +485,32 @@ function start() {
     clouds.forEach((c) => (c.visible = cloudFade > 0.001));
     let mist = 0;
     if (cloudFade > 0.01) CLOUD_LAYERS.forEach((y) => (mist = Math.max(mist, Math.exp(-((camKm.y - y) ** 2) / 1.4))));
-    if (mistEl) mistEl.style.opacity = (mist * cloudFade * 0.6).toFixed(3);
+    if (mistEl) mistEl.style.opacity = Math.max(mist * cloudFade * 0.6,interior.ready?journey.veil:0).toFixed(3);
 
     // rozdziały
-    const ch = p < 0.3 ? 0 : p < 0.55 ? 1 : p < 0.82 ? 2 : 3;
+    const ch = p < .45 ? 0 : p < .68 ? 1 : 2;
     if (ch !== lastChapter) {
       lastChapter = ch;
       chapters.forEach((c, i) => c.classList.toggle('is-current', i === ch));
     }
 
     // rozmycie i przejście w hero
-    const blur = smooth(0.8, 0.9, p);
-    const photo = smooth(0.83, 0.91, p);
-    stage.style.setProperty('--blur', `${(blur * 22).toFixed(2)}px`);
-    stage.style.setProperty('--zoom', (1 + blur * 0.08).toFixed(4));
+    const photo = interior.failed?smooth(.57,.78,p):journey.photo;
+    interior.render(p);
+    stage.style.setProperty('--blur', '0px');
+    stage.style.setProperty('--zoom', '1');
     stage.style.setProperty('--photo', photo.toFixed(3));
-    // wariant „od nocy do dnia”: po rozjaśnieniu nagłówek przechodzi na ciemny tusz
-    if (toDay) {
-      const day = photo > 0.55;
-      if (day !== dayMode) {
-        dayMode = day;
-        body.classList.toggle('planet-ink', !day);
-      }
-    }
-    stage.style.setProperty('--hero-text', smooth(0.9, 0.96, p).toFixed(3));
+    stage.style.setProperty('--hero-text', journey.text.toFixed(3));
     stage.style.setProperty('--ui', (1 - smooth(0.84, 0.9, p)).toFixed(3));
+    if(skipButton)skipButton.hidden=p>.93;
     if (finalLayer) {
       const interactive = p > 0.95;
       if (interactive === finalLayer.hasAttribute('inert')) finalLayer.toggleAttribute('inert', !interactive);
     }
     if (progressEl) progressEl.value = p;
 
-    if (photo < 0.999) renderer.render(scene, camera);
+    stage.dataset.journeyProgress=p.toFixed(4);stage.dataset.journeyPhase=photo>.999?'hero':journey.photo>0?'photo':journey.travel>.56?'interior':journey.room>.99?'city':'globe';
+    if (photo < 0.999 && (!interior.ready || journey.room<.999)) renderer.render(scene, camera);
     requestAnimationFrame(frame);
   }
 
@@ -833,7 +530,11 @@ function start() {
     wide = camera.aspect >= 0.8;
     camera.fov = wide ? 38 : 54;
     camera.updateProjectionMatrix();
+    interior.resize();
+    syncHeaderPosition();
   }
+  function syncHeaderPosition(){body.classList.toggle('planet-past',seq.getBoundingClientRect().bottom<stage.clientHeight-.5);}
+  addEventListener('scroll',syncHeaderPosition,{passive:true});
   addEventListener('resize', resize);
   resize();
 
@@ -846,7 +547,7 @@ function start() {
   /* ---------------- scroll + teksty (GSAP) ---------------- */
   const split = (el) => {
     const lines = el.innerHTML.split(/<br\s*\/?>/i);
-    el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+    el.setAttribute('aria-label', lines.map(line=>line.replace(/<[^>]+>/g,'')).join(' ').replace(/\s+/g, ' ').trim());
     el.innerHTML = lines
       .map((line) => line.trim().split(/\s+/).map((w) => `<span class="pw" aria-hidden="true"><span>${w}</span></span>`).join(' '))
       .join('<br>');
@@ -879,15 +580,16 @@ function start() {
       state.target = self.progress;
       run();
     },
-    onLeave: () => body.classList.add('planet-past'),
-    onEnterBack: () => body.classList.remove('planet-past'),
+    onLeave: syncHeaderPosition,
+    onEnterBack: syncHeaderPosition,
   });
 
-  const skip = stage.querySelector('.planet-skip');
+  const skip = skipButton;
   if (skip) {
     skip.hidden = false;
     skip.addEventListener('click', () => {
-      scrollTo({ top: seq.offsetTop + seq.offsetHeight - innerHeight, behavior: 'auto' });
+      state.p=state.target=1;tl.progress(1);finalLayer?.removeAttribute('inert');
+      scrollTo({ top: seq.offsetTop + seq.offsetHeight - innerHeight, behavior: 'instant' });
       finalLayer?.querySelector('a')?.focus({ preventScroll: true });
     });
   }
@@ -898,7 +600,8 @@ function start() {
   /* ---------------- wejście ---------------- */
   const intro = stage.querySelector('.planet-intro');
   const introWords = split(intro.querySelector('h2'));
-  ready.then(() => {
+  ready.then(async () => {
+    await interior.prepare();
     loading?.setAttribute('hidden', '');
     run();
     gsap
