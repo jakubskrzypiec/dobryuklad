@@ -2,6 +2,8 @@
 
 Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
+**Strona główna nocą (gałąź `claude/nocna-strona`).** Hero to przelot nocą nad Koszalin: czarne niebo z gwiazdami, Ziemia w czerni i złocie, przelot przez chmury, Koszalin z wysokości i przejście w fotograficzne hero. Pod nim cała strona na czarnym tle z gwiazdami (paralaksa, spadające gwiazdy), złote akcenty i karty z głębią. Przerywnik portfolio to orbita kadrów wnętrz wokół złotej planety, a cytat „Dobre wnętrze…” stoi obok globusa z Koszalinem (studio) i miastami realizacji połączonymi złotymi łukami — lista miast do potwierdzenia przez studio. Treści sekcji bez zmian. Pliki: `dist/noc.css`, `dist/noc.js`, `dist/planeta.css`, `dist/planeta.js`; przebudowa jednorazowa skryptem `scripts/build-noc.cjs` (z `planeta.html`). Uwaga: `scripts/build-walkthrough.cjs` zakłada dawne hero strony głównej — `wejscie.html` zostaje w zbudowanej wersji.
+
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
 [Podstrona O nas](https://jakubskrzypiec.github.io/dobryuklad/o-nas.html) — dwa zdjęcia Sandry, trzy zespołowe, osiem portretów i kontakt. Fotografie oraz podpisy portretów czekają na materiały studia.
