@@ -43,4 +43,4 @@ Czytelność tekstów jest wspólna dla strony głównej, O nas i Oferty: `dist/
 
 [Kontakt](https://jakubskrzypiec.github.io/dobryuklad/kontakt.html) — formularz zapytania z informacjami o inwestycji i przygotowaniem szkicu wiadomości z załącznikami. [Zakres działania](CONTACT.md).
 
-[Spacer przez wnętrze 3D — podgląd](https://jakubskrzypiec.github.io/dobryuklad/wejscie.html) — historia sterowana scrollem: przestrzenna biała makieta z góry → materiały → krótki łuk przy sofie → fotorealistyczny finał. Osobny wariant; standardowa strona główna pozostaje bez zmian. [Opis modelu](WALKTHROUGH_3D.md).
+[Spacer przez wnętrze 3D — podgląd](https://jakubskrzypiec.github.io/dobryuklad/wejscie.html) — historia sterowana scrollem: biała makieta bez podpisów → zejście do korytarza → wejście i skręt w lewo na sofę → fotorealistyczny finał. Przed Wiedzą z praktyki przerywnik powiększa się, przechodzi w jadalnię 3D i odsuwa firany, odsłaniając stronę. Osobny wariant; standardowa strona główna pozostaje bez zmian. [Opis modelu](WALKTHROUGH_3D.md).

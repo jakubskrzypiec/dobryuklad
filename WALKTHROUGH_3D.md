@@ -2,10 +2,10 @@
 
 Bieżący wariant: dist/wejscie.html, budowany poleceniem node scripts/build-walkthrough.cjs z zatwierdzonej strony głównej. Standardowy dist/index.html pozostaje bez zmian.
 
-## Trzy etapy clay-8
+## Trzy etapy corridor-9
 
-1. Projekt: od razu widoczna jest przestrzenna, biała makieta z góry, z wyraźną wysokością ścian i mebli. Etap płaskiego rzutu został usunięty także z renderowanej sceny. Pozostają tylko dyskretne nazwy pomieszczeń, bez fikcyjnych metraży.
-2. Wizualizacja: makieta spokojnie nabiera pełnej wysokości, kamera opada bez obrotu wokół osi widoku. Białe powierzchnie przechodzą w materiały i światło. Skrócony spacer biegnie łukiem do boku sofy i wraca do końcowego kadru; pomija dawną trasę za sofą i wokół kuchni.
+1. Projekt: od razu widoczna jest przestrzenna, biała makieta z góry, z wyraźną wysokością ścian i mebli. Etap płaskiego rzutu został usunięty także z renderowanej sceny. Napisy SALON, KUCHNIA i WEJŚCIE zostały usunięte.
+2. Wizualizacja: makieta spokojnie nabiera pełnej wysokości, kamera opada bez obrotu wokół osi widoku. Białe powierzchnie przechodzą w materiały i światło. Kamera schodzi do korytarza (x=3,8; z=9,3), przejeżdża przez istniejący otwór wejściowy i skręca w lewo na sofę. Krótki łuk wraca do dopasowanego finału.
 3. Efekt końcowy: kamera zatrzymuje się w kadrze dopasowanym do wygenerowanego obrazu, a scroll powoli odsłania fotorealistyczne hero. Następnie pojawiają się hasło i przyciski. To koncepcja, nie zdjęcie realizacji studia.
 
 ## Podział scrolla
@@ -26,10 +26,20 @@ Pomiń spacer prowadzi do pełnego końcowego hero. Dalsze przewijanie przechodz
 
 ## Implementacja
 
-- interior-project.js: biała kopia tej samej geometrii i nazwy pomieszczeń. Płaskie linie planu nie są generowane. Sufity oraz otoczenie są pomijane w makiecie. Oryginalne materiały i scena pozostają nienaruszone. Zewnętrzne elementy oraz sufity mają oddzielne znaczniki zachowywane przez łączenie statycznych geometrii.
+### Przerywnik z firanami przed Wiedzą z praktyki
+
+Wariant `wejscie.html#firany` zachowuje cytat i istniejącą fotografię jadalni. Natywny scroll powiększa kadr, miesza go z modelowaną jadalnią, kieruje kamerę w lewo, a następnie rozsuwa dwie geometryczne firany. Za nimi odsłania się sekcja sklepu. Przejście działa wstecz; nie przechwytuje kółka ani dotyku. Początek strony i przerywnik są niezależnymi scenami, renderowanymi wyłącznie na żądanie w pobliżu ekranu.
+
+- `curtain-motion.js`: fazy i deformacja plisowanej tkaniny, z kompresją fałd i stabilnym brzegiem.
+- `curtain-scene.js`: osobna jadalnia, kamienny stół, tapicerowane krzesła, drewniana ściana i firany; lokalne tekstury z istniejących zasobów.
+- `curtain.js` i `curtain.css`: leniwe uruchomienie WebGL, responsywny kadr, odwracalne przewijanie i przycisk pominięcia. Preferencja ograniczonego ruchu, druk i błąd WebGL zachowują statyczny przerywnik.
+- Wizualny podgląd następnej sekcji ma `aria-hidden` i `inert`, nie powiela identyfikatorów. Docelowa sekcja pozostaje zwykłym HTML; fokus na jej linku kończy animację.
+- `check-curtain-transition.mjs` sprawdza skończone współrzędne i normalne tkaniny, kompresję i powrót fałd, kolejność obrotu/otwarcia i ciągłość faz.
+
+- interior-project.js: biała kopia tej samej geometrii bez nazw pomieszczeń. Płaskie linie planu nie są generowane. Sufity oraz otoczenie są pomijane w makiecie. Oryginalne materiały i scena pozostają nienaruszone. Zewnętrzne elementy oraz sufity mają oddzielne znaczniki zachowywane przez łączenie statycznych geometrii.
 - interior-stage-pass.js: zgodne kadry makiety i materiałów są mieszane w przybliżeniu percepcyjnym. Podwójny render działa wyłącznie podczas pojawiania się materiałów.
 - walkthrough-motion.js: osobny tor z góry kończy się dokładnie na początku skróconej trasy pieszej. Główna trasa nadal rozkłada postęp według drogi i kąta obrotu, z interpolacją kwaternionów, tłumieniem krytycznym i limitem szybkości.
-- walkthrough-timing.js: fazy, wzrost geometrii, zanik linii, materiały, fotografia i tekst.
+- walkthrough-timing.js: fazy, wzrost geometrii, materiały, fotografia i tekst.
 - walkthrough.js: sterowanie renderem, rozmiarem i kontrastem menu oraz aktywnymi podpisami etapów. DPR jest ograniczony, a renderowanie modelu zatrzymuje się po pełnym odsłonięciu fotografii i poza widoczną sekcją.
 
 Materiały używają fotograficznych map orzecha i lnu z Poly Haven oraz autorskich map marmuru i podłogi. HDR Forest Slope służy wyłącznie jako źródło radiancji; widok za oknem jest własnym modelem dziedzińca. Szczegóły mebli, zlew, reliefy, narzuta, książki i rośliny to własna geometria. Three.js 0.180.0 oraz lokalne dodatki pochodzą z oficjalnej paczki npm i mają lokalną licencję MIT.
