@@ -1,5 +1,6 @@
 import * as THREE from './vendor/three/three.module.min.js';
 export function addCourtyardAndArt({scene,box,cylinder,tube,leafGeometry,oak,bronze,dark,plaster}){
+ const existingExterior=new Set(scene.children);
  const stone=new THREE.MeshStandardMaterial({color:'#bcb8a9',roughness:.92}),wall=new THREE.MeshStandardMaterial({color:'#c9c5b7',roughness:.96}),soil=new THREE.MeshStandardMaterial({color:'#46483b',roughness:1});
  // A finite garden, with perspective and parallax, replaces the forest photograph.
  box(12,.12,29,stone,-12.2,-.13,-.5);box(.22,2.65,29,wall,-16.8,1.25,-.5);box(10.6,2.65,.22,wall,-11.6,1.25,-14.8);box(10.6,2.65,.22,wall,-11.6,1.25,13.8);
@@ -22,6 +23,7 @@ export function addCourtyardAndArt({scene,box,cylinder,tube,leafGeometry,oak,bro
  // Quiet low vegetation in the distant raised bed, deliberately clear of the glass.
  const grasses=new THREE.InstancedMesh(new THREE.ConeGeometry(.065,.45,4),foliageMaterial,180);
  for(let i=0;i<180;i++){dummy.position.set(-15.8+rand()*.65,.62,-11+rand()*21);dummy.scale.set(.6+rand(),.55+rand(),.6+rand());dummy.rotation.set(0,rand()*6.28,0);dummy.updateMatrix();grasses.setMatrixAt(i,dummy.matrix);}scene.add(grasses);
+ for(const object of scene.children)if(!existingExterior.has(object))object.userData.exterior=true;
  // Sculptural diptych on the wall opposite the sofa; every layer is physical geometry.
  const paper=new THREE.MeshStandardMaterial({color:'#ded8c9',roughness:1}),relief=new THREE.MeshStandardMaterial({color:'#afa593',roughness:1});
  for(const [x,flip] of [[-2.52,false],[-1.18,true]]){

@@ -1,9 +1,10 @@
 import * as THREE from 'three';
-import {createInterior} from './interior-scene.js?v=courtyard-6';
-import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=courtyard-6';
-import {createInteriorTrack,advanceProgress,matchedHeroFov} from './walkthrough-motion.js?v=courtyard-6';
+import {createInterior} from './interior-scene.js?v=project-7';
+import {walkthroughPhases,HERO_STOP} from './walkthrough-timing.js?v=project-7';
+import {createInteriorTrack,createProjectIntroTrack,advanceProgress,matchedHeroFov} from './walkthrough-motion.js?v=project-7';
 import {EffectComposer} from './vendor/three/postprocessing/EffectComposer.js';
-import {RenderPass} from './vendor/three/postprocessing/RenderPass.js';
+import {createProjectStage} from './interior-project.js?v=project-7';
+import {InteriorStagePass} from './interior-stage-pass.js?v=project-7';
 import {SSAOPass} from './vendor/three/postprocessing/SSAOPass.js';
 import {LightProbeGenerator} from './vendor/three/lights/LightProbeGenerator.js';
 import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';
@@ -11,8 +12,10 @@ import {OutputPass} from './vendor/three/postprocessing/OutputPass.js';
 const sequence=document.querySelector('.walkthrough-sequence'),stage=sequence.querySelector('.walkthrough-stage'),container=stage.querySelector('.walkthrough-canvas'),final=stage.querySelector('.walkthrough-final'),status=stage.querySelector('.walkthrough-loading'),header=document.querySelector('.header'),skip=stage.querySelector('.walkthrough-skip'),progress=stage.querySelector('progress');
 const captureHero=new URLSearchParams(location.search).get('capture')==='hero';if(captureHero)document.body.classList.add('walkthrough-capture');
 const photograph=stage.querySelector('.walkthrough-photograph');let photoReady=false;
+const chapters=[...stage.querySelectorAll('.walkthrough-chapters span')],guideLabel=stage.querySelector('.walkthrough-guide span');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)');
 let frameAverage=16.7;
+let project,stagePass,introTrack;
 let renderer,scene,camera,composer,ao,raf=0,target=0,current=0,last=0,visible=true,ready=false,range=1,origin=0;
 const cameraTrack=createInteriorTrack(),motion={value:0,velocity:0};
 function revealHero(alpha){
@@ -23,7 +26,7 @@ function revealHero(alpha){
 }
 function staticHero(){
  const wasVisible=document.body.classList.contains('walkthrough-active')&&stage.getBoundingClientRect().top<=0&&stage.getBoundingClientRect().bottom>0;
- document.body.classList.remove('walkthrough-active');revealHero(1);stage.style.setProperty('--photo-reveal','1');skip.hidden=true;status.hidden=true;
+ document.body.classList.remove('walkthrough-active','walkthrough-design');revealHero(1);stage.style.setProperty('--photo-reveal','1');skip.hidden=true;status.hidden=true;
  header.style.removeProperty('transform');header.inert=false;stage.dataset.phase='hero';
  if(ready){current=target=motion.value=1;motion.velocity=0;resize();request();}
  if(wasVisible)scrollTo({top:origin,behavior:'instant'});
@@ -38,19 +41,23 @@ function scrollState(){
 function resize(){
  if(!ready)return;
  origin=sequence.getBoundingClientRect().top+scrollY;range=Math.max(1,sequence.offsetHeight-stage.clientHeight);
- const mobile=innerWidth<760,ratio=Math.min(devicePixelRatio,mobile?1.25:1.75);
+ const mobile=innerWidth<760,ratio=Math.min(devicePixelRatio,mobile?1.25:1.75,Math.sqrt(2560*1440/(stage.clientWidth*stage.clientHeight)));
  renderer.setPixelRatio(ratio);renderer.setSize(stage.clientWidth,stage.clientHeight);composer.setPixelRatio(ratio);composer.setSize(stage.clientWidth,stage.clientHeight);ao.enabled=!mobile;
- camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();scrollState();
+ camera.aspect=stage.clientWidth/stage.clientHeight;introTrack=createProjectIntroTrack(camera.aspect);camera.updateProjectionMatrix();scrollState();
 }
 function render(time){
  raf=0;if(!ready||!visible||document.hidden)return;
  const elapsed=time-last;if(last&&elapsed<250)frameAverage=frameAverage*.9+elapsed*.1;const dt=Math.min(elapsed/1000||.016,.05);last=time;current=advanceProgress(motion,target,dt);
- const phase=walkthroughPhases(current);cameraTrack.sample(phase.travel,camera.position,camera.quaternion);
- camera.fov=THREE.MathUtils.lerp(innerWidth<760?78:60,matchedHeroFov(camera.aspect),phase.travel);camera.updateProjectionMatrix();
+ const phase=walkthroughPhases(current),startFov=innerWidth<760?78:60;
+ if(phase.intro<1){introTrack.sample(phase.intro,camera.position,camera.quaternion);camera.fov=THREE.MathUtils.lerp(45,startFov,phase.intro);}else{cameraTrack.sample(phase.travel,camera.position,camera.quaternion);camera.fov=THREE.MathUtils.lerp(startFov,matchedHeroFov(camera.aspect),phase.travel);}camera.updateProjectionMatrix();
+ stage.style.setProperty('--scene-shade',phase.materials.toFixed(4));project.update(phase.growth,phase.lines);stagePass.mix=phase.materials;ao.scene=phase.materials>.001?scene:project.scene;ao.enabled=innerWidth>=760&&phase.growth>.06;
+ document.body.classList.toggle('walkthrough-design',phase.materials<.5&&!captureHero);
+ const chapter=phase.photo>0?'effect':phase.materials>.001?'visualization':'project';for(const label of chapters)label.classList.toggle('is-current',label.dataset.chapter===chapter);
+ guideLabel.textContent=phase.photo>0?'Przewiń do efektu końcowego':phase.intro<1?'Przewiń, aby wejść w projekt':'Przewiń, aby przejść przez wnętrze';
  revealHero(phase.hero);stage.style.setProperty('--photo-reveal',photoReady?phase.photo.toFixed(4):'0');
  // After the camera stops, scroll gradually reveals the matched photographic rendering.
  renderer.info.reset();if(captureHero||!photoReady||phase.photo<.999)composer.render();stage.dataset.drawCalls=renderer.info.render.calls;stage.dataset.frameMs=frameAverage.toFixed(1);
- stage.dataset.cameraProgress=current.toFixed(4);stage.dataset.cameraTravel=phase.travel.toFixed(4);stage.dataset.heroOpacity=phase.hero.toFixed(4);stage.dataset.photoOpacity=(photoReady?phase.photo:0).toFixed(4);stage.dataset.cameraPosition=camera.position.toArray().map(n=>n.toFixed(3)).join(',');stage.dataset.phase=phase.hold?'hero':phase.photo>0||phase.hero>0?'blend':'walk';
+ stage.dataset.cameraProgress=current.toFixed(4);stage.dataset.cameraTravel=phase.travel.toFixed(4);stage.dataset.heroOpacity=phase.hero.toFixed(4);stage.dataset.photoOpacity=(photoReady?phase.photo:0).toFixed(4);stage.dataset.cameraPosition=camera.position.toArray().map(n=>n.toFixed(3)).join(',');stage.dataset.phase=phase.hold?'hero':phase.photo>0?'blend':phase.materials<.001?'project':phase.materials<1?'materials':'walk';stage.dataset.cameraIntro=phase.intro.toFixed(4);stage.dataset.designGrowth=phase.growth.toFixed(4);stage.dataset.materials=phase.materials.toFixed(4);
  if(current!==target)request();
 }
 function request(){if(ready&&visible&&!document.hidden&&!raf)raf=requestAnimationFrame(render);}
@@ -71,7 +78,7 @@ async function boot(){
   const capture=new THREE.WebGLCubeRenderTarget(innerWidth<760?256:512,{type:THREE.HalfFloatType}),cube=new THREE.CubeCamera(.1,60,capture);cube.position.copy(interior.capturePosition);renderer.shadowMap.needsUpdate=true;cube.update(renderer,scene);
   const bounce=await LightProbeGenerator.fromCubeRenderTarget(renderer,capture);if(bounce.sh.coefficients.every(v=>Number.isFinite(v.x)&&Number.isFinite(v.y)&&Number.isFinite(v.z))){bounce.intensity=.28;scene.add(bounce);}
   const environment=pmrem.fromCubemap(capture.texture);scene.environment=environment.texture;scene.environmentIntensity=.75;scene.environmentRotation.set(0,0,0);capture.dispose();skyEnvironment?.dispose();pmrem.dispose();
-  composer=new EffectComposer(renderer,new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:4}));composer.addPass(new RenderPass(scene,camera));ao=new SSAOPass(scene,camera,stage.clientWidth,stage.clientHeight,24);ao.kernelRadius=.34;ao.minDistance=.0003;ao.maxDistance=.03;composer.addPass(ao);composer.addPass(new OutputPass());
+  composer=new EffectComposer(renderer,new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:4}));project=createProjectStage(scene);stagePass=new InteriorStagePass(project.scene,scene,camera);composer.addPass(stagePass);ao=new SSAOPass(scene,camera,stage.clientWidth,stage.clientHeight,24);ao.kernelRadius=.34;ao.minDistance=.0003;ao.maxDistance=.03;composer.addPass(ao);composer.addPass(new OutputPass());
   ready=true;current=target=motion.value=0;motion.velocity=0;status.hidden=true;mode();
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){last=0;request();}},{rootMargin:'120px'}).observe(stage);
   renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();fail();});

@@ -30,11 +30,20 @@ export function advanceProgress(state,target,dt){
 
 export function createInteriorTrack(){
 // Slow entry, a window-side arc, a look back across the lounge, then the final hero.
-const route=new THREE.CatmullRomCurve3([[3.8,1.62,11],[3.8,1.6,8.5],[3.8,1.57,6.6],[3.5,1.52,4.7],[1.2,1.48,3.55],[-2.0,1.48,3.35],[-4.9,1.5,2.9],[-5.05,1.54,-.5],[-4.8,1.55,-3.35],[-2,1.53,-3.5],[.65,1.51,-3.35],[.85,1.47,-.25],[1.15,1.44,2.65],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.3);
-const gaze=new THREE.CatmullRomCurve3([[3.8,1.4,-2],[3.6,1.4,-2],[2.7,1.35,-2.1],[1.3,1.15,-1.6],[-.6,1,-.7],[-1.1,.95,-.4],[-1,.95,-.35],[-.5,1.05,-.6],[-.5,1.05,-.6],[-.5,1.05,-.6],[-.5,1.05,-.6],[-1,1,-.1],[.25,1.2,-2],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.3);
+const route=new THREE.CatmullRomCurve3([[3.5,1.52,4.7],[1.2,1.48,3.55],[-2.0,1.48,3.35],[-4.9,1.5,2.9],[-5.05,1.54,-.5],[-4.8,1.55,-3.35],[-2,1.53,-3.5],[.65,1.51,-3.35],[.85,1.47,-.25],[1.15,1.44,2.65],[.15,1.42,5.2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.3);
+const gaze=new THREE.CatmullRomCurve3([[1.3,1.15,-1.6],[-.6,1,-.7],[-1.1,.95,-.4],[-1,.95,-.35],[-.5,1.05,-.6],[-.5,1.05,-.6],[-.5,1.05,-.6],[-.5,1.05,-.6],[-1,1,-.1],[.25,1.2,-2],[0,1.4,-2]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.3);
 return createCameraTrack(route,gaze);
 
 }
 
 // Match object-fit:cover to the final 3D projection on portrait and ultrawide screens.
 export function matchedHeroFov(aspect,referenceAspect=1662/946,baseFov=52){return aspect>referenceAspect?THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(baseFov)*.5)*referenceAspect/aspect)):baseFov;}
+
+// Stable, zero-roll descent from the same floor plan into the first walking pose.
+export function createProjectIntroTrack(aspect){
+ const height=Math.max(18.6,12.9/aspect)/(2*Math.tan(THREE.MathUtils.degToRad(45)*.5))*(aspect<.8?1.2:1.55);
+ const route=new THREE.CatmullRomCurve3([[0,height,2.5],[0,18,4],[1.8,9,5],[3.5,3.7,4.9],[3.5,1.52,4.7]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.2);
+ const gaze=new THREE.CatmullRomCurve3([[0,0,2.5],[0,0,1],[1.8,.5,0],[2,1,-1.6],[1.3,1.15,-1.6]].map(p=>new THREE.Vector3(...p)),false,'catmullrom',.2);
+ const euler=new THREE.Euler(0,0,0,'YXZ');
+ return {height,sample(t,position,quaternion){position.copy(route.getPoint(t));const target=gaze.getPoint(t),dx=target.x-position.x,dy=target.y-position.y,dz=target.z-position.z,horizontal=Math.hypot(dx,dz);euler.set(Math.atan2(dy,horizontal),horizontal<1e-6?0:Math.atan2(-dx,-dz),0,'YXZ');quaternion.setFromEuler(euler);}};
+}

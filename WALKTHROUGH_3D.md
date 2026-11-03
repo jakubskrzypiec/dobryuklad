@@ -1,40 +1,45 @@
-# Spacer przez model wnętrza
+# Od projektu do efektu końcowego
 
-Podgląd: dist/wejscie.html. Strona główna dist/index.html pozostaje bez zmian. Podgląd jest generowany poleceniem node scripts/build-walkthrough.cjs.
+Bieżący wariant: dist/wejscie.html, budowany poleceniem node scripts/build-walkthrough.cjs z zatwierdzonej strony głównej. Standardowy dist/index.html pozostaje bez zmian.
 
-To jeden ciągły model WebGL. Kamera wchodzi przez prawy hol, przechodzi przed sofą, zatacza łuk przy oknie, zagląda za sofę i wraca do szerokiego ujęcia końcowego. Pozycja i cel spojrzenia mają osobne krzywe, zsynchronizowane wspólnym parametrem. Droga omija meble i ściany; scenę można przewijać w obu kierunkach. Sekcja ma 1100svh na komputerze i 1000svh na telefonie. Długość została lekko skrócona względem wersji room-3.
+## Trzy etapy project-7
 
-Fazy courtyard-6: kamera kończy przy 73% przewinięcia; od 75,5% do 92,5% model powoli przenika w nową fotorealistyczną interpretację dokładnie tego kadru. Hasło i przyciski pojawiają się od 87,5% do 95%; ostatnie 5% utrzymuje gotowe hero. Część z ruchem kamery ma podobną długość w pikselach jak wcześniej; dodatkowy odcinek przeznaczono na spokojne przenikanie. Przy pełnym zdjęciu model przestaje się renderować.
+1. Projekt: techniczny rzut z góry na jasnym tle, z liniami ścian, szklenia i wyposażenia odpowiadającymi temu samemu wnętrzu. Brak fikcyjnych metraży i wymiarów klientki. Kamera ma stabilny pionowy kierunek, z północą rzutu na górze.
+2. Wizualizacja: rzeczywista geometria modelu zostaje spłaszczona do planu i płynnie nabiera wysokości. Kamera opada bez obrotu wokół osi widoku. Biała makieta przechodzi w kolorowe materiały i oświetlenie. Spacer rozpoczyna się we wnętrzu w tej samej pozycji, orientacji i polu widzenia, w których zakończył się przelot z góry.
+3. Efekt końcowy: kamera zatrzymuje się w kadrze dopasowanym do wygenerowanego obrazu, a scroll powoli odsłania fotorealistyczne hero. Następnie pojawiają się hasło i przyciski. To koncepcja, nie zdjęcie realizacji studia.
 
-Przy ograniczonym ruchu systemowym pokazywany jest bezpośrednio fotograficzny finał, bez spaceru. Bez WebGL dostępne pozostają fotograficzne hero, tekst i przyciski. Na telefonie ograniczono DPR i wyłączono SSAO. Na komputerze są SSAO, MSAA i dokładniejsza mapa cieni.
+## Podział scrolla
 
-Aktualne materiały używają fotograficznych map orzecha i lnu z Poly Haven oraz wcześniejszych autorskich map marmuru i kamienia. Zmniejszono nadmierną wysokość mikrofaktury, rozjaśniono światło pośrednie i złagodzono kontrast słońca. Dodano odkształconą narzutę z fałdami, półprzezroczystą zasłonę, szwy tapicerki widoczne z tyłu, zlew i drobne przedmioty kuchenne. Odbicia są oparte na przechwyconym otoczeniu modelu. Nowych obrazów nie generowano.
+Sekcja: 1350svh na komputerze, 1200svh na telefonie. Scroll jest natywny, bez przechwytywania kółka czy dotyku; cała historia działa w obie strony.
 
-Scena jest koncepcyjną wizualizacją czasu rzeczywistego, nie fotografią ani realizacją klientki. Nadal występują uproszczenia geometrii i oświetlenia względem pełnego renderingu architektonicznego.
+| Fragment | Zakres postępu |
+| --- | --- |
+| Ściany i wyposażenie nabierają wysokości | 3,5–17,5% |
+| Kamera opada z rzutu do wnętrza | 7,5–27,5% |
+| Makieta dostaje materiały i światło | 21,5–32,5% |
+| Spacer we wnętrzu | 32,5–74% |
+| Przenikanie do fotograficznego finału | 76,5–93% |
+| Hasło i przyciski | 88–95,5% |
+| Zatrzymanie gotowego hero | ostatnie 4,5% |
 
-Three.js 0.180.0 pochodzi z oficjalnej paczki npm. Biblioteka i dodatki są lokalne w dist/vendor/three, z licencją MIT. Inspiracje obejrzane wcześniej: HILIGHT, LA.BURO i HEDO Architects; ich modeli i fotografii nie użyto.
+Pomiń spacer prowadzi do pełnego końcowego hero. Dalsze przewijanie przechodzi do sekcji O nas. Preferencja ograniczonego ruchu i brak WebGL pokazują fotograficzny finał. Bez poprawnego wczytania obrazu spacer pozostaje funkcjonalny i kończy się modelem.
 
-Prompty wcześniejszych map: IMAGE_PROMPTS_WALKTHROUGH.md oraz IMAGE_PROMPTS_INTERIOR_REALISM.md. Poprzedni układ kończący fotografią zachowuje historia Git.
+## Implementacja
 
-## Płynność smooth-4
-Tor ma tablicę 1600 próbek pozycji i orientacji. Czas przejścia uwzględnia dystans oraz kąt obrotu (3,6 m równoważnika na radian), więc zakręt otrzymuje odpowiednią długość scrollowania. Orientacja jest interpolowana kwaternionem. Zamiast gwałtownego przyspieszenia w środku całego spaceru zastosowano prawie równomierne tempo, z krótkimi rampami na początku i końcu. Postęp ma tłumienie krytyczne, limit prędkości i ochronę przed przestrzeleniem celu. Test regresji: node scripts/check-walkthrough-motion.mjs — 3001 próbek trasy, kolizje, wielkość obrotów, przód/tył i 30/60/120 fps.
+- interior-project.js: rzut i biała kopia tej samej geometrii. Sufity oraz otoczenie są pomijane w makiecie. Oryginalne materiały i scena pozostają nienaruszone. Zewnętrzne elementy oraz sufity mają oddzielne znaczniki zachowywane przez łączenie statycznych geometrii.
+- interior-stage-pass.js: zgodne kadry makiety i materiałów są mieszane w przybliżeniu percepcyjnym. Podwójny render działa wyłącznie podczas pojawiania się materiałów.
+- walkthrough-motion.js: osobny tor z góry kończy się dokładnie na początku skróconej trasy pieszej. Główna trasa nadal rozkłada postęp według drogi i kąta obrotu, z interpolacją kwaternionów, tłumieniem krytycznym i limitem szybkości.
+- walkthrough-timing.js: fazy, wzrost geometrii, zanik linii, materiały, fotografia i tekst.
+- walkthrough.js: sterowanie renderem, rozmiarem i kontrastem menu oraz aktywnymi podpisami etapów. DPR jest ograniczony, a renderowanie modelu zatrzymuje się po pełnym odsłonięciu fotografii i poza widoczną sekcją.
 
-Realizm: filtrowane cienie VSM, jaśniejsze światło odbite, 512-pikselowe przechwycenie otoczenia na komputerze, spokojniejszy połysk kamienia i delikatne zróżnicowanie szorstkości powierzchni drewna, marmuru, podłogi i lnu. Finał nadal pozostaje tym samym modelem 3D.
+Materiały używają fotograficznych map orzecha i lnu z Poly Haven oraz autorskich map marmuru i podłogi. HDR Forest Slope służy wyłącznie jako źródło radiancji; widok za oknem jest własnym modelem dziedzińca. Szczegóły mebli, zlew, reliefy, narzuta, książki i rośliny to własna geometria. Three.js 0.180.0 oraz lokalne dodatki pochodzą z oficjalnej paczki npm i mają lokalną licencję MIT.
 
-## Przebudowa atelier-5
-Tapicerka ma zamknięte siatki superelipsoidalne, zmienne wyoblenia, nieregularne fałdy oraz rzeczywiste wypustki. Wygładzanie normalnych na szwach UV usuwa fasetowanie po deformacji. UV splotu poduszek używają skali metrycznej. Zmieniono bryłę i krawędź stolika, zamknięto tył sofy i dodano nóżki. W książkach oddzielono okładki, grzbiety, blok i krawędzie kartek. Narzuta i dywan mają frędzle/obszycie. Hokery mają wyściełane oparcia i podnóżki.
+## Weryfikacja
 
-Blat kuchenny ma fizyczny otwór w geometrii, oddzielną komorę zlewu, odpływ oraz detale baterii. Szafki mają cofnięty cokół i uchwyty; górna zabudowa łączy się z obniżeniem sufitu, a półki znajdują się we wnęce. Przewody lampy sięgają sufitu. Okna mają uszczelki i kamienny parapet. Ceramiczne naczynia mają wewnętrzne ścianki. Drobne gałązki i zakrzywione liście zastępują wcześniejsze proste patyki i bryłki.
+Przed publikacją GitHub Pages uruchamiane są:
 
-Leśna panorama HDR jest rzeczywistym otoczeniem za oknem. Służy też do wstępnego oświetlenia i przechwycenia odbić wewnątrz pomieszczenia. LightProbe dodaje niskoczęstotliwościowe światło rozproszone na podstawie radiancji przechwyconej w pokoju. To przybliżenie odbicia światła, nie path tracing.
+- node scripts/check-walkthrough-motion.mjs — ciągłość trasy, kolizje, granice obrotów, ruch w obie strony, spójność przy 30/60/120 fps i dopasowanie projekcji do zdjęcia.
+- node scripts/check-interior-craft.mjs — skończona geometria, UV, normalne, rzeczywisty otwór zlewu, zachowanie granic przy łączeniu obiektów.
+- node scripts/check-project-story.mjs — rzut i kopia modelu, ukrywanie sufitu/otoczenia, brak mutacji materiałów, pionowy kadr początkowy, ciągłość orientacji do spaceru, bezpieczne wejście pod sufit i poprawna kolejność faz na różnych proporcjach ekranu.
 
-Statyczne elementy o wspólnym materiale są łączone z zachowaniem światowego położenia, UV i cieni. W sprawdzonym ujęciu liczbę siatek zredukowano z 298 do 75 przed ostatnimi drobnymi zmianami. Test check-interior-craft.mjs weryfikuje skończoność geometrii/UV/normalnych, rzeczywisty otwór zlewu oraz zachowanie granic sceny po łączeniu. Oba testy działają też przed publikacją Pages.
-
-Źródła: [INTERIOR_ASSET_SOURCES.md](INTERIOR_ASSET_SOURCES.md).
-
-## Ogród, reliefy i finał courtyard-6
-Leśne tło zostało zastąpione fizycznym dziedzińcem: daleko odsunięty mur, jasne płyty, donice i drobna roślinność, z rzeczywistą paralaksą. Stara panorama pozostaje wyłącznie źródłem światła i nie jest widoczna za oknem. Naprzeciw sofy dodano przestrzenny dyptyk z reliefami oraz niską konsolę.
-
-Finał to nowy obraz wygenerowany na podstawie czystego zrzutu końcowej pozycji modelu. Dopasowanie pola widzenia do object-fit:cover utrzymuje podobne kadrowanie także na telefonie i ekranie ultrapanoramicznym. Brak dekodowania obrazu nie przerywa spaceru — w takim przypadku zostaje model. Tryb autora ?capture=hero pokazuje sam model w ostatniej pozycji, bez interfejsu i fotografii.
-
-[Prompt, referencja i ścieżki obrazu](IMAGE_PROMPT_COURTYARD_HERO.md).
+Źródła materiałów: INTERIOR_ASSET_SOURCES.md i INTERIOR_ASSET_MANIFEST.json. Referencja, obraz i pełny prompt końcowego hero: IMAGE_PROMPT_COURTYARD_HERO.md. Warianty wcześniejszych makiet i przejść zachowuje historia Git. Tryb autora ?capture=hero nadal pokazuje sam końcowy model, bez interfejsu i fotografii.

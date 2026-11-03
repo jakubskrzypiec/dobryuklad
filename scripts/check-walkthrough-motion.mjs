@@ -26,7 +26,7 @@ for(const fps of [30,60,120]){
 const settled=[];
 for(const fps of [30,60,120]){const state={value:0,velocity:0};for(let i=0;i<fps*2;i++)advanceProgress(state,.3,1/fps);settled.push(state.value);}
 assert.ok(Math.max(...settled)-Math.min(...settled)<.002);
-assert.equal(walkthroughPhases(.73).travel,1);assert.equal(walkthroughPhases(.75).photo,0);assert.equal(walkthroughPhases(.93).photo,1);assert.equal(walkthroughPhases(.96).hero,1);
+assert.equal(walkthroughPhases(.74).travel,1);assert.equal(walkthroughPhases(.75).photo,0);assert.equal(walkthroughPhases(.93).photo,1);assert.equal(walkthroughPhases(.96).hero,1);
 assert.ok(walkthroughPhases(.83).photo>0&&walkthroughPhases(.83).photo<1);assert.equal(walkthroughPhases(.83).hero,0);
 for(const aspect of [.44,1,1662/946,2.5]){const fov=matchedHeroFov(aspect),expected=Math.tan(THREE.MathUtils.degToRad(52)*.5)*Math.min(1,(1662/946)/aspect);assert.ok(Math.abs(Math.tan(THREE.MathUtils.degToRad(fov)*.5)-expected)<1e-9);}
 console.log('PASS: clear route, bounded camera turns and translation, forward/reverse damping, 30/60/120 fps consistency, fixed 3D endpoint.');

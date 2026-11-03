@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from './vendor/three/RoundedBoxGeometry.js';
 import {upholsteryGeometry,addUpholsteryWelt,addCraftDetails,createBotanical} from './interior-craft.js?v=atelier-5';
-import {addCourtyardAndArt} from './interior-courtyard.js?v=courtyard-6';
-import {batchStaticInterior} from './interior-batching.js?v=atelier-5';
+import {addCourtyardAndArt} from './interior-courtyard.js?v=project-7';
+import {batchStaticInterior} from './interior-batching.js?v=project-7';
 import {HDRLoader} from './vendor/three/HDRLoader.js';
 import {RectAreaLightUniformsLib} from './vendor/three/lights/RectAreaLightUniformsLib.js';
 
@@ -49,7 +49,7 @@ export async function createInterior(){
  const jointMaterial=new THREE.MeshBasicMaterial({color:'#4d463d',transparent:true,opacity:.25});
  for(let x=-5;x<6;x+=2.5){const seam=box(.003,.001,17.8,jointMaterial,x,-.017,2.2);seam.castShadow=false;}
  for(let z=-5;z<11;z+=2.7){const seam=box(12.5,.001,.003,jointMaterial,0,-.017,z);seam.castShadow=false;}
- box(12.6,.16,12.2,plaster,0,6.38,.2);
+ box(12.6,.16,12.2,plaster,0,6.38,.2).userData.ceiling=true;
  // Rear walnut wall, deep kitchen alcove and full-height pier.
  box(7.35,6.3,.24,oak,-2.55,3.15,-5.6);
  for(let x=-5.85;x<1.05;x+=.69){const panel=oak.clone();panel.color.multiplyScalar(.94+random()*.1);box(.684,6.26,.035,panel,x,3.15,-5.45);}
@@ -62,13 +62,13 @@ export async function createInterior(){
  const glazing=box(.012,3.48,7.9,glass,-6.3,1.82,-.9);glazing.castShadow=false;
  for(const z of [-4.8,-2.84,-.87,1.1,3.05])box(.11,3.6,.055,metal,-6.26,1.8,z);
  for(const y of [.08,3.55])box(.15,.07,7.9,metal,-6.27,y,-.9);
- box(7,.15,16,plaster,-9.9,-.17,-.5);
+ box(7,.15,16,plaster,-9.9,-.17,-.5).userData.exterior=true;
  // Entry corridor on the right. Camera traverses the opening before turning left.
  box(12.6,2.7,.3,oak,0,4.95,6.3);
  box(8.7,3.6,.25,oak,-1.95,1.8,6.3);box(1.0,3.6,.25,oak,5.85,1.8,6.3);
  box(2.8,.54,.4,oak,3.8,3.33,6.3);
  for(const x of [2.37,5.23]){box(.15,3.1,.55,oak,x,1.55,6.3);box(.025,3.08,.03,bronze,x+(x<3? .09:-.09),1.54,6.6);}
- box(.18,3.6,5.6,oak,2.25,1.8,9);box(.18,3.6,5.6,plaster,5.35,1.8,9);box(3.3,.15,5.7,plaster,3.8,3.68,9);
+ box(.18,3.6,5.6,oak,2.25,1.8,9);box(.18,3.6,5.6,plaster,5.35,1.8,9);box(3.3,.15,5.7,plaster,3.8,3.68,9).userData.ceiling=true;
  for(const x of [2.36,5.24])box(.015,.018,5.3,warmLight,x,3.42,9.0);
  box(.25,.07,1.75,oak,5.15,.86,9,scene,.018);
  // Kitchen fronts and warmly lit marble splashback.

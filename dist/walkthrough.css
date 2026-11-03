@@ -9,7 +9,7 @@
 .walkthrough-active .walkthrough-final{opacity:var(--hero-reveal,0);will-change:opacity}
 .walkthrough-active .walkthrough-final[inert]{pointer-events:none}
 .walkthrough-active .header{position:fixed;will-change:transform}.walkthrough-active.menu-open .header{transform:none!important}
-.walkthrough-active .walkthrough-sequence{height:1100svh}.walkthrough-active .walkthrough-stage{position:sticky;top:0;min-height:0}
+.walkthrough-active .walkthrough-sequence{height:1350svh}.walkthrough-active .walkthrough-stage{position:sticky;top:0;min-height:0}
 .walkthrough-caption,.walkthrough-guide,.walkthrough-classic{display:none}
 .walkthrough-active .walkthrough-caption{display:block;position:absolute;left:6.5%;bottom:10%;z-index:3;font:500 10px/1.8 'Manrope',Arial,sans-serif;letter-spacing:.12em;pointer-events:none}
 .walkthrough-active .walkthrough-guide{display:block;position:absolute;left:50%;bottom:4%;transform:translateX(-50%);z-index:3;text-align:center;font:500 11px/1.8 'Manrope',Arial,sans-serif;letter-spacing:.02em;white-space:nowrap}
@@ -19,7 +19,7 @@
 .walkthrough-loading{position:absolute;top:50%;left:50%;z-index:4;transform:translate(-50%,-50%);background:#25231fd9;padding:14px 25px;font:400 14px/1.8 'Manrope',Arial,sans-serif}.walkthrough-loading[hidden]{display:none}
 .walkthrough-stage.is-hero .walkthrough-caption,.walkthrough-stage.is-hero .walkthrough-guide,.walkthrough-stage.is-hero .walkthrough-classic{display:none}
 .walkthrough-stage button:focus-visible,.walkthrough-stage a:focus-visible{outline:2px solid #f3e9dc;outline-offset:5px}
-@media(max-width:760px){.walkthrough-active .walkthrough-sequence{height:1000svh}.walkthrough-stage{min-height:560px}.walkthrough-active .walkthrough-stage{min-height:0}.walkthrough-active .walkthrough-caption{left:7%;bottom:16%;font-size:9px}.walkthrough-active .walkthrough-guide{font-size:10px;bottom:9%;width:90%;max-width:90%;white-space:normal}.walkthrough-guide progress{margin-top:9px;width:130px}.walkthrough-active .walkthrough-classic{left:7%;font-size:10px;bottom:3%}.walkthrough-skip:not([hidden]){right:7%;bottom:2%;font-size:11px}}
+@media(max-width:760px){.walkthrough-active .walkthrough-sequence{height:1200svh}.walkthrough-stage{min-height:560px}.walkthrough-active .walkthrough-stage{min-height:0}.walkthrough-active .walkthrough-caption{left:7%;bottom:16%;font-size:9px}.walkthrough-active .walkthrough-guide{font-size:10px;bottom:9%;width:90%;max-width:90%;white-space:normal}.walkthrough-guide progress{margin-top:9px;width:130px}.walkthrough-active .walkthrough-classic{left:7%;font-size:10px;bottom:3%}.walkthrough-skip:not([hidden]){right:7%;bottom:2%;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.walkthrough-active .walkthrough-sequence{height:100svh}.walkthrough-active .walkthrough-stage{position:relative}.walkthrough-caption,.walkthrough-guide,.walkthrough-skip,.walkthrough-classic{display:none!important}.walkthrough-final{opacity:1!important}.walkthrough-active .header{position:absolute;transform:none!important}}
 @media print{.walkthrough-active .walkthrough-sequence{height:auto}.walkthrough-active .walkthrough-stage{position:relative}.walkthrough-final{opacity:1!important}.walkthrough-active .header{position:absolute;transform:none!important}.walkthrough-caption,.walkthrough-guide,.walkthrough-skip,.walkthrough-classic{display:none!important}}
 
@@ -35,3 +35,16 @@
 @media print{.walkthrough-photograph{opacity:1!important}}
 
 .walkthrough-final .hero-left{text-shadow:0 2px 18px #0005}
+
+.walkthrough-chapters{display:none;position:absolute;left:6.5%;top:160px;z-index:3;flex-direction:column;gap:10px;font:500 11px/1.6 'Manrope',Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;pointer-events:none;opacity:var(--tour-ui,1)}
+.walkthrough-active .walkthrough-chapters{display:flex}.walkthrough-chapters span{opacity:.35;transition:opacity .4s}.walkthrough-chapters span.is-current{opacity:1}
+.walkthrough-design .header nav a,.walkthrough-design .walkthrough-chapters,.walkthrough-design .walkthrough-guide,.walkthrough-design .walkthrough-caption,.walkthrough-design .walkthrough-classic,.walkthrough-design .walkthrough-skip{color:#37352f}
+.walkthrough-design .header .brand-logo img{filter:brightness(0);opacity:.84}.walkthrough-design .menu-toggle span{background:#37352f}
+.walkthrough-design .walkthrough-classic,.walkthrough-design .walkthrough-skip{border-color:#55534a66}
+.walkthrough-design .walkthrough-guide progress::-webkit-progress-bar{background:#55534a33}.walkthrough-design .walkthrough-guide progress::-webkit-progress-value{background:#55534a}
+.walkthrough-stage:after{opacity:var(--scene-shade,1)}.walkthrough-design.menu-open .header nav a{color:#151413}
+.walkthrough-capture .walkthrough-chapters{display:none!important}
+@media(max-width:760px){.walkthrough-chapters{top:132px;left:7%;right:7%;font-size:10px;gap:14px}.walkthrough-chapters span{display:none}.walkthrough-chapters span.is-current{display:block}}
+@media(prefers-reduced-motion:reduce){.walkthrough-chapters{display:none!important}}
+
+.walkthrough-active.menu-open .menu-toggle span{background:#151413}
