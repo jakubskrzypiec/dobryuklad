@@ -1,0 +1,17 @@
+/* Jasne intro na stronie głównej: beżowe niebo i Ziemia, ciemny tusz tekstów.
+   Po wejściu w hero (ciemne wnętrze) nagłówek wraca do bieli. */
+.planet-daylight .planet-sequence,.planet-daylight .planet-stage{background:#efe8de;color:#1f1a15}
+.planet-daylight .planet-intro h2,.planet-daylight .planet-caption h2{color:#1f1a15}
+.planet-daylight .planet-caption{text-shadow:0 1px 20px rgba(239,232,222,.9)}
+.planet-daylight .planet-caption p{color:#5b5046}
+.planet-daylight .planet-eyebrow,.planet-daylight .planet-chapters span.is-current{color:#8a6a3c}
+.planet-daylight .planet-pin strong{color:#1f1a15}.planet-daylight .planet-pin span{color:#8a6a3c}
+.planet-daylight .planet-mist{background:radial-gradient(120% 90% at 50% 60%,rgba(250,247,241,.9),rgba(228,220,208,.95) 70%)}
+.planet-daylight .planet-loading{color:#6f655b}
+.planet-daylight .planet-guide progress{background:#1f1a1526}.planet-daylight .planet-guide progress::-webkit-progress-bar{background:#1f1a1526}.planet-daylight .planet-guide progress::-webkit-progress-value{background:#8a6a3c}.planet-daylight .planet-guide progress::-moz-progress-bar{background:#8a6a3c}
+.planet-ink .header nav a,.planet-ink .planet-chapters,.planet-ink .planet-guide,.planet-ink .planet-skip{color:#1f1a15}
+.planet-ink .planet-skip{border-color:#1f1a1555}
+.planet-ink .header .brand-logo img{filter:brightness(0);opacity:.86}
+.planet-ink .menu-toggle span{background:#1f1a15}
+.planet-daylight .header .brand-logo img{transition:filter .4s,opacity .4s}.planet-daylight .header nav a{transition:color .4s}
+.planet-ink.menu-open .header nav a{color:#151413}
