@@ -5,6 +5,7 @@ export function curtainPhases(p){return {expand:ease(p/.19),image:1-ease((p-.16)
 // A sewn, pleated surface: gathers compress horizontally while each fold retains depth.
 export function createCurtainGeometry(){return new THREE.PlaneGeometry(1,1,192,48);}
 export function updateCurtainGeometry(geometry,side,opening){
+ if(side===1&&!geometry.userData.windingCorrected){const index=geometry.index;for(let i=0;i<index.count;i+=3){const b=index.getX(i+1);index.setX(i+1,index.getX(i+2));index.setX(i+2,b);}index.needsUpdate=true;geometry.userData.windingCorrected=true;}
  const p=geometry.attributes.position,uv=geometry.attributes.uv,width=THREE.MathUtils.lerp(3.46,.27,opening);
  for(let i=0;i<p.count;i++){
   const u=uv.getX(i),v=uv.getY(i),bottom=1-v,fold=Math.sin(u*Math.PI*24),secondary=Math.sin(u*Math.PI*48+.35);

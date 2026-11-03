@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {advanceProgress} from './walkthrough-motion.js?v=corridor-9';
-import {curtainPhases,curtainCamera,curtainOpening} from './curtain-motion.js?v=corridor-9';
-import {createCurtainScene} from './curtain-scene.js?v=corridor-9';
+import {advanceProgress} from './walkthrough-motion.js?v=corridor-10';
+import {curtainPhases,curtainCamera,curtainOpening} from './curtain-motion.js?v=corridor-10';
+import {createCurtainScene} from './curtain-scene.js?v=corridor-10';
 
 const sequence=document.querySelector('.curtain-sequence'),stage=sequence?.querySelector('.curtain-stage'),reduce=matchMedia('(prefers-reduced-motion: reduce)');
 let renderer,interior,camera,ready=false,booting=false,visible=false,raf=0,last=0,target=0,range=1,origin=0;

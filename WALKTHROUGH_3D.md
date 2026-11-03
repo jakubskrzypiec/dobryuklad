@@ -2,7 +2,7 @@
 
 Bieżący wariant: dist/wejscie.html, budowany poleceniem node scripts/build-walkthrough.cjs z zatwierdzonej strony głównej. Standardowy dist/index.html pozostaje bez zmian.
 
-## Trzy etapy corridor-9
+## Trzy etapy corridor-10
 
 1. Projekt: od razu widoczna jest przestrzenna, biała makieta z góry, z wyraźną wysokością ścian i mebli. Etap płaskiego rzutu został usunięty także z renderowanej sceny. Napisy SALON, KUCHNIA i WEJŚCIE zostały usunięte.
 2. Wizualizacja: makieta spokojnie nabiera pełnej wysokości, kamera opada bez obrotu wokół osi widoku. Białe powierzchnie przechodzą w materiały i światło. Kamera schodzi do korytarza (x=3,8; z=9,3), przejeżdża przez istniejący otwór wejściowy i skręca w lewo na sofę. Krótki łuk wraca do dopasowanego finału.

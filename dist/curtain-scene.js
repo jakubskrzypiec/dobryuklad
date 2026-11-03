@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {RoundedBoxGeometry} from './vendor/three/RoundedBoxGeometry.js';
 import {upholsteryGeometry,addUpholsteryWelt} from './interior-craft.js?v=atelier-5';
 import {RectAreaLightUniformsLib} from './vendor/three/lights/RectAreaLightUniformsLib.js';
-import {createCurtainGeometry,updateCurtainGeometry} from './curtain-motion.js?v=corridor-9';
+import {createCurtainGeometry,updateCurtainGeometry} from './curtain-motion.js?v=corridor-10';
 
 // A quiet dining room in the palette of the existing photographic divider.
 export async function createCurtainScene(){
@@ -43,11 +43,11 @@ export async function createCurtainScene(){
  for(const z of [-2.7,-.4,1.9,4.2])box(.09,3.7,.055,bronze,-4.02,1.85,z);
  const curtains=new THREE.Group();curtains.position.set(-3.97,0,.8);curtains.rotation.y=Math.PI/2;scene.add(curtains);
  const curtainMaterial=new THREE.MeshPhysicalMaterial({color:'#e0d6c3',roughness:1,side:THREE.DoubleSide,sheen:1,sheenColor:new THREE.Color('#fff5e4'),sheenRoughness:.85});
- const panels=[-1,1].map(side=>{const g=createCurtainGeometry();updateCurtainGeometry(g,side,0);const mesh=new THREE.Mesh(g,curtainMaterial);mesh.layers.enable(1);curtains.add(mesh);return {g,side};});
+ const panels=[-1,1].map(side=>{const g=createCurtainGeometry();updateCurtainGeometry(g,side,0);const mesh=new THREE.Mesh(g,curtainMaterial);curtains.add(mesh);return {g,side};});
  scene.add(new THREE.HemisphereLight('#fff5e5','#5a4b3c',.65));
  const sun=new THREE.DirectionalLight('#ffecd0',1.3);sun.position.set(-6,5,3);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7,near:.1,far:24});sun.shadow.normalBias=.01;sun.shadow.radius=4;scene.add(sun);
  const daylight=new THREE.RectAreaLight('#fff0dc',3.3,5.8,3.1);daylight.position.set(-3.8,1.9,.8);daylight.lookAt(0,1.3,-.4);scene.add(daylight);
- const clothBounce=new THREE.RectAreaLight('#f5eddf',2,3.6,2.7);clothBounce.position.set(-1,2.2,1.2);clothBounce.lookAt(-4,1.8,.8);clothBounce.layers.set(1);scene.add(clothBounce);
+ const clothBounce=new THREE.RectAreaLight('#f5eddf',2,3.6,2.7);clothBounce.position.set(-1,2.2,1.2);clothBounce.lookAt(-4,1.8,.8);scene.add(clothBounce);
  const fill=new THREE.DirectionalLight('#dad9d2',.48);fill.position.set(1,3,5);scene.add(fill);
  const roomMaterials=new Set();room.traverse(o=>{if(o.material)roomMaterials.add(o.material);});
  let priorOpening=-1;

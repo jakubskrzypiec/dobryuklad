@@ -7,6 +7,7 @@ for(const side of [-1,1]){
   assert.ok(width<=previousWidth+.00001);previousWidth=width;
   assert.ok(box.min.y>=0&&box.max.y<3.75);assert.ok(side<0?box.min.x>=-3.451:box.max.x<=3.451);
   for(const a of [geometry.attributes.position,geometry.attributes.normal])assert.ok(a.array.every(Number.isFinite));
+  const normals=geometry.attributes.normal;for(let j=0;j<normals.count;j++)assert.ok(normals.getZ(j)>0,'both mirrored panels must face into the room');
  }
  assert.ok(previousWidth<.28);updateCurtainGeometry(geometry,side,0);geometry.computeBoundingBox();assert.ok(geometry.boundingBox.max.x-geometry.boundingBox.min.x>3.45);geometry.dispose();
 }
