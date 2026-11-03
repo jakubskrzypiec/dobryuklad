@@ -215,9 +215,9 @@ function start() {
     t.wrapS = THREE.RepeatWrapping;
     return t;
   };
-  const dayMap = tex('earth-day-2048.jpg', true);
+  const dayMap = tex('earth-day-4096.jpg', true);
   const nightMap = tex('earth-night-4096.jpg', true);
-  const packMap = tex('earth-pack-2048.jpg', false); // R wysokość, G ląd, B chmury
+  const packMap = tex('earth-pack-4096.jpg', false); // R wysokość, G ląd, B chmury
 
   /* ---------------- niebo z gwiazdami ---------------- */
   const K = new THREE.Vector3(0, 1, 0);
@@ -252,7 +252,7 @@ function start() {
   sky.renderOrder = -10;
   scene.add(sky);
 
-  const STARS = isSmall ? 2600 : 5200;
+  const STARS = isSmall ? 700 : 1300;
   const sPos = new Float32Array(STARS * 3);
   const sCol = new Float32Array(STARS * 3);
   const sSize = new Float32Array(STARS);
@@ -263,7 +263,7 @@ function start() {
     const r = rand();
     const c = r < 0.12 ? C.gold : r < 0.3 ? C.warmWhite : new THREE.Color(0.92, 0.92, 1);
     sCol.set([c.r, c.g, c.b], i * 3);
-    sSize[i] = Math.pow(rand(), 5) * 3.2 + 0.6;
+    sSize[i] = Math.pow(rand(), 4) * 9.0 + 2.2;
   }
   const starGeo = new THREE.BufferGeometry();
   starGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
@@ -275,7 +275,7 @@ function start() {
     new THREE.ShaderMaterial({
       transparent: true,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      
       uniforms: starUniforms,
       vertexColors: true,
       vertexShader: LOGDEPTH_V + /* glsl */ `
@@ -294,7 +294,11 @@ function start() {
           #include <logdepthbuf_fragment>
           float d = length(gl_PointCoord - 0.5);
           float a = smoothstep(0.5, 0.0, d); a *= a;
-          gl_FragColor = vec4(vC * a * vT * uAlpha * 1.3, 1.0);
+          // złota iskra: jasny środek i cztery krótkie promienie
+          vec2 q = abs(gl_PointCoord - 0.5) * 2.0;
+          float spark = max(smoothstep(0.12, 0.0, q.x) * smoothstep(1.0, 0.2, q.y), smoothstep(0.12, 0.0, q.y) * smoothstep(1.0, 0.2, q.x));
+          float k = max(smoothstep(0.5, 0.15, d), spark * 0.8);
+          gl_FragColor = vec4(mix(vec3(0.6, 0.44, 0.2), vec3(0.74, 0.56, 0.28), vT), k * (0.45 + 0.55 * vT) * uAlpha);
           #include <colorspace_fragment>
         }`,
     })
@@ -406,6 +410,27 @@ function start() {
   );
   scene.add(halo);
 
+  const borderMat = new THREE.LineBasicMaterial({ color: new THREE.Color('#3a3027'), transparent: true, opacity: 0 });
+  fetch('assets/planeta/borders-europe.json')
+    .then((r) => r.json())
+    .then((lines) => {
+      const pos = [];
+      const a = new THREE.Vector3();
+      const b = new THREE.Vector3();
+      lines.forEach((l) => {
+        for (let i = 0; i < l.length - 2; i += 2) {
+          a.copy(latLon(l[i + 1], l[i])).multiplyScalar(1.0004);
+          b.copy(latLon(l[i + 3], l[i + 2])).multiplyScalar(1.0004);
+          pos.push(a.x, a.y, a.z, b.x, b.y, b.z);
+        }
+      });
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      const borders = new THREE.LineSegments(g, borderMat);
+      spin.add(borders);
+    })
+    .catch(() => {});
+
   /* ---------------- znacznik Koszalina ---------------- */
   const pin = new THREE.Group();
   pin.position.copy(K).multiplyScalar(1.00001);
@@ -471,6 +496,72 @@ function start() {
   );
   cityLights.frustumCulled = false;
   site.add(cityLights);
+  cityLights.visible = false; // zastąpione prawdziwym planem miasta
+
+  /* ---------------- plan Koszalina z OpenStreetMap (metry → km) ---------------- */
+  const map = new THREE.Group();
+  map.scale.setScalar(0.001);
+  site.add(map);
+  const mapMats = [];
+  const fillMat = (hex, y) => {
+    const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(hex), transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
+    m.userData = { k: 1, y };
+    mapMats.push(m);
+    return m;
+  };
+  const lineMat = (hex, k) => {
+    const m = new THREE.LineBasicMaterial({ color: new THREE.Color(hex), transparent: true, opacity: 0, depthWrite: false });
+    m.userData = { k };
+    mapMats.push(m);
+    return m;
+  };
+  const fills = (polys, mat, y, order) => {
+    const shapes = [];
+    polys.forEach((c) => {
+      const n = c.length / 2;
+      if (n < 3) return;
+      // zamknięte obrysy tylko
+      if (Math.abs(c[0] - c[c.length - 2]) + Math.abs(c[1] - c[c.length - 1]) > 6) return;
+      const pts = [];
+      for (let i = 0; i < c.length; i += 2) pts.push(new THREE.Vector2(c[i], c[i + 1]));
+      shapes.push(new THREE.Shape(pts));
+    });
+    if (!shapes.length) return;
+    const g = new THREE.ShapeGeometry(shapes);
+    g.rotateX(Math.PI / 2); // (x, y) kształtu → (x, z) mapy
+    const mesh = new THREE.Mesh(g, mat);
+    mesh.position.y = y;
+    mesh.renderOrder = order;
+    mesh.frustumCulled = false;
+    map.add(mesh);
+  };
+  const lines = (polys, mat, y, order) => {
+    const pos = [];
+    polys.forEach((c) => {
+      for (let i = 0; i < c.length - 2; i += 2) pos.push(c[i], y, c[i + 1], c[i + 2], y, c[i + 3]);
+    });
+    if (!pos.length) return;
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    const l = new THREE.LineSegments(g, mat);
+    l.renderOrder = order;
+    l.frustumCulled = false;
+    map.add(l);
+  };
+  fetch('assets/planeta/koszalin-osm.json')
+    .then((r) => r.json())
+    .then((d) => {
+      fills(d.green || [], fillMat('#d6d1bd', 0.4), 0.4, 1);
+      fills(d.water || [], fillMat('#c5c8c3', 0.6), 0.6, 2);
+      lines((d.water || []), lineMat('#8c8f8a', 0.6), 0.7, 3);
+      fills(d.bld || [], fillMat('#cdbfac', 0.9), 0.9, 4);
+      lines(d.r3 || [], lineMat('#9a8c7b', 0.9), 1.4, 5);
+      lines(d.r2 || [], lineMat('#5e5145', 1), 1.5, 6);
+      lines(d.rail || [], lineMat('#2b241d', 0.8), 1.5, 6);
+      lines([...(d.r1 || []), ...(d.r0 || [])], lineMat('#7a5a2e', 1), 1.6, 7);
+      lines(d.coast || [], lineMat('#2b241d', 1), 1.6, 7);
+    })
+    .catch(() => {});
 
   // łuna nad miastem i ciemny teren z linią brzegu
   const groundUniforms = { uAlpha: { value: 0 }, uAmber: { value: C.amber } };
@@ -496,8 +587,7 @@ function start() {
           float r = length(vec2(x, z));
           vec3 land = vec3(0.92, 0.88, 0.82) * (0.97 + 0.05 * fbm2(vec2(x, z) * 0.25));
           vec3 water = vec3(0.83, 0.82, 0.79);
-          vec3 col = mix(land, water, sea);
-          col = mix(col, vec3(0.3, 0.26, 0.22), smoothstep(0.08, 0.0, abs(z - coast)) * 0.7); // linia brzegu
+          vec3 col = land;
           col *= 1.0 - 0.04 * exp(-r * r / 18.0);
           float edge = 1.0 - smoothstep(55.0, 80.0, r);
           gl_FragColor = vec4(col, uAlpha * edge);
@@ -563,7 +653,7 @@ function start() {
   const qFull = new THREE.Quaternion().setFromUnitVectors(startDir, UP);
   const qPart = new THREE.Quaternion();
   const TOP_KM = 34;
-  const END_KM = new THREE.Vector3(0, 6.8, 5.6);
+  const END_KM = new THREE.Vector3(0, 3.4, 3.6);
   let wide = true;
   const local = (x, y, z, out) => out.set(x, y, z).multiplyScalar(KM).add(K);
   const bez = (a, b, c, t, out) => out.copy(a).multiplyScalar((1 - t) * (1 - t)).addScaledVector(b, 2 * t * (1 - t)).addScaledVector(c, t * t);
@@ -651,12 +741,14 @@ function start() {
     stars.position.copy(camPos);
     skyUniforms.uLow.value = low;
     starUniforms.uTime.value = time;
-    starUniforms.uAlpha.value = 0.0;
-    stars.visible = false;
+    // złote gwiazdy: widoczne w kosmosie, gasną przy schodzeniu nad miasto
+    starUniforms.uAlpha.value = state.intro * (1 - smooth(0.2, 0.42, p)) * 0.85;
+    stars.visible = starUniforms.uAlpha.value > 0.002;
 
     // Ziemia
     const cityA = smooth(0.28, 0.44, p);
     earthUniforms.uCity.value = cityA;
+    borderMat.opacity = (0.22 + 0.4 * smooth(0.05, 0.25, p)) * (1 - smooth(0.36, 0.5, p)) * state.intro;
     earthUniforms.uLightsFade.value = 1 - smooth(0.004, 0.02, alt);
     earthUniforms.uRim.value = smooth(0.03, 0.3, alt);
     earthUniforms.uCloudShift.value = time * 0.0015;
@@ -678,6 +770,7 @@ function start() {
     // miasto i chmury
     site.visible = p > 0.26;
     cityUniforms.uAlpha.value = cityA;
+    mapMats.forEach((m) => (m.opacity = cityA * m.userData.k));
     cityUniforms.uTime.value = time;
     cityUniforms.uScale.value = KM;
     groundUniforms.uAlpha.value = cityA;
