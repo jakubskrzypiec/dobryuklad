@@ -15,3 +15,4 @@
 .planet-ink .menu-toggle span{background:#1f1a15}
 .planet-daylight .header .brand-logo img{transition:filter .4s,opacity .4s}.planet-daylight .header nav a{transition:color .4s}
 .planet-ink.menu-open .header nav a{color:#151413}
+.planet-daylight .planet-stage:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;opacity:var(--ui,1);background:radial-gradient(70% 55% at 0% 100%,rgba(239,232,222,.92),rgba(239,232,222,.55) 45%,transparent 75%)}

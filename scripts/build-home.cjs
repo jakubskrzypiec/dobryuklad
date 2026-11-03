@@ -52,7 +52,7 @@ html = html.slice(0, s)
 
 html = html
   .replace('<link rel="preload" as="image" href="assets/hero-v2.webp">', '')
-  .replace('</head>', '<link rel="stylesheet" href="planeta.css?v=4"><link rel="stylesheet" href="planeta-dzien.css?v=1"><link rel="stylesheet" href="globus.css?v=1"><script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script></head>')
-  .replace('</body>', '<script src="vendor/gsap/gsap.min.js" defer></script><script src="vendor/gsap/ScrollTrigger.min.js" defer></script><script type="module" src="planeta-dzien.js?v=1"></script><script type="module" src="globus.js?v=1"></script></body>');
+  .replace('</head>', '<link rel="stylesheet" href="planeta.css?v=4"><link rel="stylesheet" href="planeta-dzien.css?v=2"><link rel="stylesheet" href="globus.css?v=1"><script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script></head>')
+  .replace('</body>', '<script src="vendor/gsap/gsap.min.js" defer></script><script src="vendor/gsap/ScrollTrigger.min.js" defer></script><script type="module" src="planeta-dzien.js?v=2"></script><script type="module" src="globus.js?v=1"></script></body>');
 fs.writeFileSync(indexPath, html);
 console.log('Built homepage with night intro and globe interlude.');
