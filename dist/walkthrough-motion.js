@@ -35,3 +35,6 @@ const gaze=new THREE.CatmullRomCurve3([[3.8,1.4,-2],[3.6,1.4,-2],[2.7,1.35,-2.1]
 return createCameraTrack(route,gaze);
 
 }
+
+// Match object-fit:cover to the final 3D projection on portrait and ultrawide screens.
+export function matchedHeroFov(aspect,referenceAspect=1662/946,baseFov=52){return aspect>referenceAspect?THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(baseFov)*.5)*referenceAspect/aspect)):baseFov;}

@@ -1,0 +1,17 @@
+# Fotograficzny finał spaceru
+
+Tryb: wbudowane image_gen, edycja czystego zrzutu końcowej pozycji modelu. Nie jest to zdjęcie realizacji studia.
+
+Referencja w repo: `references/hero-courtyard-model-reference.png`.
+
+Oryginalna ścieżka referencji: `C:/Users/AMDtest/Documents/Codex/2026-11-01/https-github-com-jakubskrzypiec-dobryuklad-https/outputs/hero-courtyard-model-reference.png` (1265 × 720).
+
+Oryginał wygenerowany: `C:/Users/AMDtest/.codex/generated_images/01a1979d-0df1-7e63-956a-bc0aa7e96e02/exec-97279172-a0d4-45bb-b8eb-828a02226634.png` (1662 × 946).
+
+Plik używany przez stronę: `dist/assets/interior-hero-courtyard-v1.webp`, 1662 × 946, jakość 94. Wyłącznie konwersja do WebP, bez zmiany kadru.
+
+Obraz jest dopasowany do modelu kompozycyjnie. Przenikanie jest połączeniem dwóch ujęć, a nie rekonstrukcją geometryczną ani płynną deformacją wszystkich powierzchni. Drobne różnice formy między modelem i fotorealistyczną interpretacją pozostają.
+
+## Pełny prompt
+
+Use case: photorealistic-natural / precise architectural render-to-photograph edit. INPUT IMAGE is the exact edit target, a camera-matched WebGL interior. Transform ONLY rendering realism into an exceptionally lifelike professional architectural interior photograph. Preserve the EXACT wide landscape aspect ratio (1265:720, approximately 16:9), framing, camera position, perspective, focal length, horizon and ALL major object outlines and positions pixel-for-pixel as closely as possible; the output will slowly dissolve directly over this reference. Do not redesign the room, do not crop, do not move furniture, do not change wall proportions. Keep the ivory L-shaped sofa on the left, its rounded cushions and throw in their exact places; low oval dark walnut coffee table, small stack of books and black sculptural pedestal bowl in the same foreground positions; large neutral beige rug occupying the lower left; full-height dark satin walnut panel wall with the same central projecting pier; dark brown veined marble kitchen island and bronze vase with delicate dry branches on the right; two slim counter stools at the far right; the same three thin horizontal pendant bars and long ceiling suspension; rear kitchen, tap, warm niche light, objects and cabinetry as shown. Retain the dark charcoal/walnut, ivory, taupe and muted bronze palette. Through the LEFT window retain a calm private architectural courtyard with pale stone paving, low warm-grey plaster wall, a slim olive tree in a planter, daylight and pale sky, natural believable proportions, NO forest photograph, NO giant tree trunks against the glass. Increase realism through physically plausible bounced daylight, soft contact shadows, restrained natural reflections, authentic irregular linen weave, tiny natural fabric compression creases and stitched seams, beautiful satin real walnut grain, carefully honed marble and convincing ceramic and bronze. Preserve the direction of the soft window illumination and the moody elegant exposure while adding photographic dynamic range and nuanced details in dark areas. This should look like a real luxury interiors magazine photograph taken on a high-end full-frame camera with a level tilt-shift architectural lens, not a game screenshot or glossy CGI. No UI, no text, no logo, no watermarks, no people. No new objects, no extra windows, no extra furniture. Highest possible natural photorealism. Geometry and camera match take priority over artistic restyling. Output a wide landscape image matching the reference aspect, not a square or portrait.

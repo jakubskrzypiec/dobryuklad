@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from './vendor/three/RoundedBoxGeometry.js';
 import {upholsteryGeometry,addUpholsteryWelt,addCraftDetails,createBotanical} from './interior-craft.js?v=atelier-5';
+import {addCourtyardAndArt} from './interior-courtyard.js?v=courtyard-6';
 import {batchStaticInterior} from './interior-batching.js?v=atelier-5';
 import {HDRLoader} from './vendor/three/HDRLoader.js';
 import {RectAreaLightUniformsLib} from './vendor/three/lights/RectAreaLightUniformsLib.js';
@@ -118,13 +119,7 @@ export async function createInterior(){
  // Metallic vase and branched seed stems, matching the scale of the hero still life.
  lathe([[0,0],[.12,0],[.14,.02],[.14,.43],[.12,.46],[.1,.46],[.105,.42],[.125,.025],[0,.025]],bronze,2.8,1.04,-2.5);
  const stemMat=new THREE.MeshStandardMaterial({color:'#756049',roughness:.93});const botanical=createBotanical(scene,stemMat),dummy=new THREE.Object3D();
- // Trees outside the left-hand glazing, modelled as instanced leaves.
- const leafMat=new THREE.MeshStandardMaterial({color:'#65705a',roughness:.95,side:THREE.DoubleSide});const trunkMat=new THREE.MeshStandardMaterial({color:'#51483b',roughness:1});
- for(const z of [-4.3,.7]){
-  const tree=new THREE.Group();tree.position.set(-8.3,0,z);scene.add(tree);tube([[0,0,0],[.05,1.5,.08],[-.12,3.2,0],[.04,4.6,0]],.075,trunkMat,tree);
-  const leaves=new THREE.InstancedMesh(botanical.leafGeometry,leafMat,800);
-  for(let b=0;b<10;b++){const a=b*2.4,tip=[Math.cos(a)*1.2,3.1+random()*1.7,Math.sin(a)*1.0];tube([[0,2,0],[tip[0]*.4,2.8,tip[2]*.4],tip],.02,trunkMat,tree);for(let j=0;j<80;j++){const angle=random()*6.28,r=Math.sqrt(random())*.7;dummy.position.set(tip[0]+Math.cos(angle)*r,tip[1]+(random()-.5)*.7,tip[2]+Math.sin(angle)*r);dummy.scale.set(.65+random()*.5,1.0+random(),1);dummy.rotation.set(random()*3,random()*6,random()*3);dummy.updateMatrix();leaves.setMatrixAt(b*80+j,dummy.matrix);leaves.setColorAt(b*80+j,new THREE.Color().setHSL(.18+random()*.08,.16+random()*.14,.18+random()*.13));}}leaves.castShadow=false;tree.add(leaves);
- }
+ addCourtyardAndArt({scene,box,cylinder,tube,leafGeometry:botanical.leafGeometry,oak,bronze,dark,plaster});
  // Low-contrast contact occlusion underneath furniture, not a screen-sized fake shadow.
  const canvas=document.createElement('canvas');canvas.width=canvas.height=128;const ctx=canvas.getContext('2d'),gradient=ctx.createRadialGradient(64,64,0,64,64,64);gradient.addColorStop(0,'rgba(0,0,0,.55)');gradient.addColorStop(.6,'rgba(0,0,0,.2)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(canvas);
  for(const [x,z,w,d] of [[-1.9,-.2,5.3,3.0],[-1.05,1.1,2.8,1.8],[3.0,-2.5,3.3,2.0]]){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false,opacity:.65}));mesh.rotation.x=-Math.PI/2;mesh.position.set(x,.012,z);scene.add(mesh);}
@@ -138,6 +133,6 @@ export async function createInterior(){
  addCraftDetails({scene,sofa,box,cylinder,lathe,tube,linen,oak,metal,bronze,marble,paper,dark,plaster,texture});
  batchStaticInterior(scene);
  const landscape=await new HDRLoader().loadAsync(new URL('./assets/interior/forest-slope-'+(innerWidth<760?'1k':'2k')+'.hdr',import.meta.url).href).catch(()=>null);
- if(landscape){landscape.mapping=THREE.EquirectangularReflectionMapping;scene.background=landscape;scene.backgroundIntensity=.7;scene.backgroundBlurriness=.02;scene.backgroundRotation.y=1.3;}
+ if(landscape){landscape.mapping=THREE.EquirectangularReflectionMapping;scene.background=new THREE.Color('#d4dad7');}
  return {scene,landscape,capturePosition:new THREE.Vector3(.2,1.6,2.8)};
 }

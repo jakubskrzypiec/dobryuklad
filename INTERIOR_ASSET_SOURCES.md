@@ -15,3 +15,5 @@ Oryginalny len ma niebieski barwnik. W materiale 3D kolor został zneutralizowan
 Pełne adresy pobrań, rozdzielczości, nazwy autorów, rozmiary i SHA-256 plików zawiera INTERIOR_ASSET_MANIFEST.json.
 
 Dodatki HDRLoader, LightProbeGenerator i BufferGeometryUtils pochodzą z oficjalnej paczki npm Three.js 0.180.0 i są objęte lokalną licencją MIT w dist/vendor/three/LICENSE. W BufferGeometryUtils zmieniono ścieżkę importu three na lokalny moduł, aby ten sam plik działał w przeglądarce i testach Node.
+
+W wersji courtyard-6 Forest Slope pozostaje wyłącznie źródłem radiancji i nie jest wyświetlane za oknem. Widok to własny model dziedzińca, a fotograficzny finał opisano w IMAGE_PROMPT_COURTYARD_HERO.md.

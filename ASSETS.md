@@ -65,3 +65,6 @@ Od wersji room-3 hero w wejscie.html pozostaje sceną 3D. Usunięto obraz hero-v
 
 ## Atelier-5 — fotograficzne mapy powierzchni i HDR
 Bieżący model używa map lnu i orzecha oraz panoramy Forest Slope z Poly Haven (CC0), lokalnie w dist/assets/interior. Pełne źródła i autorzy: [INTERIOR_ASSET_SOURCES.md](INTERIOR_ASSET_SOURCES.md). Narzuta, detale sofy, zlew, książki, rośliny, profile stolika i wykończenia są własną geometrią 3D.
+
+## Courtyard-6 — fotorealistyczny finał
+Nowy plik dist/assets/interior-hero-courtyard-v1.webp wygenerowano wbudowanym image_gen na podstawie dokładnego końcowego kadru modelu. [Referencja i pełny prompt](IMAGE_PROMPT_COURTYARD_HERO.md). Ogród i reliefy są własną geometrią; tło Forest Slope przestało być widoczne za oknem i służy tylko jako źródło radiancji.

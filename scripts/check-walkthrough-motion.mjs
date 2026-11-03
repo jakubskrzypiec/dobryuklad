@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import * as THREE from '../dist/vendor/three/three.module.min.js';
-import {createInteriorTrack,advanceProgress} from '../dist/walkthrough-motion.js';
+import {createInteriorTrack,advanceProgress,matchedHeroFov} from '../dist/walkthrough-motion.js';
 import {walkthroughPhases} from '../dist/walkthrough-timing.js';
 
 const track=createInteriorTrack(),position=new THREE.Vector3(),rotation=new THREE.Quaternion();
 let priorPosition,priorRotation,maxTranslation=0,maxTurn=0;
-const obstacles=[['sofa',-4.17,.48,-1.52,1.5],['island',1.82,5.75,-3.23,-1.77],['coffee table',-2.08,-.02,.44,1.76]];
+const obstacles=[['sofa',-4.17,.48,-1.52,1.5],['island',1.82,5.75,-3.23,-1.77],['coffee table',-2.08,-.02,.44,1.76],['art console',-3.42,-.28,5.59,6.08]];
 for(let i=0;i<=3000;i++){
  track.sample(i/3000,position,rotation);
  for(const [name,left,right,back,front] of obstacles)assert.ok(!(position.x>left&&position.x<right&&position.z>back&&position.z<front),'camera intersects '+name);
@@ -26,6 +26,8 @@ for(const fps of [30,60,120]){
 const settled=[];
 for(const fps of [30,60,120]){const state={value:0,velocity:0};for(let i=0;i<fps*2;i++)advanceProgress(state,.3,1/fps);settled.push(state.value);}
 assert.ok(Math.max(...settled)-Math.min(...settled)<.002);
-assert.equal(walkthroughPhases(.89).travel,1);assert.equal(walkthroughPhases(.95).hero,1);
+assert.equal(walkthroughPhases(.73).travel,1);assert.equal(walkthroughPhases(.75).photo,0);assert.equal(walkthroughPhases(.93).photo,1);assert.equal(walkthroughPhases(.96).hero,1);
+assert.ok(walkthroughPhases(.83).photo>0&&walkthroughPhases(.83).photo<1);assert.equal(walkthroughPhases(.83).hero,0);
+for(const aspect of [.44,1,1662/946,2.5]){const fov=matchedHeroFov(aspect),expected=Math.tan(THREE.MathUtils.degToRad(52)*.5)*Math.min(1,(1662/946)/aspect);assert.ok(Math.abs(Math.tan(THREE.MathUtils.degToRad(fov)*.5)-expected)<1e-9);}
 console.log('PASS: clear route, bounded camera turns and translation, forward/reverse damping, 30/60/120 fps consistency, fixed 3D endpoint.');
 console.log({maxTranslationPerStep:maxTranslation,maxRadiansPerStep:maxTurn,weightedTrackLength:track.length});
