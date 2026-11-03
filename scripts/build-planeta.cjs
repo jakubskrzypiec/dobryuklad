@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const dist = path.join(__dirname, '../dist');
 let html = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
-if (html.includes('class="noc-stars"') || html.includes('class="day-hero"')) {
+if (html.includes('class="planet-sequence')) {
   console.log('index.html ma już nocne hero (build-noc.cjs) — planeta.html zostaje bez zmian.');
   process.exit(0);
 }

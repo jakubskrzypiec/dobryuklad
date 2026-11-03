@@ -2,7 +2,7 @@
 
 Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
-**Strona główna „od nocy do dnia” (gałąź `claude/jasna-strona`).** Wejście to nocny przelot nad Koszalin (czarne niebo, Ziemia w czerni i złocie, chmury, miasto świateł), który rozjaśnia się w nowe jasne hero: ciepła biel, nagłówek „Przestrzeń ma znaczenie.”, zdjęcie salonu w dziennym świetle i mały kadr detalu w złotej ramce. Dalej oryginalna jasna strona z płynniejszym ruchem nagłówków i kart; cytat „Dobre wnętrze…” stoi obok jasnego globusa-mapy z Koszalinem (studio) i miastami realizacji (lista do potwierdzenia). Treści sekcji bez zmian. Pliki: `dist/dzien.css`, `dist/dzien.js`, `dist/planeta.css`, `dist/planeta.js`; przebudowa jednorazowa skryptem `scripts/build-dzien.cjs` na klasycznym `index.html`.
+**Strona główna (gałąź `claude/hero-globus`).** Jasne intro: beżowe niebo i Ziemia w odcieniach kamienia, scroll prowadzi przez chmury nad Koszalin, miasto pojawia się jako grafitowy rysunek ulic, a potem obraz przechodzi w klasyczne ciemne hero ze zdjęciem wnętrza. Reszta strony jak dotąd, jasna. Cytat „Dobre wnętrze…” stoi przy jasnym globusie z granicami państw (Natural Earth 1:50m) i kilkoma miastami: Koszalin (studio), Gdańsk, Poznań, Warszawa, Wrocław, Kraków — lista do potwierdzenia przez studio. Pliki: `dist/planeta-dzien.js`, `dist/planeta-dzien.css`, `dist/planeta.css`, `dist/globus.js`, `dist/globus.css`, `dist/assets/planeta/borders-europe.json`; przebudowa jednorazowa skryptem `scripts/build-home.cjs` na klasycznym `index.html`. Nocna wersja intro zostaje w `planeta.html`.
 
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
