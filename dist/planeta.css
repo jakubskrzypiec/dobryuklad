@@ -1,0 +1,78 @@
+/* Od planety do rzutu: globus z gliny → Koszalin → mapa → rzut → makieta → hero. */
+.planet-sequence{position:relative;background:#17130e}
+.planet-stage{position:relative;height:100svh;min-height:620px;overflow:hidden;isolation:isolate;background:radial-gradient(120% 90% at 70% 40%,#2a2119 0%,#17130e 55%,#0f0c09 100%);color:#f3ece2}
+.planet-canvas{position:absolute;inset:0;z-index:0}.planet-canvas canvas{display:block;width:100%;height:100%}
+.planet-final{position:absolute;inset:0;z-index:2}
+.planet-final .hero.hero-v3{position:absolute;inset:0;height:100%;min-height:0;width:100%}
+
+/* bez JS / ograniczony ruch / brak WebGL: zwykłe hero */
+.planet-intro,.planet-caption,.planet-chapters,.planet-guide,.planet-skip,.planet-classic,.planet-pin,.planet-dim,.planet-loading{display:none}
+.planet-static .planet-canvas{display:none}
+
+.planet-active .planet-sequence{height:760svh}
+.planet-active .planet-stage{position:sticky;top:0;min-height:0}
+.planet-active .planet-final{opacity:var(--photo,0);will-change:opacity}
+.planet-active .planet-final[inert]{pointer-events:none}
+.planet-active .planet-final .hero-left{opacity:var(--hero-text,0)}
+.planet-active .header{position:fixed}
+.planet-active.planet-past .header{position:absolute}
+.planet-active .planet-final .hero-canopy img,.planet-active .planet-final .hero-window-leaves i{animation-play-state:paused}
+.planet-active .planet-final:not([inert]) .hero-canopy img,.planet-active .planet-final:not([inert]) .hero-window-leaves i{animation-play-state:running}
+
+/* wstęp */
+.planet-active .planet-intro{display:flex;flex-direction:column;align-items:flex-start;gap:22px;position:absolute;z-index:3;left:6.5%;bottom:17%;max-width:min(560px,80%);pointer-events:none}
+.planet-eyebrow{font:500 11px/1.6 'Manrope',Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#c9a46a;margin:0}
+.planet-intro h2,.planet-caption h2{font-family:'Playfair Display',Georgia,serif;font-weight:400;letter-spacing:-.045em;line-height:1.06;margin:0;text-wrap:balance}
+.planet-intro h2{font-size:clamp(44px,4.6vw,80px);color:#f6efe5}
+.pw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}.pw>span{display:inline-block;will-change:transform}
+
+/* podpisy etapów */
+.planet-active .planet-caption{display:flex;flex-direction:column;gap:16px;position:absolute;z-index:3;left:6.5%;bottom:14%;max-width:min(520px,80%);visibility:hidden;pointer-events:none}
+.planet-caption h2{font-size:clamp(36px,3.6vw,62px)}
+.planet-caption p{margin:0;font:400 15px/1.7 'Manrope',Arial,sans-serif;color:inherit;opacity:.78;max-width:34ch}
+.planet-caption[data-tone=dark]{color:#2b241d}
+.planet-caption[data-tone=light]{color:#f6efe5}
+
+/* znacznik i wymiary — pozycjonowane z rzutu kamery */
+.planet-active .planet-pin,.planet-active .planet-dim{display:block;position:absolute;left:0;top:0;z-index:3;pointer-events:none;opacity:0;will-change:transform,opacity}
+.planet-pin>div{position:absolute;left:26px;top:-18px;display:flex;flex-direction:column;gap:2px;white-space:nowrap}
+.planet-pin strong{font:400 26px/1 'Playfair Display',Georgia,serif;letter-spacing:-.02em;color:#f3ece2;transition:color .4s}
+.planet-pin span{font:500 10px/1.6 'Manrope',Arial,sans-serif;letter-spacing:.16em;color:#c9a46a;transition:color .4s}
+.planet-pin.on-paper strong{color:#2b241d}.planet-pin.on-paper span{color:#6e5f52}
+.planet-dim{font:500 11px/1 'Manrope',Arial,sans-serif;letter-spacing:.08em;color:#2b241d}
+.planet-dim>span{display:block;transform:translate(-50%,-50%);background:#f6f2eb;padding:2px 6px}
+.planet-dim[data-dim=h]>span{transform:translate(-50%,-50%) rotate(-90deg)}
+
+/* rozdziały, przewodnik, pominięcie */
+.planet-active .planet-chapters{display:flex;position:absolute;left:6.5%;top:160px;z-index:3;flex-direction:column;gap:10px;font:500 11px/1.6 'Manrope',Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;pointer-events:none;opacity:var(--ui,1)}
+.planet-chapters span{opacity:.35;transition:opacity .4s}.planet-chapters span.is-current{opacity:1}
+.planet-active .planet-guide{display:block;position:absolute;left:50%;bottom:4%;transform:translateX(-50%);z-index:3;text-align:center;font:500 11px/1.8 'Manrope',Arial,sans-serif;white-space:nowrap;opacity:var(--ui,1);pointer-events:none}
+.planet-guide progress{display:block;appearance:none;width:180px;height:1px;margin:13px auto 0;border:0;background:#eee8db55}.planet-guide progress::-webkit-progress-bar{background:#eee8db55}.planet-guide progress::-webkit-progress-value{background:#c9a46a}.planet-guide progress::-moz-progress-bar{background:#c9a46a}
+.planet-skip:not([hidden]){display:block;position:absolute;right:6.5%;bottom:4%;z-index:3;font:400 12px/1.8 'Manrope',Arial,sans-serif;background:none;color:inherit;border-bottom:1px solid #e9ddc885;min-height:44px;padding:10px 0;opacity:var(--ui,1)}
+.planet-active .planet-classic{display:block;position:absolute;left:6.5%;bottom:4%;z-index:3;font:400 11px/1.8 'Manrope',Arial,sans-serif;border-bottom:1px solid #e9ddc877;padding:8px 0;opacity:var(--ui,1)}
+.planet-active .planet-loading:not([hidden]){display:block;position:absolute;top:50%;left:50%;z-index:4;transform:translate(-50%,-50%);font:400 13px/1.8 'Manrope',Arial,sans-serif;letter-spacing:.06em;color:#c9b8a2}
+.planet-stage button:focus-visible,.planet-stage a:focus-visible{outline:2px solid #f3e9dc;outline-offset:5px}
+
+/* jasne etapy (mapa, rzut, makieta): ciemny tusz zamiast bieli */
+.planet-light .header nav a,.planet-light .planet-chapters,.planet-light .planet-guide,.planet-light .planet-classic,.planet-light .planet-skip{color:#2b241d}
+.planet-light .header .brand-logo img{filter:brightness(0);opacity:.84}.planet-light .menu-toggle span{background:#2b241d}
+.planet-light .planet-classic,.planet-light .planet-skip{border-color:#2b241d55}
+.planet-light .planet-guide progress::-webkit-progress-bar{background:#2b241d33}.planet-light .planet-guide progress{background:#2b241d33}
+.planet-active .header .brand-logo img{transition:filter .3s,opacity .3s}.planet-active .header nav a,.planet-chapters,.planet-guide,.planet-classic,.planet-skip{transition:color .3s,border-color .3s}
+.planet-light.menu-open .header nav a{color:#151413}
+
+@media(max-width:760px){
+  .planet-active .planet-sequence{height:680svh}
+  .planet-stage{min-height:560px}.planet-active .planet-stage{min-height:0}
+  .planet-active .planet-intro{left:7%;right:7%;bottom:20%;max-width:none}
+  .planet-intro h2{font-size:clamp(38px,10vw,56px)}
+  .planet-active .planet-caption{left:7%;right:7%;bottom:18%;max-width:none}
+  .planet-caption h2{font-size:clamp(32px,8.6vw,46px)}
+  .planet-active .planet-chapters{top:132px;left:7%;font-size:10px}.planet-chapters span{display:none}.planet-chapters span.is-current{display:block}
+  .planet-active .planet-guide{bottom:9%;font-size:10px}
+  .planet-active .planet-classic{left:7%;bottom:3%;font-size:10px}
+  .planet-skip:not([hidden]){right:7%;bottom:2%;font-size:11px}
+  .planet-pin strong{font-size:22px}
+}
+@media(prefers-reduced-motion:reduce){.planet-active .planet-sequence{height:100svh}.planet-active .planet-stage{position:relative}.planet-final{opacity:1!important}}
+@media print{.planet-active .planet-sequence{height:auto}.planet-active .planet-stage{position:relative}.planet-final{opacity:1!important}.planet-canvas{display:none}}
