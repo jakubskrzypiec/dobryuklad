@@ -4,8 +4,9 @@ import * as THREE from 'three';
 
 const ScrollTrigger = window.ScrollTrigger;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const GOLD = new THREE.Color('#9a7440');
-const INK = new THREE.Color('#2b241d');
+const NIGHT = document.body.classList.contains('noc');
+const GOLD = new THREE.Color(NIGHT ? '#d9a75a' : '#9a7440');
+const INK = new THREE.Color(NIGHT ? '#d9a75a' : '#2b241d');
 const AMBER = new THREE.Color('#ffb15a');
 
 // Koszalin pierwszy; przesunięcia podpisów w px (ujemne x = podpis po lewej kropki)
@@ -72,27 +73,30 @@ function initGlobe() {
         uSun: { value: sunDir },
         uGold: { value: GOLD },
         uAmber: { value: AMBER },
+        uSea: { value: new THREE.Color(NIGHT ? '#0a0908' : '#e6dfd5').convertSRGBToLinear() },
+        uLand: { value: new THREE.Color(NIGHT ? '#2a2119' : '#bba893').convertSRGBToLinear() },
+        uRim: { value: new THREE.Color(NIGHT ? '#6b4a26' : '#f2ece2').convertSRGBToLinear() },
       },
       vertexShader: /* glsl */ `
         varying vec2 vUv; varying vec3 vN; varying vec3 vW;
         void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); vec4 w = modelMatrix * vec4(position,1.0); vW = w.xyz;
           gl_Position = projectionMatrix * viewMatrix * w; }`,
       fragmentShader: /* glsl */ `
-        uniform sampler2D uNight, uPack; uniform vec3 uSun, uGold, uAmber;
+        uniform sampler2D uNight, uPack; uniform vec3 uSun, uGold, uAmber, uSea, uLand, uRim;
         varying vec2 vUv; varying vec3 vN; varying vec3 vW;
         void main(){
           vec3 n = normalize(vN); vec3 v = normalize(cameraPosition - vW);
           vec4 pk = texture2D(uPack, vUv);
           float land = smoothstep(0.3, 0.7, pk.g);
           // ląd: ciepły taupe, morze: jasny kamień — wyraźny, spokojny podział
-          vec3 col = mix(vec3(0.9, 0.87, 0.82), vec3(0.74, 0.66, 0.56), land);
+          vec3 col = mix(uSea, uLand, land);
           // miasta jako delikatne ciemniejsze plamki
           float nl = dot(texture2D(uNight, vUv).rgb, vec3(0.333));
-          col *= 1.0 - pow(nl, 1.5) * 0.35 * land;
+          col = ${NIGHT ? 'true' : 'false'} ? col + uAmber * pow(nl, 1.4) * 1.6 : col * (1.0 - pow(nl, 1.5) * 0.35 * land);
           float diff = max(dot(n, normalize(vec3(-0.4, 0.6, 0.7))), 0.0);
           col *= 0.86 + 0.16 * diff;
           float fres = pow(1.0 - max(dot(n, v), 0.0), 2.6);
-          col = mix(col, vec3(0.95, 0.92, 0.87), fres * 0.6);
+          col = mix(col, uRim, fres * 0.6);
           gl_FragColor = vec4(col, 1.0);
           #include <colorspace_fragment>
         }`,
@@ -114,7 +118,7 @@ function initGlobe() {
         void main(){ vec3 v = normalize(cameraPosition - vW);
           float rim = pow(clamp(0.82 + dot(normalize(vN), v), 0.0, 1.0), 6.0);
           float s = smoothstep(-0.6, 0.6, dot(normalize(vW), uSun));
-          gl_FragColor = vec4(vec3(0.99, 0.97, 0.93), rim * 0.7);
+          gl_FragColor = vec4(${NIGHT ? 'vec3(0.85, 0.6, 0.3)' : 'vec3(0.99, 0.97, 0.93)'}, rim * 0.7);
           #include <colorspace_fragment>
         }`,
     })
