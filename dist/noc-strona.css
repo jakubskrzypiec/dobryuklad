@@ -1,14 +1,14 @@
 /* DOBRY UKŁAD — strona główna nocą: czerń, brąz, beż i złoto; tło z rozmytych ciepłych świateł (tlo-noc.js).
    Nadpisuje kolory home.css / readability.css, nie zmienia treści ani układu sekcji. */
 .noc{
-  --noc-bg:#050403;
-  --noc-ink:#f3eadb;
-  --noc-soft:#d8cbb6;
-  --noc-muted:#a3957f;
-  --noc-gold:#d9a75a;
-  --noc-gold-soft:#d9a75a33;
-  --noc-line:#d9a75a26;
-  --noc-panel:rgba(18,14,10,.62);
+  --noc-bg:#111110;
+  --noc-ink:#e8e3df;
+  --noc-soft:#e8e3df;
+  --noc-muted:#a99e95;
+  --noc-gold:#a99e95;
+  --noc-gold-soft:#a99e9533;
+  --noc-line:#a99e9526;
+  --noc-panel:rgba(17,17,16,.62);
   --home-ink:var(--noc-ink);
   --home-muted:var(--noc-muted);
   --home-line:var(--noc-line);
@@ -16,11 +16,11 @@
   background:var(--noc-bg);
   color:var(--noc-ink);
 }
-.noc ::selection{background:var(--noc-gold);color:#120d08}
+.noc ::selection{background:var(--noc-gold);color:#111110}
 
 /* sekcje: przezroczyste, gwiazdy prześwitują */
 .noc .home-section,.noc .home-offer,.noc .home-shop,.noc .home-contact,.noc .home-social,.noc .home-reviews,.noc footer.site-footer{background:transparent;color:var(--noc-ink)}
-.noc .home-section h2,.noc .home-section h3,.noc .home-social h2,.noc .home-contact h2{color:#f7efe2}
+.noc .home-section h2,.noc .home-section h3,.noc .home-social h2,.noc .home-contact h2{color:#ffffff}
 .noc .home-kicker,.noc .home-contact>.home-kicker,.noc .home-social .home-kicker{color:var(--noc-gold);letter-spacing:.16em}
 .noc .home-overline,.noc .home-heading>p,.noc .home-offer-eyebrow,.noc .brief-shop-intro,.noc .home-comparison-copy p,.noc .home-material-note,.noc .brief-compare-note{color:var(--noc-muted)}
 .noc .home-about-copy>.home-lead{color:var(--noc-soft)}
@@ -29,40 +29,40 @@
 /* linki i przyciski */
 .noc .home-card-link{color:var(--noc-ink);border-color:var(--noc-gold-soft);transition:border-color .3s,color .3s}
 .noc .home-card-link:hover{color:var(--noc-gold);border-color:var(--noc-gold)}
-.noc .home-cta{color:var(--noc-ink);border:1px solid #d9a75a80;background:transparent}
-.noc .home-cta:hover,.noc .home-cta-light:hover{background:var(--noc-gold);color:#120d08;border-color:var(--noc-gold)}
-.noc .home-offer-footer .home-cta{border:1px solid #d9a75a80}
+.noc .home-cta{color:var(--noc-ink);border:1px solid #a99e9580;background:transparent}
+.noc .home-cta:hover,.noc .home-cta-light:hover{background:var(--noc-gold);color:#111110;border-color:var(--noc-gold)}
+.noc .home-offer-footer .home-cta{border:1px solid #a99e9580}
 
 /* o nas: miejsce na zdjęcie studia jako ciemna, złota rama */
-.noc .studio-photo-placeholder{background:linear-gradient(160deg,rgba(217,167,90,.08),rgba(18,14,10,.7) 55%);border:1px solid var(--noc-line);color:var(--noc-muted)}
+.noc .studio-photo-placeholder{background:linear-gradient(160deg,rgba(169,158,149,.08),rgba(17,17,16,.7) 55%);border:1px solid var(--noc-line);color:var(--noc-muted)}
 .noc .studio-photo-placeholder p{color:var(--noc-soft)}
 .noc .placeholder-line{background:var(--noc-gold)}
 .noc .placeholder-top,.noc .placeholder-bottom,.noc .studio-photo-placeholder small{color:var(--noc-muted)}
 
 /* wybrane projekty */
-.noc .project-slide,.noc .project-slide:nth-child(n){background:linear-gradient(165deg,#1c150e,#0b0806 70%);border:1px solid var(--noc-line);transition:border-color .4s,box-shadow .4s}
-.noc .project-slide:nth-child(3n+2){background:linear-gradient(165deg,#241a10,#0b0806 70%)}
-.noc .project-slide:hover{border-color:#d9a75a80;box-shadow:0 30px 80px -40px rgba(217,167,90,.45)}
+.noc .project-slide,.noc .project-slide:nth-child(n){background:linear-gradient(165deg,#1c150e,#111110 70%);border:1px solid var(--noc-line);transition:border-color .4s,box-shadow .4s}
+.noc .project-slide:nth-child(3n+2){background:linear-gradient(165deg,#241a10,#111110 70%)}
+.noc .project-slide:hover{border-color:#a99e9580;box-shadow:0 30px 80px -40px rgba(169,158,149,.45)}
 .noc .project-slot,.noc .project-index{color:var(--noc-muted)}
 .noc .project-index{color:var(--noc-gold)}
-.noc .project-hover-logo{background:#0b0806}
-.noc .carousel-controls button{border-color:#d9a75a66;color:var(--noc-ink)}
-.noc .carousel-controls button:hover{background:#d9a75a22}
+.noc .project-hover-logo{background:#111110}
+.noc .carousel-controls button{border-color:#a99e9566;color:var(--noc-ink)}
+.noc .carousel-controls button:hover{background:#a99e9522}
 .noc .carousel-count{color:var(--noc-muted)}
 
 /* oferta: szklane karty ze złotym numerem */
 .noc .home-offer-card{background:var(--noc-panel);border:1px solid var(--noc-line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .4s,box-shadow .4s;transform-style:preserve-3d}
-.noc .home-offer-card:hover{border-color:#d9a75a70;box-shadow:0 40px 90px -50px rgba(217,167,90,.5)}
+.noc .home-offer-card:hover{border-color:#a99e9570;box-shadow:0 40px 90px -50px rgba(169,158,149,.5)}
 .noc .home-offer-number{color:var(--noc-gold)}
 
 /* porównanie */
-.noc .brief-compare{background:#0d0a07;border:1px solid var(--noc-line)}
+.noc .brief-compare{background:#111110;border:1px solid var(--noc-line)}
 .noc .brief-compare-after{background:linear-gradient(160deg,#20180f,#0c0906)}
-.noc .brief-compare-before{background:linear-gradient(160deg,#2c2115,#120d08)}
+.noc .brief-compare-before{background:linear-gradient(160deg,#2c2115,#111110)}
 .noc .brief-compare-panel>span,.noc .brief-compare-panel small{color:var(--noc-soft)}
 .noc .brief-compare-panel small{color:var(--noc-muted)}
 .noc .brief-compare-divider{background:var(--noc-gold)}
-.noc .brief-compare-divider>span{background:var(--noc-gold);color:#120d08}
+.noc .brief-compare-divider>span{background:var(--noc-gold);color:#111110}
 
 /* opinie */
 .noc .home-reviews-grid article{border-color:var(--noc-line)}
@@ -71,36 +71,36 @@
 .noc .home-reviews-grid small{color:var(--noc-muted)}
 
 /* sklep */
-.noc .course-photo{background:linear-gradient(165deg,#1d160e,#0b0806 75%);border:1px solid var(--noc-line);color:var(--noc-muted)}
+.noc .course-photo{background:linear-gradient(165deg,#1d160e,#111110 75%);border:1px solid var(--noc-line);color:var(--noc-muted)}
 .noc .home-shop .course-photo span{color:var(--noc-muted)}
 .noc .course-caption{border-top-color:var(--noc-line)}
 .noc .course-caption>span{color:var(--noc-gold)}
 
 /* kontakt */
-.noc .home-contact{background:linear-gradient(180deg,transparent,rgba(18,14,10,.55) 30%,rgba(18,14,10,.55) 70%,transparent)}
+.noc .home-contact{background:linear-gradient(180deg,transparent,rgba(17,17,16,.55) 30%,rgba(17,17,16,.55) 70%,transparent)}
 .noc .contact-intro-new>p,.noc .contact-intro-new>a{color:var(--noc-soft)!important}
 .noc .contact-intro-new>a{border-bottom:1px solid var(--noc-gold-soft)}
 .noc .home-contact form label{color:var(--noc-muted)}
-.noc .home-contact form input,.noc .home-contact form select,.noc .home-contact form textarea{color:var(--noc-ink);border-bottom-color:#d9a75a55;background:transparent}
+.noc .home-contact form input,.noc .home-contact form select,.noc .home-contact form textarea{color:var(--noc-ink);border-bottom-color:#a99e9555;background:transparent}
 .noc .home-contact form input:focus,.noc .home-contact form select:focus,.noc .home-contact form textarea:focus{border-bottom-color:var(--noc-gold);outline:none}
-.noc .home-contact form select option{background:#120d08;color:var(--noc-ink)}
-.noc .home-contact form .button{background:var(--noc-gold);color:#120d08;border-color:var(--noc-gold)}
-.noc .home-contact form .button:hover{background:#f0c27d}
+.noc .home-contact form select option{background:#111110;color:var(--noc-ink)}
+.noc .home-contact form .button{background:var(--noc-gold);color:#111110;border-color:var(--noc-gold)}
+.noc .home-contact form .button:hover{background:#ffffff}
 .noc .home-contact form .form-note,.noc .form-status{color:var(--noc-muted)}
 
 /* social i stopka */
 .noc .social-profile{border-bottom-color:var(--noc-line);color:var(--noc-ink)}
-.noc .social-profile>.social-icon{background:#d9a75a1f;color:var(--noc-gold)}
-.noc .social-profile:hover .social-icon{background:var(--noc-gold);color:#120d08}
+.noc .social-profile>.social-icon{background:#a99e951f;color:var(--noc-gold)}
+.noc .social-profile:hover .social-icon{background:var(--noc-gold);color:#111110}
 .noc .social-text strong{color:var(--noc-ink)}.noc .social-text>span{color:var(--noc-soft)}.noc .social-text small{color:var(--noc-muted)}
 .noc footer.site-footer{border-top:1px solid var(--noc-line)}
 .noc .site-footer .footer-bottom{border-top-color:var(--noc-line)}
 
 /* okna dialogowe */
-.noc .content-dialog{background:#0d0a07;color:var(--noc-ink);border:1px solid var(--noc-line)}
+.noc .content-dialog{background:#111110;color:var(--noc-ink);border:1px solid var(--noc-line)}
 .noc .content-dialog p,.noc .content-dialog label,.noc .materials p{color:var(--noc-soft)}
-.noc .content-dialog input,.noc .content-dialog select,.noc .content-dialog textarea{background:transparent;color:var(--noc-ink);border-bottom-color:#d9a75a55}
-.noc .process-track article>span{background:#0d0a07}
+.noc .content-dialog input,.noc .content-dialog select,.noc .content-dialog textarea{background:transparent;color:var(--noc-ink);border-bottom-color:#a99e9555}
+.noc .process-track article>span{background:#111110}
 
 /* nagłówki sekcji: maska dla słów */
 .noc .nw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}.noc .nw>span{display:inline-block;will-change:transform}
@@ -108,8 +108,8 @@
 
 /* szkło jak na moodboardzie: przydymione karty i pigułki z jasną krawędzią */
 .noc .home-offer-card,.noc .home-reviews-grid article,.noc .course-card,.noc .social-profile{border-radius:28px}
-.noc .home-offer-card{background:linear-gradient(160deg,rgba(255,240,215,.07),rgba(255,240,215,.02));border:1px solid rgba(255,236,205,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 30px 80px -40px rgba(0,0,0,.8);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
+.noc .home-offer-card{background:linear-gradient(160deg,rgba(232,227,223,.07),rgba(232,227,223,.02));border:1px solid rgba(232,227,223,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 30px 80px -40px rgba(0,0,0,.8);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
 .noc .home-cta,.noc .home-contact form .button,.noc .hero-button{border-radius:999px}
 .noc .project-slide,.noc .course-photo,.noc .studio-photo-placeholder,.noc .brief-compare{border-radius:24px;overflow:hidden}
 .noc .home-contact{background:transparent}
-.noc .globe-cities li{background:rgba(255,240,215,.05)}
+.noc .globe-cities li{background:rgba(232,227,223,.05)}

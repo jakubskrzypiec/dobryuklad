@@ -29,11 +29,11 @@ const KM = 1 / 6371; // jednostki sceny na kilometr (promień Ziemi = 1)
 const CLOUD_LAYERS = [6.5, 9.5]; // km
 
 const COLORS = {
-  space: '#040302',
-  gold: '#d9a75a',
-  amber: '#ffb15a',
-  warmWhite: '#ffe2b8',
-  ink: '#120d08',
+  space: '#0b0b0a',
+  gold: '#a99e95',
+  amber: '#e8e3df',
+  warmWhite: '#ffffff',
+  ink: '#111110',
 };
 
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
@@ -241,10 +241,10 @@ function start() {
           vec3 d = normalize(vDir);
           float h = dot(d, uUp);
           // nocne niebo: prawie czarne, ciepła łuna miasta tuż nad horyzontem
-          vec3 col = vec3(0.0011, 0.0009, 0.0007);
+          vec3 col = vec3(0.0055, 0.0055, 0.005);
           float glow = exp(-max(h + 0.02, 0.0) * 9.0) * uLow;
           col += uGold * glow * 0.06;
-          col = mix(col, vec3(0.006, 0.0045, 0.0033), uLow * smoothstep(0.02, -0.05, h));
+          col = mix(col, vec3(0.008, 0.008, 0.0075), uLow * smoothstep(0.02, -0.05, h));
           gl_FragColor = vec4(col, 1.0);
           #include <colorspace_fragment>
         }`,
@@ -262,7 +262,7 @@ function start() {
     v.set(rand() * 2 - 1, rand() * 2 - 1, rand() * 2 - 1).normalize().multiplyScalar(18);
     sPos.set([v.x, v.y, v.z], i * 3);
     const r = rand();
-    const c = r < 0.12 ? C.gold : r < 0.3 ? C.warmWhite : new THREE.Color(0.92, 0.92, 1);
+    const c = r < 0.12 ? C.gold : r < 0.4 ? new THREE.Color('#e8e3df') : C.warmWhite;
     sCol.set([c.r, c.g, c.b], i * 3);
     sSize[i] = Math.pow(rand(), 5) * 3.6 + 0.7;
   }
@@ -350,10 +350,10 @@ function start() {
           // dzień w czerni i złocie: monochromatyczna sepia, ocean prawie czarny
           vec3 day = texture2D(uDay, vUv).rgb;
           float lum = dot(day, vec3(0.2126, 0.7152, 0.0722));
-          vec3 sepia = mix(vec3(0.02, 0.014, 0.008), vec3(0.62, 0.47, 0.29), smoothstep(0.02, 0.5, lum));
-          sepia = mix(vec3(0.008, 0.007, 0.006) + uGold * 0.015, sepia, land);
+          vec3 sepia = mix(vec3(0.016, 0.015, 0.014), vec3(0.42, 0.38, 0.35), smoothstep(0.02, 0.5, lum));
+          sepia = mix(vec3(0.007, 0.007, 0.0065) + uGold * 0.01, sepia, land);
           vec3 col = sepia * dayF * 0.95;
-          col = mix(col, vec3(0.8, 0.7, 0.56) * dayF, cl * 0.75);
+          col = mix(col, vec3(0.8, 0.78, 0.76) * dayF, cl * 0.75);
           // złoty refleks słońca na oceanie
           vec3 hv = normalize(uSun + v);
           col += uGold * pow(max(dot(n, hv), 0.0), 70.0) * (1.0 - land) * (1.0 - cl) * dayF * 1.4;
@@ -361,11 +361,11 @@ function start() {
           // światła miast: złote, gęste, z miękką poświatą
           vec3 night = texture2D(uNight, vUv).rgb;
           float nl = dot(night, vec3(0.333));
-          vec3 lights = mix(uAmber, vec3(1.0, 0.9, 0.7), smoothstep(0.5, 1.0, nl)) * pow(nl, 1.6) * 2.9;
+          vec3 lights = mix(uAmber, vec3(1.0), smoothstep(0.5, 1.0, nl)) * pow(nl, 1.6) * 2.9;
           lights *= (1.0 - dayF) * (1.0 - cl * 0.65) * (1.0 - uLightsFade);
           col += lights;
           // chmury w nocy: słabo podświetlone przez miasta
-          col += vec3(0.05, 0.035, 0.022) * cl * (1.0 - dayF) * (0.3 + nl);
+          col += vec3(0.04, 0.038, 0.036) * cl * (1.0 - dayF) * (0.3 + nl);
 
           // złota atmosfera na krawędzi, mocniejsza od strony słońca
           float fres = pow(1.0 - max(dot(n, v), 0.0), 3.0);
@@ -408,7 +408,7 @@ function start() {
   );
   scene.add(halo);
 
-  const borderMat = new THREE.LineBasicMaterial({ color: new THREE.Color('#d9a75a'), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
+  const borderMat = new THREE.LineBasicMaterial({ color: new THREE.Color('#a99e95'), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
   fetch('assets/planeta/borders-europe.json')
     .then((r) => r.json())
     .then((lines) => {
@@ -577,9 +577,9 @@ function start() {
     c.width = c.height = 256;
     const x = c.getContext('2d');
     const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
-    g.addColorStop(0, 'rgba(255,214,150,0.95)');
-    g.addColorStop(0.18, 'rgba(232,170,90,0.55)');
-    g.addColorStop(0.5, 'rgba(160,100,45,0.18)');
+    g.addColorStop(0, 'rgba(232,227,223,0.95)');
+    g.addColorStop(0.18, 'rgba(169,158,149,0.55)');
+    g.addColorStop(0.5, 'rgba(53,51,48,0.18)');
     g.addColorStop(1, 'rgba(0,0,0,0)');
     x.fillStyle = g;
     x.fillRect(0, 0, 256, 256);
@@ -607,12 +607,12 @@ function start() {
       }).sort((a, b) => a[0] - b[0]);
       if (coast.length > 2) {
         const f = coast[0], l = coast[coast.length - 1];
-        fills([[...coast.flat(), l[0] + 60000, l[1], l[0] + 60000, -90000, f[0] - 60000, -90000, f[0] - 60000, f[1], f[0], f[1]]], fillMat('#050404', 1), 0.3);
+        fills([[...coast.flat(), l[0] + 60000, l[1], l[0] + 60000, -90000, f[0] - 60000, -90000, f[0] - 60000, f[1], f[0], f[1]]], fillMat('#0b0b0a', 1), 0.3);
       }
-      fills(d.green || [], fillMat('#2a2018', 0.9), 0.4);
+      fills(d.green || [], fillMat('#262523', 0.9), 0.4);
       fills(d.water || [], fillMat('#080706', 1), 0.6);
-      lines(d.water || [], lineMat('#5b4630', 0.7), 0.7);
-      lines(d.coast || [], lineMat('#c4914e', 1, true), 1.6);
+      lines(d.water || [], lineMat('#4a4643', 0.7), 0.7);
+      lines(d.coast || [], lineMat('#a99e95', 1, true), 1.6);
     })
     .catch(() => {});
 
@@ -638,7 +638,7 @@ function start() {
           float coast = -11.5 + sin(x * 0.09) * 1.2 + sin(x * 0.31) * 0.4;
           float sea = smoothstep(coast + 0.3, coast - 0.3, z);
           float r = length(vec2(x, z));
-          vec3 col = vec3(0.034, 0.026, 0.018) * (0.9 + 0.2 * fbm2(vec2(x, z) * 0.25));
+          vec3 col = vec3(0.03, 0.029, 0.027) * (0.9 + 0.2 * fbm2(vec2(x, z) * 0.25));
           col += uAmber * 0.006 * exp(-r * r / 20.0); // delikatna łuna nad śródmieściem
           float edge = 1.0 - smoothstep(55.0, 80.0, r);
           gl_FragColor = vec4(col, uAlpha * edge);

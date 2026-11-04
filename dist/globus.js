@@ -5,9 +5,9 @@ import * as THREE from 'three';
 const ScrollTrigger = window.ScrollTrigger;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const NIGHT = document.body.classList.contains('noc');
-const GOLD = new THREE.Color(NIGHT ? '#d9a75a' : '#9a7440');
-const INK = new THREE.Color(NIGHT ? '#d9a75a' : '#2b241d');
-const AMBER = new THREE.Color('#ffb15a');
+const GOLD = new THREE.Color(NIGHT ? '#a99e95' : '#9a7440');
+const INK = new THREE.Color(NIGHT ? '#a99e95' : '#2b241d');
+const AMBER = new THREE.Color(NIGHT ? '#e8e3df' : '#ffb15a');
 
 // Koszalin pierwszy; przesunięcia podpisów w px (ujemne x = podpis po lewej kropki)
 const CITIES = [
@@ -75,9 +75,9 @@ function initGlobe() {
         uSun: { value: sunDir },
         uGold: { value: GOLD },
         uAmber: { value: AMBER },
-        uSea: { value: new THREE.Color(NIGHT ? '#0a0908' : '#e6dfd5').convertSRGBToLinear() },
-        uLand: { value: new THREE.Color(NIGHT ? '#2a2119' : '#bba893').convertSRGBToLinear() },
-        uRim: { value: new THREE.Color(NIGHT ? '#6b4a26' : '#f2ece2').convertSRGBToLinear() },
+        uSea: { value: new THREE.Color(NIGHT ? '#0b0b0a' : '#e6dfd5').convertSRGBToLinear() },
+        uLand: { value: new THREE.Color(NIGHT ? '#2a2927' : '#bba893').convertSRGBToLinear() },
+        uRim: { value: new THREE.Color(NIGHT ? '#55504b' : '#f2ece2').convertSRGBToLinear() },
       },
       vertexShader: /* glsl */ `
         varying vec2 vUv; varying vec3 vN; varying vec3 vW;
@@ -120,7 +120,7 @@ function initGlobe() {
         void main(){ vec3 v = normalize(cameraPosition - vW);
           float rim = pow(clamp(0.82 + dot(normalize(vN), v), 0.0, 1.0), 6.0);
           float s = smoothstep(-0.6, 0.6, dot(normalize(vW), uSun));
-          gl_FragColor = vec4(${NIGHT ? 'vec3(0.85, 0.6, 0.3)' : 'vec3(0.99, 0.97, 0.93)'}, rim * 0.7);
+          gl_FragColor = vec4(${NIGHT ? 'vec3(0.66, 0.62, 0.58)' : 'vec3(0.99, 0.97, 0.93)'}, rim * 0.7);
           #include <colorspace_fragment>
         }`,
     })
