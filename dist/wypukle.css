@@ -1,0 +1,40 @@
+/* Wypukłe kafelki: miękkie, wielowarstwowe cienie, jasna krawędź od światła z lewej góry,
+   lekkie przechylenie za kursorem (kafelki.js ustawia --rx, --ry, --mx, --my). */
+.home-offer-grid,.course-grid,.home-reviews-grid,.project-group,.home-about-grid,.home-about>div{perspective:1100px}
+.wypukly{
+  --rx:0;--ry:0;--lift:0px;--mx:30%;--my:20%;
+  position:relative;border-radius:22px;isolation:isolate;
+  rotate:var(--ry) var(--rx) 0 calc(hypot(var(--rx),var(--ry)) * 7deg);
+  translate:0 var(--lift);
+  transition:rotate .5s cubic-bezier(.2,.7,.2,1),translate .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.75),
+    inset -1px -1px 0 rgba(90,74,60,.08),
+    0 1px 2px rgba(60,46,34,.06),
+    0 6px 14px -4px rgba(60,46,34,.1),
+    0 22px 44px -18px rgba(60,46,34,.22);
+  transform-style:preserve-3d;
+}
+.wypukly::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  background:
+    radial-gradient(120% 90% at var(--mx) var(--my),rgba(255,255,255,.34),rgba(255,255,255,0) 55%),
+    linear-gradient(160deg,rgba(255,255,255,.18),rgba(255,255,255,0) 40%,rgba(70,55,42,.06));
+  mix-blend-mode:soft-light;
+}
+.wypukly.is-tilt{--lift:-6px;transition:rotate .12s linear,translate .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s;
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.85),
+    inset -1px -1px 0 rgba(90,74,60,.08),
+    0 2px 4px rgba(60,46,34,.06),
+    0 14px 26px -8px rgba(60,46,34,.16),
+    0 40px 70px -26px rgba(60,46,34,.32)}
+.home-offer-card.wypukly{background:linear-gradient(165deg,#fff 0%,#faf7f3 60%,#f2ede7 100%)}
+.project-slide.wypukly{overflow:hidden}
+.course-card .course-photo.wypukly,.studio-photo-placeholder.wypukly{overflow:hidden}
+.studio-photo-placeholder.wypukly{border:0}
+.home-reviews-grid article.wypukly{border-left:0;padding:34px 30px;background:rgba(255,253,250,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.home-reviews-grid{gap:22px}
+.brief-compare{border-radius:22px;overflow:hidden;box-shadow:0 1px 2px rgba(60,46,34,.06),0 22px 44px -18px rgba(60,46,34,.22)}
+@media(max-width:760px){.home-reviews-grid article.wypukly{padding:26px 20px}}
+@media (prefers-reduced-motion:reduce){.wypukly{rotate:none;translate:none}}
