@@ -1,4 +1,4 @@
-**Zabawa 3D na stronie 2D.** Pod stroną żywe tło 3D (`dist/tlo.js`). Kafelki są wypukłe i przechylają się za kursorem (`dist/wypukle.css`, `dist/kafelki.js`). Zamiast zdjęcia „Dobre wnętrze…” stoi kopuła Ziemi „Zobacz miejsca, w których projektujemy” (`globus.js`, klasa `is-dome`). Na dole, zamiast sekcji social media, obracająca się kula: scroll obraca ją do Polski, schodzi przez stratosferę nad Koszalin i pokazuje Instagram, Facebook i e-mail (`dist/kula.js`, `dist/kula.css`).
+**Aktualna strona główna — 2D ze światłem i subtelną interakcją.** Fotograficzne hero i typografia pozostają płaskie. Usunięto oba globusy, przestrzenne tło i przechylanie kafelków. Wróciły fotograficzny cytat oraz bezpośrednie linki Instagram/Facebook. `dist/home-atmosphere.css` i `dist/home-atmosphere.js` dodają delikatne beżowe światło, linie architektoniczne reagujące na scroll, stopniowe odsłanianie sekcji, reakcje kart i ruchome cienie na przyciskach. Bez WebGL, Three.js, GSAP i zatrzymywania przewijania na stronie głównej. Animacje respektują ograniczony ruch i pauzują poza ekranem. Eksperymenty 3D pozostają w repo i na osobnych podglądach.
 
 **Strona główna: wersja 2D (gałąź `claude/strona-2d`).** Wracamy do pierwszej, zwykłej strony bez 3D: fotograficzne hero „Przestrzeń ma znaczenie.”, sekcje oferty i portfolio (`dist/index.html` z commita fb2a94a). Wszystkie wersje 3D zostają w repo do dalszej zabawy: nocna wersja w palecie studia na gałęzi `claude/paleta-studia`, przebudowa `node scripts/build-home-noc.cjs`; jasna wersja z mapą Koszalina: `node scripts/build-home-koszalin.cjs`.
 
@@ -10,7 +10,7 @@
 
 Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 
-**Aktualna strona główna.** Jasny globus w odcieniach kamienia i beżu przechodzi przez chmury w koncepcyjną zabudowę, lot do budynku oraz wejście przez korytarz do jasnego salonu. Po zatrzymaniu kamery pojawia się dopasowane fotograficzne hero z jasnym dębem, kremowym kamieniem i naturalnym lnem. Podpis i plansza Koszalina zostały pominięte. Przy cytacie pozostaje jasny globus z granicami Natural Earth oraz miastami studia. [Opis połączenia i testów](HOME_JOURNEY.md), [źródło nowego hero i prompt](references/IMAGE_PROMPT_HERO_DAYLIGHT.md).
+**Wcześniejszy eksperyment wejścia przez miasto (archiwum).** Jasny globus przechodził przez chmury w koncepcyjną zabudowę, lot do budynku oraz wejście przez korytarz do jasnego salonu. Pliki są zachowane; bieżąca strona główna ich nie ładuje. [Opis połączenia i testów](HOME_JOURNEY.md), [źródło jasnego hero i prompt](references/IMAGE_PROMPT_HERO_DAYLIGHT.md).
 
 Materiały mapowe zachowane w repozytorium: granice i wybrzeża Natural Earth; wcześniejszy plan `dist/assets/planeta/koszalin-osm.json` — © OpenStreetMap contributors, ODbL. Bieżące wejście nie pobiera planu ulic. Nocny eksperyment pozostaje w `planeta.html`.
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
