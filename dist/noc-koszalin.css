@@ -1,20 +1,29 @@
 /* Wersja nocna wejścia: ciemne podpisy mapy, ciepły błysk, ciemne hero. */
-.noc .tlo-3d{background:#060605}
-.noc.planet-active .planet-caption.is-center{background:radial-gradient(closest-side,rgba(6,6,5,.85),rgba(6,6,5,.55) 70%,transparent)}
-.noc .planet-caption.is-center h2{color:#f6eddd}
-.noc .planet-caption.is-center p{color:#d8cbb6}
-.noc .planet-caption-eyebrow{color:#d9a75a!important}
-.noc .planet-maplabel{color:#cdbb9f;text-shadow:0 0 8px #060605,0 0 14px #060605}
-.noc .planet-maplabel.is-city{color:#f6eddd}
-.noc .planet-maplabel.is-sea,.noc .planet-maplabel.is-water{color:#a08a6c}
-.noc .planet-mist{z-index:3;background:radial-gradient(80% 70% at 50% 50%,#f3d9ab 0%,#c48c46 45%,#3a2615 100%)!important}
-.noc .planet-final .hero.hero-v3:after{background:linear-gradient(90deg,rgba(16,13,10,.45),transparent 55%),linear-gradient(0deg,rgba(10,8,7,.5),transparent 50%)!important}
+.noc .tlo-3d{background:#111110}
+.noc.planet-active .planet-caption.is-center{background:radial-gradient(closest-side,rgba(17,17,16,.85),rgba(17,17,16,.55) 70%,transparent)}
+.noc .planet-caption.is-center h2{color:#ffffff}
+.noc .planet-caption.is-center p{color:#e8e3df}
+.noc .planet-caption-eyebrow{color:#a99e95!important}
+.noc .planet-maplabel{color:#a99e95;text-shadow:0 0 8px #111110,0 0 14px #111110}
+.noc .planet-maplabel.is-city{color:#ffffff}
+.noc .planet-maplabel.is-sea,.noc .planet-maplabel.is-water{color:#a99e95}
+.noc .planet-mist{z-index:3;background:radial-gradient(80% 70% at 50% 50%,#e8e3df 0%,#a99e95 45%,#353330 100%)!important}
+.noc .planet-final .hero.hero-v3:after{background:linear-gradient(90deg,rgba(17,17,16,.45),transparent 55%),linear-gradient(0deg,rgba(17,17,16,.5),transparent 50%)!important}
 .noc .planet-final .hero-v3 h1,.noc .planet-final .hero-statement{color:#fff;text-shadow:0 2px 18px #0006}
 /* przerywnik z globusem w nocy */
-.noc .globe-interlude{background:transparent;color:#f6eddd}
-.noc .globe-interlude:before{background:linear-gradient(20deg,rgba(6,6,5,.92) 0%,rgba(6,6,5,.45) 32%,transparent 55%)}
-.noc .globe-copy .home-kicker{color:#d9a75a}
-.noc .globe-copy h2{color:#f6eddd}
-.noc .globe-labels span{color:#e9dcc6;text-shadow:0 1px 8px #000}
-.noc .globe-labels span[data-city="0"]{color:#f8f0e2}
-.noc .globe-labels small{color:#d9a75a}
+.noc .globe-interlude{background:transparent;color:#ffffff}
+.noc .globe-interlude:before{background:linear-gradient(20deg,rgba(17,17,16,.92) 0%,rgba(17,17,16,.45) 32%,transparent 55%)}
+.noc .globe-copy .home-kicker{color:#a99e95}
+.noc .globe-copy h2{color:#ffffff}
+.noc .globe-labels span{color:#e8e3df;text-shadow:0 1px 8px #000}
+.noc .globe-labels span[data-city="0"]{color:#ffffff}
+.noc .globe-labels small{color:#a99e95}
+
+/* paleta studia: biel, głęboka czerń, grafit, taupe, beż — bez złota */
+.noc .planet-eyebrow,.noc .planet-pin span,.noc .planet-chapters span.is-current{color:#a99e95}
+.noc .planet-pin strong,.noc .planet-intro h2,.noc .planet-caption h2{color:#ffffff}
+.noc .planet-caption p{color:#e8e3df}
+.noc .planet-guide progress::-webkit-progress-value{background:#e8e3df}.noc .planet-guide progress::-moz-progress-bar{background:#e8e3df}
+.noc .planet-skip:not([hidden]){border-color:#a99e9580}
+.noc .planet-stage button:focus-visible,.noc .planet-stage a:focus-visible{outline-color:#e8e3df}
+.noc .planet-credit{color:#a99e95}

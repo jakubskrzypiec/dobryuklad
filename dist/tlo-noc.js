@@ -1,5 +1,5 @@
 // Tło nocnej strony: prawie czarna przestrzeń z dużymi, rozmytymi, ciepłymi światłami
-// (złoto, brąz, beż), które powoli płyną, oraz rzadkie gwiazdy. Niska rozdzielczość, pauza w tle karty.
+// (taupe, grafit, beż), które powoli płyną, oraz rzadkie gwiazdy. Niska rozdzielczość, pauza w tle karty.
 const canvas = document.querySelector('.tlo-3d');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const gl = canvas && canvas.getContext('webgl', { antialias: false });
@@ -15,11 +15,11 @@ if (canvas && gl) {
     vec2 p = vec2(uv.x * ar, uv.y);
     float t = uTime * 0.05;
     float s = uScroll * 0.00012;
-    vec3 gold  = vec3(0.85, 0.58, 0.22);
-    vec3 amber = vec3(0.72, 0.40, 0.12);
-    vec3 brown = vec3(0.36, 0.22, 0.11);
-    vec3 beige = vec3(0.90, 0.78, 0.58);
-    vec3 col = vec3(0.024, 0.022, 0.02);
+    vec3 gold  = vec3(0.66, 0.62, 0.58);  // taupe
+    vec3 amber = vec3(0.55, 0.52, 0.49);  // taupe w cieniu
+    vec3 brown = vec3(0.21, 0.20, 0.19);  // grafit
+    vec3 beige = vec3(0.91, 0.89, 0.87);  // beż
+    vec3 col = vec3(0.067, 0.067, 0.063); // głęboka czerń
     // duże, miękkie światła przy krawędziach — jak smugi światła w ciemnym wnętrzu
     col += blob(p, vec2(-0.05 + 0.08 * sin(t * 1.1), 0.05 + 0.1 * sin(t * 0.7 + s)), 0.55, gold * 0.55);
     col += blob(p, vec2(0.15 + 0.1 * sin(t * 0.8 + 1.0), -0.12 + 0.06 * cos(t + s * 2.0)), 0.35, beige * 0.35);
@@ -33,7 +33,7 @@ if (canvas && gl) {
     vec2 g = floor(gl_FragCoord.xy / 3.0 + vec2(0.0, uScroll * 0.02));
     float r = h(g);
     float star = step(0.9985, r) * (0.5 + 0.5 * sin(uTime * (1.0 + r * 3.0) + r * 50.0));
-    col += vec3(1.0, 0.92, 0.8) * star * 0.55;
+    col += vec3(1.0) * star * 0.5;
     col += (h(gl_FragCoord.xy + uTime) - 0.5) * 0.018;
     gl_FragColor = vec4(col, 1.0);
   }`;
