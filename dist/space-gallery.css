@@ -6,7 +6,7 @@
 .space-heading h2{font:400 var(--section-heading-size)/1.1 'Playfair Display',Georgia,serif;letter-spacing:-.045em}
 .space-heading>a{font-size:14px;white-space:nowrap;padding:12px 0;border-bottom:1px solid #a99e9270}
 .space-stars{position:absolute;inset:-15%;z-index:-1;pointer-events:none;transform:translate(calc(var(--space-progress)*-35px),calc(var(--space-progress)*18px))}
-.space-stars::before,.space-stars::after{content:'';position:absolute;inset:24% -15% 10% 50%;border:1px solid #a99e9224;transform:rotate(-25deg)}
+.space-stars::before,.space-stars::after{display:none}
 .space-stars::after{inset:32% -20% 1% 40%;border-color:#a99e9219}
 .space-star{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:#a99e92;opacity:var(--alpha);animation:starBreath var(--duration) ease-in-out infinite alternate;animation-delay:var(--delay);animation-play-state:paused}
 .space-gallery.is-active .space-star{animation-play-state:running}
@@ -28,13 +28,15 @@
 .space-gallery.is-scroll{height:var(--space-height,500svh)}
 .space-gallery.is-scroll .space-stage{position:sticky;top:0;height:100svh;min-height:620px;display:flex;flex-direction:column;justify-content:center;padding-top:28px;padding-bottom:24px}
 /* CSS perspective camera, alternating projects along the gallery walls. */
-.space-gallery.is-walk:not(.is-keyboard) .space-track{position:relative;display:block;flex:none;height:clamp(280px,48svh,530px);overflow:hidden;perspective-origin:50% 50%;scroll-snap-type:none;padding:0;margin-top:22px;mask-image:linear-gradient(90deg,transparent,#000 3% 97%,transparent)}
+.space-gallery.is-walk:not(.is-keyboard) .space-track{position:relative;display:block;flex:none;height:clamp(300px,54svh,590px);overflow:hidden;perspective-origin:50% 50%;scroll-snap-type:none;padding:0;margin-top:22px;mask-image:linear-gradient(90deg,transparent,#000 3% 97%,transparent)}
 .space-gallery.is-walk:not(.is-keyboard) .space-world{display:block;position:absolute;width:0;height:0;left:50%;top:50%;transform-origin:0 0;transform-style:preserve-3d;will-change:transform}
-.space-gallery.is-walk:not(.is-keyboard) .space-card{position:absolute;left:0;top:0;width:900px;max-width:none;margin:0;backface-visibility:hidden;transform-origin:0 0;transform:translate3d(var(--panel-x),0,var(--panel-z)) rotateY(var(--panel-angle)) translate(-50%,-50%);opacity:var(--panel-opacity,1)}
-.space-gallery.is-walk:not(.is-keyboard) .space-image-link{aspect-ratio:1.6;background:#fff;border:10px solid #fff;outline:1px solid #d8d2cc;box-shadow:0 16px 40px #56493a20}
+.space-gallery.is-walk:not(.is-keyboard) .space-card{position:absolute;left:0;top:0;width:900px;max-width:none;margin:0;backface-visibility:hidden;transform-origin:0 0;transform:translate3d(var(--panel-x),0,var(--panel-z)) rotateY(var(--panel-angle)) scale(var(--panel-scale,1)) translate(-50%,-50%);opacity:var(--panel-opacity,0);pointer-events:var(--panel-hit,none)}
+.space-gallery.is-walk:not(.is-keyboard) .space-image-link{aspect-ratio:1.6;background:#fff;border:0;outline:0;box-shadow:0 12px 36px #56493a0c}
 .space-gallery.is-walk:not(.is-keyboard) .space-card figcaption{display:none}
 .space-gallery.is-walk:not(.is-keyboard) .space-current{display:flex;justify-content:space-between;gap:20px;font-size:13px;color:#746d66;line-height:1.7;padding-top:10px;min-height:40px;position:relative;z-index:2}
+.space-current{opacity:var(--caption-opacity,0)}
 .space-current strong{font-size:17px;font-weight:400;color:#24211e}
+.space-gallery.is-walk:not(.is-keyboard) .walk-floor{opacity:.18}
 .space-gallery.is-walk:not(.is-keyboard) .walk-floor{display:block;position:absolute;left:0;top:0;width:2200px;height:8500px;transform-origin:0 0;transform:translate3d(0,480px,-2600px) rotateX(90deg) translate(-50%,-50%);background:repeating-linear-gradient(0deg,transparent 0 249px,#a99e922c 249px 250px),repeating-linear-gradient(90deg,transparent 0 249px,#a99e9226 249px 250px);pointer-events:none}
 .space-gallery.is-walk:not(.is-keyboard) .walk-wall{display:block;position:absolute;left:0;top:0;width:8500px;height:1300px;transform-origin:0 0;border-top:1px solid #a99e9230;border-bottom:1px solid #a99e9230;background:repeating-linear-gradient(90deg,transparent 0 899px,#a99e9226 899px 900px);pointer-events:none}
 .walk-wall-left{transform:translate3d(-1050px,-100px,-2600px) rotateY(90deg) translate(-50%,-50%)}

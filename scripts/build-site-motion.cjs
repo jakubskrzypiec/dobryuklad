@@ -18,8 +18,8 @@ for(const page of pages){
   html=html.replace(/<section class="space-gallery"[\s\S]*?<div id="portfolio-exit" tabindex="-1"><\/div>/,gallery);
   html=html.replace(/<link rel="stylesheet" href="space-gallery\.css[^\"]*">/g,'');
   html=html.replace(/<script[^>]*src="space-gallery\.js[^\"]*"[^>]*><\/script>/g,'');
-  html=html.replace('</head>','<link rel="stylesheet" href="space-gallery.css?v=walk-2"></head>');
-  html=html.replace('</body>','<script type="module" src="space-gallery.js?v=walk-2"></script></body>');
+  html=html.replace('</head>','<link rel="stylesheet" href="space-gallery.css?v=clean-3"></head>');
+  html=html.replace('</body>','<script type="module" src="space-gallery.js?v=clean-3"></script></body>');
  }
  if(page==='kontakt.html'){
   html=html.replace('src="assets/shop-hero-v1.webp"','src="assets/about-hero-v2.webp"');
