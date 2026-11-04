@@ -1,4 +1,4 @@
-**Aktualna strona główna — 2D ze światłem i subtelną interakcją.** Fotograficzne hero i typografia pozostają płaskie. Usunięto oba globusy, przestrzenne tło i przechylanie kafelków. Wróciły fotograficzny cytat oraz bezpośrednie linki Instagram/Facebook. `dist/home-atmosphere.css` i `dist/home-atmosphere.js` dodają delikatne beżowe światło, linie architektoniczne reagujące na scroll, stopniowe odsłanianie sekcji, reakcje kart i ruchome cienie na przyciskach. Bez WebGL, Three.js, GSAP i zatrzymywania przewijania na stronie głównej. Animacje respektują ograniczony ruch i pauzują poza ekranem. Eksperymenty 3D pozostają w repo i na osobnych podglądach.
+**Aktualna strona — wspólne animacje i ciemna galeria wnętrz.** `site-motion.css/js` są podpięte do 16 stron studia: powiększanie kadrów, delikatne przechylenie wybranych kart, ruchome linie, odsłanianie treści i cienie przycisków. Hero O nas, Oferty, Portfolio, Kontaktu i Sklepu mają wspólną wysokość 480 px / 460 px na telefonie; Kontakt korzysta z kadru O nas. W „Wybranych projektach” na głównej jest ciemna galeria z gwiazdami i poziomym przesuwaniem zdjęć sterowanym zwykłym scrollem (`space-gallery.css/js`). Obrazy są wyraźnie oznaczone jako koncepcyjne i czekają na materiały klientki. Bez WebGL, Three.js, GSAP i przechwytywania kółka myszy. Globusy i wcześniejsze wersje 3D pozostają osobno.
 
 **Strona główna: wersja 2D (gałąź `claude/strona-2d`).** Wracamy do pierwszej, zwykłej strony bez 3D: fotograficzne hero „Przestrzeń ma znaczenie.”, sekcje oferty i portfolio (`dist/index.html` z commita fb2a94a). Wszystkie wersje 3D zostają w repo do dalszej zabawy: nocna wersja w palecie studia na gałęzi `claude/paleta-studia`, przebudowa `node scripts/build-home-noc.cjs`; jasna wersja z mapą Koszalina: `node scripts/build-home-koszalin.cjs`.
 
@@ -20,6 +20,10 @@ Materiały mapowe zachowane w repozytorium: granice i wybrzeża Natural Earth; w
 ## Pliki i publikowanie
 
 Strona znajduje się w katalogu `dist/`. Nie wymaga instalowania zależności ani kompilacji.
+
+Po przebudowie stron starszymi generatorami uruchom na końcu `node scripts/build-site-motion.cjs`. Polecenie ponownie podpina wspólne animacje i galerię; można uruchamiać je wielokrotnie. Główna zachowuje również stonowane tła z `home-atmosphere.css`.
+
+Galeria korzysta z natywnego scrolla i CSS sticky: można przewijać w obie strony lub użyć „Przejdź dalej”. Obsługa Tab przełącza kadry na zwykły poziomy scroller i utrzymuje aktywny link w widoku. Przy ograniczonym ruchu, krótkim ekranie albo bez JS pozostaje zwykła pozioma galeria bez przypinania. Nowe animacje pauzują poza ekranem i w ukrytej karcie. Sprawdzone: pięć nagłówków na desktopie i telefonie, pełny przebieg galerii, powrót do strony, klawiatura, reakcja ilustracji oferty na kursor, brak przepełnienia szerokości oraz istniejące kontrole składni i geometrii.
 
 Każdy push zmian w `dist/` na `main` uruchamia GitHub Actions i publikuje stronę w GitHub Pages. Konfiguracja: `.github/workflows/pages.yml`.
 
