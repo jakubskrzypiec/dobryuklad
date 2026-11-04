@@ -1,3 +1,5 @@
+**Zabawa 3D na stronie 2D.** Pod stroną żywe tło 3D (`dist/tlo.js`). Kafelki są wypukłe i przechylają się za kursorem (`dist/wypukle.css`, `dist/kafelki.js`). Zamiast zdjęcia „Dobre wnętrze…” stoi kopuła Ziemi „Zobacz miejsca, w których projektujemy” (`globus.js`, klasa `is-dome`). Na dole, zamiast sekcji social media, obracająca się kula: scroll obraca ją do Polski, schodzi przez stratosferę nad Koszalin i pokazuje Instagram, Facebook i e-mail (`dist/kula.js`, `dist/kula.css`).
+
 **Strona główna: wersja 2D (gałąź `claude/strona-2d`).** Wracamy do pierwszej, zwykłej strony bez 3D: fotograficzne hero „Przestrzeń ma znaczenie.”, sekcje oferty i portfolio (`dist/index.html` z commita fb2a94a). Wszystkie wersje 3D zostają w repo do dalszej zabawy: nocna wersja w palecie studia na gałęzi `claude/paleta-studia`, przebudowa `node scripts/build-home-noc.cjs`; jasna wersja z mapą Koszalina: `node scripts/build-home-koszalin.cjs`.
 
 # DOBRY UKŁAD

@@ -1,0 +1,36 @@
+/* Finał: kula → stratosfera → Koszalin, potem social media. Scena przyklejona na czas przewijania. */
+.kula-final{position:relative;height:420vh;background:linear-gradient(180deg,rgba(243,238,230,0) 0%,#efe8de 8%,#ebe4d9 100%);color:#111110;font-family:'Manrope',Arial,sans-serif}
+.kula-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;isolation:isolate}
+.kula-canvas{position:absolute;inset:0;z-index:0}.kula-canvas canvas{display:block;width:100%;height:100%}
+.kula-haze{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;background:radial-gradient(120% 90% at 50% 60%,rgba(255,255,255,.95),rgba(248,245,241,.85) 50%,rgba(232,227,223,.7))}
+.kula-pin{position:absolute;left:0;top:0;z-index:2;pointer-events:none;opacity:0;will-change:transform,opacity}
+.kula-pin span{position:absolute;left:18px;top:-30px;white-space:nowrap;font:400 26px/1 'Playfair Display',Georgia,serif;letter-spacing:-.01em;color:#111110;text-shadow:0 1px 10px rgba(255,255,255,.9)}
+.kula-pin small{display:block;margin-top:7px;font:500 10px/1 'Manrope',Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#353330}
+.kula-step{position:absolute;z-index:3;left:6.5%;max-width:560px;opacity:0;translate:0 24px;transition:opacity .7s ease,translate .7s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.kula-step.is-on{opacity:1;translate:0 0;pointer-events:auto}
+.kula-step .home-kicker{color:#7d746c;margin:0 0 18px}
+.kula-step h2{font:400 clamp(38px,4.2vw,68px)/1.06 'Playfair Display',Georgia,serif;letter-spacing:-.045em;margin:0;text-wrap:balance;color:#111110}
+.kula-step p{margin:18px 0 0;font-size:16px;line-height:1.6;color:#353330;max-width:440px}
+.kula-step[data-kula-step="0"],.kula-step[data-kula-step="1"]{top:50%;margin-top:-90px}
+.kula-step[data-kula-step="2"]{bottom:7%;left:auto;right:6.5%;max-width:520px;padding:34px 36px;border-radius:26px;background:rgba(255,255,255,.62);backdrop-filter:blur(18px) saturate(1.1);-webkit-backdrop-filter:blur(18px) saturate(1.1);box-shadow:inset 1px 1px 0 rgba(255,255,255,.8),0 30px 60px -28px rgba(17,17,16,.35)}
+.kula-step[data-kula-step="2"] h2{font-size:clamp(32px,3vw,48px)}
+.kula-social{display:grid;gap:4px;margin-top:22px}
+.kula-social a{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid rgba(53,51,48,.18);color:#111110;text-decoration:none;transition:gap .3s,color .3s}
+.kula-social a:last-child{border-bottom:0}
+.kula-social a:hover{gap:22px;color:#353330}
+.kula-social svg{width:26px;height:26px;flex-shrink:0}
+.kula-social strong{display:block;font-weight:500;font-size:17px}
+.kula-social small{display:block;font-size:13px;color:#7d746c;margin-top:2px}
+.kula-static{height:auto}.kula-static .kula-stage{position:relative;height:auto;padding:90px 6.5%}
+.kula-static .kula-step{position:relative;opacity:1;translate:none;left:auto;right:auto;top:auto;bottom:auto;margin:0 0 30px;pointer-events:auto}
+.kula-static .kula-step[data-kula-step="0"],.kula-static .kula-step[data-kula-step="1"]{display:none}
+@media(max-width:760px){
+  .kula-step{left:7%;right:7%}
+  .kula-step[data-kula-step="0"],.kula-step[data-kula-step="1"]{top:auto;bottom:10%;margin:0}
+  .kula-step[data-kula-step="2"]{left:4%;right:4%;bottom:4%;padding:26px 22px}
+  .kula-step h2{font-size:clamp(32px,9vw,44px)}
+}
+/* kopuła „Zobacz miejsca, w których projektujemy” */
+.globe-interlude.is-dome:before{background:linear-gradient(180deg,rgba(236,229,218,.92) 0%,rgba(236,229,218,.4) 26%,transparent 46%)}
+.globe-interlude.is-dome .globe-copy{left:50%;top:10%;bottom:auto;translate:-50% 0;align-items:center;text-align:center;max-width:760px;width:88%}
+@media(max-width:760px){.globe-interlude.is-dome{min-height:100svh;height:100svh}.globe-interlude.is-dome .globe-canvas{height:100%;inset:0}.globe-interlude.is-dome .globe-copy{top:9%}}

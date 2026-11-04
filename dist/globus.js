@@ -44,6 +44,8 @@ function initGlobe() {
   const labels = [...section.querySelectorAll('.globe-labels span')];
   labels.forEach((el, i) => el.classList.toggle('is-left', CITIES[i][3][0] < 0));
   const labelBox = section.querySelector('.globe-labels');
+  // kopuła: wielka półkula wyrastająca z dołu sekcji, Polska na jej szczycie
+  const DOME = section.classList.contains('is-dome');
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
@@ -166,6 +168,8 @@ function initGlobe() {
   const qFocus = new THREE.Quaternion().setFromUnitVectors(latLon(52.3, 18.6).normalize(), new THREE.Vector3(0, 0, 1));
   const north = new THREE.Vector3(0, 1, 0).applyQuaternion(qFocus);
   const baseQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.atan2(north.x, north.y)).multiply(qFocus);
+  // kopuła: Polska przechylona ku szczytowi półkuli
+  if (DOME) baseQ.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.68));
 
   let progress = reduceMotion || !ScrollTrigger ? 1 : 0;
   if (ScrollTrigger && !reduceMotion) {
@@ -180,6 +184,13 @@ function initGlobe() {
     camera.aspect = w / h;
     wide = w / h > 0.9;
     camera.position.set(0, 0, wide ? 2.6 : 2.25);
+    if (DOME) {
+      // środek kuli przy dolnej krawędzi: widać tylko górną połowę
+      camera.position.set(0, 0, wide ? 2.75 : 3.4);
+      camera.setViewOffset(w, h, 0, -h * (wide ? 0.5 : 0.42), w, h);
+      camera.updateProjectionMatrix();
+      return;
+    }
     // globus w prawej połowie, nieco wyżej, by zostawić lewy dół na tekst
     if (wide) camera.setViewOffset(w, h, -w * 0.18, h * 0.04, w, h);
     else camera.setViewOffset(w, h, 0, h * 0.12, w, h);
@@ -211,7 +222,8 @@ function initGlobe() {
     const t = reduceMotion ? 0 : clock.getElapsed();
     ps += (progress - ps) * Math.min(1, dt * 3);
     mouseS.lerp(mouse, Math.min(1, dt * 2));
-    euler.set(mouseS.y * 0.08 + (0.5 - ps) * 0.14, mouseS.x * 0.12 + (ps - 0.5) * 0.5, 0);
+    if (DOME) euler.set(mouseS.y * 0.05 + (0.5 - ps) * 0.1, mouseS.x * 0.1 + (ps - 0.5) * 0.35 + Math.sin(t * 0.05) * 0.04, 0);
+    else euler.set(mouseS.y * 0.08 + (0.5 - ps) * 0.14, mouseS.x * 0.12 + (ps - 0.5) * 0.5, 0);
     sway.setFromEuler(euler);
     globe.quaternion.copy(sway).multiply(baseQ);
 
