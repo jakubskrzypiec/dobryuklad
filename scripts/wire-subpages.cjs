@@ -10,14 +10,12 @@ for (const f of pages) {
   let h = fs.readFileSync(p, 'utf8'); const orig = h;
   // site-ui.css after the last stylesheet in <head>
   if (!h.includes('site-ui.css')) h = h.replace('</head>', '<link rel="stylesheet" href="site-ui.css?v=1"></head>');
-  // story.js before </body>
-  if (!h.includes('story.js')) h = h.replace('</body>', '<script src="story.js?v=3" defer></script></body>');
-  h = h.replace(/story\.js\?v=\d+/, 'story.js?v=3');
+  // Shared motion is wired by build-site-motion.cjs.
+  h = h.replace(/<script src="story\.js[^"]*"[^>]*><\/script>/g, '');
   if (f === 'index.html') {
     h = h.replace(/<div class="daylight"[\s\S]*?<\/div><\/div>\s*/, '');           // clock
   }
   if (f === 'oferta.html') {
-    h = h.replace(/(<article class="offer-package">)<img [^>]*>/g, '$1');            // package images
     h = h.replace('<a class="home-card-link" href="#proces">Poznaj proces projektowy</a>', '<a class="home-cta home-cta-outline" href="#proces">Poznaj proces projektowy</a>');
   }
   if (f === 'kontakt.html') {

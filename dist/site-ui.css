@@ -1,90 +1,122 @@
-/* Shared UI layer for ALL pages: one button style, sheet-style sections, shared overlay colour.
-   PALETTE: change colours here (and in the :root block of story.css for the home page). */
+/* DOBRY UKŁAD / shared visual system from the 36-page handoff brief.
+   Keep page structures and the scroll-controlled opening film intact. */
 body.motion-site{
-  --c-paper:#ffffff;
-  --c-soft:#f3f1ee;
-  --c-stone:#e8e4e1;
-  --c-dark:#2e2d2a;
-  --c-ink:#161615;
-  --c-contact:#f5f3f0;
-  --c-overlay:74,60,48;        /* warm taupe used instead of the old black gradient on photo breaks */
-  --sheet-shadow:0 -24px 70px #17151114;
+  --c-paper:#fff;--c-soft:#f5f3f0;--c-stone:#e8e4e1;--c-dark:#111110;--c-ink:#20201e;
+  --c-muted:#69645e;--c-line:#dcd7d1;--c-overlay:17,17,16;
+  --serif:'Playfair Display',Georgia,serif;--sans:'Manrope',Arial,sans-serif;
+  --section-heading-size:clamp(38px,4.1vw,64px);--interlude-height:430px;
+  font-family:var(--sans);color:var(--c-ink);background:var(--c-paper);
 }
-
-/* ================= BUTTONS — one style everywhere =================
-   Square, solid, no arrow. Hover: a fill sweeps in from the bottom.
-   Variants: default (dark, for light backgrounds) · light (white, for photos/dark) · outline */
-body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light){
-  position:relative;isolation:isolate;overflow:hidden;
-  display:inline-flex;align-items:center;justify-content:center;align-self:auto;
-  min-width:230px;min-height:54px;padding:16px 34px;margin-bottom:0;
-  border:1px solid var(--c-dark);border-radius:0;background:var(--c-dark);color:#fff;box-shadow:none;
-  font:500 13px/1.2 'Manrope',Arial,sans-serif;letter-spacing:.06em;text-transform:none;text-align:center;white-space:normal;
-  transition:color .45s cubic-bezier(.2,.7,.2,1),border-color .45s}
-body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light)::before{
-  content:'';position:absolute;inset:0;z-index:-1;background:#fff;border-radius:0;transform:translateY(102%);transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light)::after{display:none}
-body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light):is(:hover,:focus-visible){color:var(--c-dark);border-color:var(--c-dark);background:var(--c-dark);box-shadow:none}
-body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light):is(:hover,:focus-visible)::before{transform:none}
-body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light):focus-visible{outline:2px solid var(--c-dark);outline-offset:4px}
-
-/* light variant */
-body.motion-site :is(.home-cta-light,.hero-button-solid,.shop-link-light,.about-contact .home-cta,.shop-closing .home-cta,.project-interlude .home-cta){background:#fff;color:var(--c-dark);border-color:#fff}
-body.motion-site :is(.home-cta-light,.hero-button-solid,.shop-link-light,.about-contact .home-cta,.shop-closing .home-cta,.project-interlude .home-cta)::before{background:var(--c-dark)}
-body.motion-site :is(.home-cta-light,.hero-button-solid,.shop-link-light,.about-contact .home-cta,.shop-closing .home-cta,.project-interlude .home-cta):is(:hover,:focus-visible){color:#fff;background:#fff;border-color:var(--c-dark)}
-body.motion-site :is(.home-cta-light,.hero-button-solid,.about-contact .home-cta,.project-interlude .home-cta):focus-visible{outline-color:#fff}
-/* outline on dark/photo */
-body.motion-site .hero-button-outline{background:transparent;color:#fff;border-color:#ffffffb8}
-body.motion-site .hero-button-outline::before{background:#fff}
-body.motion-site .hero-button-outline:is(:hover,:focus-visible){color:var(--c-dark);background:transparent;border-color:#fff}
-/* outline on light */
-body.motion-site .home-cta-outline{background:transparent;color:var(--c-dark)}
-body.motion-site .home-cta-outline::before{background:var(--c-dark)}
-body.motion-site .home-cta-outline:is(:hover,:focus-visible){color:#fff;background:transparent}
-/* disabled form button */
-body.motion-site :is(.contact-submit,.button)[disabled]{opacity:.4;pointer-events:none}
-/* inside cards the button fills the card width */
-body.motion-site :is(.home-offer-card,.shop-card,.course-card) :is(.home-card-link,.home-cta){align-self:stretch;margin-top:auto}
-body.motion-site .offer-package-actions{gap:14px;flex-wrap:wrap}
-body.motion-site .hero-actions{gap:12px}
-@media(max-width:560px){body.motion-site :is(.home-cta,.home-card-link,.package-contact,.button){min-width:0;width:100%}body.motion-site .hero-button{min-width:0;flex:1;padding:16px 14px}}
-
-/* ================= footer wordmark (all pages) ================= */
-.site-footer .footer-logo{font:400 clamp(34px,3.2vw,48px)/1.05 'Playfair Display',Georgia,serif;letter-spacing:-.04em;color:#f2efeb;text-transform:none;display:block}
-
-/* ================= kinetic type (all pages) ================= */
-.sw{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em 0;margin:-.14em 0}
-.sw>span{display:inline-block;transform:translate3d(0,112%,0);transition:transform 1.05s cubic-bezier(.16,.8,.2,1);transition-delay:calc(var(--i)*55ms)}
-.sw-on .sw>span,.sw.sw-on>span{transform:none}
-
-/* ================= sheets on subpages: sections overlap as rounded layers ================= */
-:where(body.about-page main>section){background-color:var(--c-paper)}
-body.about-page main>section:not(:first-child){position:relative;border-radius:34px 34px 0 0;margin-top:-34px;box-shadow:var(--sheet-shadow)}
-body.about-page main>section:not(:first-child):not(.about-contact):not(.contact-closing):not(.shop-closing){padding-top:max(var(--sheet-pad-top,0px),0px)}
-@media(max-width:760px){body.about-page main>section:not(:first-child){border-radius:24px 24px 0 0;margin-top:-24px}}
-
-/* ================= photo-break overlays: warm taupe instead of the black gradient ================= */
-body.motion-site .about-contact:after{background:linear-gradient(90deg,rgba(var(--c-overlay),.88),rgba(var(--c-overlay),.3))}
-body.motion-site .project-interlude:after{background:linear-gradient(90deg,rgba(var(--c-overlay),.82),rgba(var(--c-overlay),.14) 82%)}
-body.motion-site .quote-interlude:before{background:linear-gradient(90deg,rgba(var(--c-overlay),.8),rgba(var(--c-overlay),.35) 55%,rgba(var(--c-overlay),.08))}
-
-/* ================= contact page: closing block ================= */
-body.contact-page .contact-closing{background:var(--c-soft);color:var(--c-ink);padding:110px 7% 120px;gap:8%;align-items:end}
-body.contact-page .contact-closing h2{font-size:clamp(44px,5.4vw,84px);line-height:1.04;color:var(--c-ink)}
-body.contact-page .contact-closing .contact-eyebrow{color:#746d66;font-size:11px;letter-spacing:.22em}
-body.contact-page .contact-closing>div+div{color:#4a4540;font-size:16px}
-body.contact-page .contact-closing>div+div a{margin-top:26px;border-bottom:0;font-size:13px;overflow-wrap:anywhere}
-body.contact-page .contact-closing>div+div a{display:inline-flex}
-
-/* ================= offer page: packages on white, no images ================= */
-body.offer-page .offer-packages-section{background:var(--c-paper)}
-body.offer-page .offer-package{height:auto;min-height:0;justify-content:flex-start;background:#fff;color:var(--c-ink);border:1px solid #e4e0db;border-radius:0;padding:44px 34px 34px;overflow:visible;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s}
-body.offer-page .offer-package:hover{transform:translateY(-8px);box-shadow:0 30px 60px #1715111a}
-body.offer-page .offer-package:after{display:none}
-body.offer-page .offer-package>.package-number{position:static;display:block;font:400 64px/1 'Playfair Display',Georgia,serif;letter-spacing:-.05em;color:var(--c-dark);margin:0 0 38px}
-body.offer-page .offer-package .package-copy{display:flex;flex-direction:column;flex:1;color:var(--c-ink)}
-body.offer-page .offer-package .package-tag{color:#746d66;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
-body.offer-page .offer-package h3{color:var(--c-ink);font-family:'Playfair Display',Georgia,serif;font-weight:400;letter-spacing:-.04em;font-size:clamp(28px,2.4vw,38px);line-height:1.12}
-body.offer-page .offer-package .package-description{color:#4a4540;font-size:15px;line-height:1.85;margin-top:18px}
-body.offer-page .offer-package .package-contact{margin-top:auto;align-self:stretch;margin-top:34px}
-@media(prefers-reduced-motion:reduce){body.offer-page .offer-package,body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button)::before{transition:none}.sw>span{transform:none;transition:none}}
+body.motion-site :is(h1,h2,h3){font-family:var(--serif);font-weight:400;font-style:normal;letter-spacing:-.04em}
+body.motion-site :is(.home-section h2,.home-social h2,.project-interlude h2,.quote-interlude h2){font-size:var(--section-heading-size);line-height:1.12}
+body.motion-site .header nav{font:500 11px/1.5 var(--sans);letter-spacing:.12em;gap:28px}
+body.motion-site .home-kicker{font:500 11px/1.7 var(--sans);letter-spacing:.18em}
+body.motion-site :is(.home-section,.home-social){border-radius:0;box-shadow:none;margin-top:0;padding-top:clamp(64px,7vw,112px);padding-bottom:clamp(64px,7vw,112px)}
+body.motion-site :is(.home-about,.home-portfolio,.home-offer,.brief-comparison,.home-reviews,.home-shop,.home-social){background:#fff}
+body.motion-site .home-about:before,body.motion-site .home-offer:before,body.motion-site .home-shop:before,body.motion-site .home-contact:before,body.motion-site .home-social:before{display:none}
+body.motion-site .home-heading{gap:32px;margin-bottom:44px}
+body.motion-site .home-heading .home-kicker{margin-bottom:20px;color:var(--c-muted)}
+body.motion-site :is(.home-about-copy>p:not(.home-overline),.home-offer-description){font:400 16px/1.85 var(--sans);color:#514e49}
+body.motion-site .home-overline{font-size:11px;letter-spacing:.14em}
+body.motion-site .home-about-copy h2{margin-bottom:28px}
+body.motion-site .home-offer-grid{gap:0;border-top:1px solid var(--c-line)}
+body.motion-site .home-offer-card{border:0;border-left:1px solid var(--c-line);border-radius:0;box-shadow:none;background:#fff;text-align:left;min-height:0;padding:32px 30px 0;transform:none}
+body.motion-site .home-offer-card:first-child{border-left:0;padding-left:0}
+body.motion-site .home-offer-card:last-child{padding-right:0}
+body.motion-site .home-offer-card:before{display:none}
+body.motion-site .home-offer-number{font:400 38px/1 var(--serif);letter-spacing:-.04em;color:#91867b;margin-bottom:24px}
+body.motion-site .home-offer-eyebrow{font-size:10px;letter-spacing:.12em;color:var(--c-muted);margin-bottom:18px}
+body.motion-site .home-offer-card h3{font:400 clamp(26px,2.5vw,38px)/1.15 var(--serif);text-transform:none;letter-spacing:-.04em;min-height:2.4em}
+body.motion-site .home-offer-description{margin-top:24px;margin-bottom:28px}
+body.motion-site .home-offer-footer{margin-top:40px}
+/* Square controls and quiet text links, as on the approved mockups. */
+body.motion-site :is(.home-cta,.package-contact,.hero-button,.button,.shop-link-light,.shop-buy){position:relative;display:inline-flex;align-items:center;justify-content:center;gap:24px;min-height:50px;min-width:0;padding:14px 24px;border:1px solid var(--c-dark);border-radius:0;background:var(--c-dark);color:#fff;box-shadow:none;font:500 12px/1.5 var(--sans);letter-spacing:.06em;transition:background-color .3s,color .3s,border-color .3s;text-align:center;text-transform:none}
+body.motion-site :is(.home-cta,.package-contact,.hero-button,.button,.shop-link-light,.shop-buy):is(:hover,:focus-visible){background:#45413c;border-color:#45413c;color:#fff;box-shadow:none}
+body.motion-site :is(.home-card-link,.shop-card-link){display:inline-flex;align-items:center;gap:24px;min-height:44px;padding:10px 0;border:0;border-bottom:1px solid #b9b0a7;background:transparent;color:var(--c-ink);font:500 12px/1.6 var(--sans);letter-spacing:.06em;text-transform:none;transition:color .3s,border-color .3s}
+body.motion-site :is(.home-card-link,.shop-card-link):after{content:'↗';display:inline;font-size:17px;position:static;transform:none;background:none;width:auto;height:auto}
+body.motion-site :is(.home-card-link,.shop-card-link):hover{color:#796d61;border-color:#796d61}
+body.motion-site .home-offer-card .home-card-link{align-self:flex-start;margin-top:auto}
+body.motion-site :is(.home-cta-light,.hero-button-outline,.shop-link-light,.about-contact .home-cta){background:transparent;border-color:#ffffff9c;color:#fff}
+body.motion-site :is(.home-cta-light,.hero-button-outline,.shop-link-light,.about-contact .home-cta):hover{background:#fff;color:var(--c-dark);border-color:#fff}
+body.motion-site .hero-button-solid{background:#fff;border-color:#fff;color:var(--c-dark)}
+body.motion-site .hero-button-solid:hover{background:#e8e4e1;color:var(--c-dark);border-color:#e8e4e1}
+body.motion-site :is(a,button,input,textarea,select):focus-visible{outline:2px solid #9c8f80;outline-offset:5px}
+body.motion-site :is(.home-cta,.home-card-link,.hero-button,.button,.package-contact,.shop-buy):before{display:none}
+body.motion-site :is(.home-cta,.hero-button,.button,.package-contact,.shop-buy):after{display:none}
+/* Photography stays neutral: no colour filters, floating shadows or zoom on studio sources. */
+body.motion-site :is(.project-interlude,.quote-interlude){height:var(--interlude-height);min-height:var(--interlude-height);text-align:left;overflow:hidden}
+body.motion-site :is(.project-interlude-photo,.quote-interlude-photo){filter:none;transform:none}
+body.motion-site .project-interlude:after,body.motion-site .quote-interlude:before{background:linear-gradient(90deg,#111110c9,#11111070 55%,#11111012)}
+body.motion-site :is(.project-interlude-shadows,.quote-interlude-shadows,.about-shadows,.motion-lines,.atmosphere-lines){display:none}
+body.motion-site :is(.project-interlude-copy,.quote-interlude-copy){padding:72px 6.5%;text-align:left;max-width:none}
+body.motion-site :is(.project-interlude h2,.quote-interlude h2){max-width:800px;margin-left:0;margin-right:0}
+body.motion-site :is(.project-interlude-copy,.quote-interlude-copy) .home-kicker{font-size:10px;letter-spacing:.16em;color:#e8e4e1;margin-bottom:24px}
+body.motion-site .interlude-material-note{display:block;margin-top:22px;font:400 11px/1.7 var(--sans);color:#e8e4e1}
+/* Images fill the existing carousel, without changing its structure. */
+body.motion-site .project-slide{border:0;box-shadow:none;background:#e8e4e1}
+.project-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+body.motion-site .project-slot{position:absolute;left:22px;bottom:22px;z-index:1;color:#fff;background:#111110c9;padding:8px 12px;font:400 11px/1.5 var(--sans);letter-spacing:.03em;text-transform:none}
+body.motion-site .project-index{left:22px;top:22px;bottom:auto;color:#fff;z-index:1}
+body.motion-site .project-hover-logo{background:#11111045}
+body.motion-site .project-hover-logo img{width:24%}
+body.motion-site .project-track{animation-duration:80s}
+body.motion-site .project-carousel:is(:hover,:focus-within) .project-track{animation-play-state:paused}
+body.motion-site .studio-photo-placeholder{padding:0;border:0;background:#e8e4e1;overflow:hidden;min-height:520px}
+.studio-detail-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.studio-detail-caption{position:absolute;bottom:18px;left:18px;padding:8px 12px;background:#111110bf;color:#fff;font:400 11px/1.5 var(--sans)}
+body.motion-site .home-reviews{padding-top:0}
+body.motion-site .home-reviews-grid p{font-size:24px;color:#69645e}
+body.motion-site .home-reviews-grid small{font-size:10px;letter-spacing:.06em}
+body.motion-site .home-contact{background:var(--c-soft);color:var(--c-ink)}
+body.motion-site .home-contact-layout>div>p,body.motion-site .home-contact-layout>div>a{color:#514e49}
+body.motion-site .home-contact>.home-kicker{color:var(--c-muted)}
+body.motion-site .course-grid{gap:28px}
+body.motion-site .course-photo{display:block;position:relative;border:0;background:#e8e4e1;overflow:hidden}
+.course-preview{width:100%;height:100%;object-fit:cover}
+body.motion-site .course-caption h3{font:400 clamp(22px,2vw,30px)/1.2 var(--serif);text-transform:none;letter-spacing:-.03em}
+.course-card>a{display:block}
+body.motion-site .social-profile>.social-icon{background:transparent;border-radius:0;width:44px;height:44px;flex-basis:44px}
+body.motion-site .social-profile:hover{padding-left:0}
+/* Shared subpage baseline; keep the eight-stage returning path and all photo counts. */
+body.motion-site.about-page main>section:not(:first-child){border-radius:0;margin-top:0;box-shadow:none}
+body.motion-site .about-hero:not(.product-hero){height:480px;min-height:480px}
+body.motion-site .about-hero:not(.product-hero) .about-hero-copy{padding:150px 6.5% 48px}
+body.motion-site .about-hero h1{font-size:clamp(44px,5vw,76px);line-height:1.08}
+body.motion-site .about-contact:after{background:linear-gradient(90deg,#111110b8,#11111030)}
+body.motion-site .offer-package{height:auto;min-height:0;background:#fff;color:var(--c-ink);border:0;border-radius:0;box-shadow:none;padding:0;justify-content:flex-start;transform:none}
+body.motion-site .offer-package:after{display:none}
+body.motion-site .offer-package>img{position:static;width:100%;height:230px;object-fit:cover;transform:none}
+body.motion-site .offer-package>.package-number{position:static;color:#91867b;font:400 34px/1 var(--serif);margin:26px 0 0}
+body.motion-site .package-copy{padding:22px 0 0;color:var(--c-ink);flex:1}
+body.motion-site .package-copy h3{color:var(--c-ink);font:400 clamp(28px,2.6vw,38px)/1.15 var(--serif)}
+body.motion-site .package-tag{color:var(--c-muted);font-size:11px;letter-spacing:.1em}
+body.motion-site .package-description{color:#514e49;font-size:16px;line-height:1.85}
+body.motion-site .package-contact{margin-top:auto;align-self:flex-start}
+body.motion-site .offer-comparison-section{background:var(--c-soft)}
+body.motion-site .contact-closing{background:var(--c-dark);color:#fff}
+body.motion-site .contact-closing h2{color:#fff}
+body.motion-site .site-footer{background:var(--c-dark)}
+.site-footer .footer-logo{font:400 clamp(32px,3.2vw,48px)/1.1 var(--serif);letter-spacing:-.04em;color:#fff;display:block}
+@media(max-width:1100px) and (min-width:761px){body.motion-site .header nav{font-size:10px;gap:17px;letter-spacing:.07em}}
+@media(max-width:760px){
+  body.motion-site{--section-heading-size:clamp(34px,9vw,44px);--interlude-height:400px}
+  body.motion-site .header nav.open{font:400 28px/1.3 var(--serif);letter-spacing:0}
+  body.motion-site .home-offer-grid{grid-template-columns:1fr}
+  body.motion-site .home-offer-card,body.motion-site .home-offer-card:first-child,body.motion-site .home-offer-card:last-child{padding:30px 0;border:0;border-bottom:1px solid var(--c-line)}
+  body.motion-site .home-offer-card h3{min-height:0;font-size:32px}
+  body.motion-site .home-offer-description{margin-top:20px}
+  body.motion-site :is(.project-interlude-copy,.quote-interlude-copy){padding:54px 7%}
+  body.motion-site .studio-photo-placeholder{min-height:400px}
+  body.motion-site .home-reviews-grid{gap:32px 16px}
+  body.motion-site .home-reviews-grid p{font-size:22px}
+  body.motion-site .home-reviews-grid small{font-size:9px}
+  body.motion-site .project-slot{left:12px;bottom:12px;font-size:10px}
+  body.motion-site .about-hero:not(.product-hero){height:440px;min-height:440px}
+  body.motion-site .about-hero:not(.product-hero) .about-hero-copy{padding:140px 7% 40px}
+  body.motion-site .about-hero h1{font-size:clamp(38px,10vw,50px)}
+  body.motion-site .course-grid{gap:30px}
+}
+@media(prefers-reduced-motion:reduce){body.motion-site .project-track{animation:none}body.motion-site .project-carousel{overflow-x:auto}body.motion-site .project-group[aria-hidden=true]{display:none}}
+body.motion-site .home-offer-footer{gap:16px;flex-wrap:wrap}
+body.motion-site .course-photo{aspect-ratio:1.15}
+@media(max-width:760px){body.motion-site .home-portfolio>.home-heading{display:block}body.motion-site .home-heading>.home-card-link{margin-top:20px}body.motion-site .home-offer-footer{align-items:stretch;flex-direction:column}}
