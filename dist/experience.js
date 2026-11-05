@@ -120,14 +120,58 @@
 
   /* ---------- Scroll intro ---------- */
   const intro = document.querySelector('.intro');
-  const scenes = intro ? [...intro.querySelectorAll('.intro-scene')] : [];
   const live = intro && !reduced;
-  const T = [[.15, .29], [.38, .52], [.61, .75]];
-  const lineWindows = [[.21, .29, .38, .43], [.44, .52, .61, .66], [.67, .75, .80, .84]];
+  // The film plays across the first part of the intro; captions sit inside that window.
+  const FILM = [0, .8];
+  const lineWindows = [[.16, .22, .31, .36], [.38, .44, .53, .58], [.6, .66, .75, .8]];
+
+  /* Film: loaded as a Blob so every frame is seekable, scrubbed by scroll position. */
+  const film = intro ? intro.querySelector('.intro-film') : null;
+  const poster = intro ? intro.querySelector('.intro-poster') : null;
+  const filmState = { ready: false, progress: 0, target: 0, shown: -1, raf: 0 };
+  function loadFilm() {
+    if (!film || !live) return Promise.resolve();
+    const small = matchMedia('(max-width: 860px), (pointer: coarse)').matches;
+    const url = (small && film.dataset.srcMobile) || film.dataset.src;
+    return fetch(url).then(res => {
+      if (!res.ok || !res.body) throw new Error('film');
+      const total = +res.headers.get('content-length') || 0;
+      const reader = res.body.getReader();
+      const chunks = [];
+      let got = 0;
+      const pump = () => reader.read().then(({ done, value }) => {
+        if (done) return new Blob(chunks, { type: 'video/mp4' });
+        chunks.push(value); got += value.length;
+        if (total) filmState.progress = got / total;
+        return pump();
+      });
+      return pump();
+    }).then(blob => new Promise(resolve => {
+      film.src = URL.createObjectURL(blob);
+      film.addEventListener('loadeddata', () => {
+        filmState.ready = true; filmState.progress = 1;
+        intro.classList.add('film-ready');
+        resolve();
+      }, { once: true });
+      film.addEventListener('error', () => resolve(), { once: true });
+      film.load();
+    })).catch(() => { filmState.progress = 1; });
+  }
+  // Ease the displayed time towards the scroll target and never queue a seek while one is running.
+  function filmLoop() {
+    filmState.raf = 0;
+    if (!filmState.ready || !film.duration) return;
+    const dur = film.duration - .05;
+    const goal = filmState.target * dur;
+    const cur = filmState.shown < 0 ? goal : filmState.shown + (goal - filmState.shown) * .22;
+    filmState.shown = Math.abs(goal - cur) < .002 ? goal : cur;
+    if (!film.seeking && Math.abs(film.currentTime - filmState.shown) > 1 / 60) film.currentTime = filmState.shown;
+    if (filmState.shown !== goal || film.seeking) filmState.raf = requestAnimationFrame(filmLoop);
+  }
+  if (film) film.addEventListener('seeked', () => { if (!filmState.raf) filmState.raf = requestAnimationFrame(filmLoop); });
   let introParts = null;
   if (live) {
     intro.classList.add('is-live');
-    intro.querySelectorAll('.intro-rooms>span').forEach((s, k) => s.style.setProperty('--k', k));
     introParts = {
       frame: intro.querySelector('.intro-frame'),
       copy: [...intro.querySelector('.intro-copy').children],
@@ -136,7 +180,6 @@
       hud: intro.querySelector('.intro-hud'),
       outro: intro.querySelector('.intro-outro'),
       outroLines: [...intro.querySelectorAll('.intro-outro-text .ln>span')],
-      imgs: scenes.map(s => s.querySelector('img')),
     };
   }
   let introP = -1;
@@ -147,7 +190,7 @@
     intro.classList.toggle('is-scrolling', p > .005);
     if (Math.abs(p - introP) < .0002) return p;
     introP = p;
-    const { frame, copy, title, lines, hud, outro, outroLines, imgs } = introParts;
+    const { frame, copy, title, lines, hud, outro, outroLines } = introParts;
 
     // Opening copy leaves upwards, line by line.
     const out = range(p, .025, .12);
@@ -163,28 +206,12 @@
       el.style.transform = `translateY(${-28 * t}px)`;
     });
 
-    // Rooms: each one opens from the centre like a doorway while the previous room pushes in.
-    let current = 0;
-    scenes.forEach((scene, i) => {
-      const img = imgs[i];
-      const enter = i === 0 ? 1 : easeIO(range(p, T[i - 1][0], T[i - 1][1]));
-      const leave = i < T.length ? ease(range(p, T[i][0], T[i][1])) : 0;
-      const lifeStart = i === 0 ? 0 : T[i - 1][1];
-      const lifeEnd = i < T.length ? T[i][0] : 1;
-      const drift = range(p, lifeStart, lifeEnd);
-      if (enter > .5) current = i;
-      if (i > 0) {
-        scene.style.setProperty('--cx', `${(50 * (1 - enter)).toFixed(2)}%`);
-        scene.style.setProperty('--cy', `${(50 * (1 - enter)).toFixed(2)}%`);
-      }
-      const scale = (i === 0 ? 1 : 1 + .32 * (1 - enter)) + .08 * drift + .38 * leave;
-      if (i === 0 && p < .001) img.style.removeProperty('transform');
-      else img.style.transform = `scale(${scale.toFixed(4)})`;
-      scene.style.visibility = enter > 0 && (leave < 1 || i === scenes.length - 1) ? 'visible' : 'hidden';
-    });
-    intro.style.setProperty('--scene', current);
+    // Film: scroll position drives the camera through the door into the living room.
+    filmState.target = range(p, FILM[0], FILM[1]);
+    if (filmState.ready && !filmState.raf) filmState.raf = requestAnimationFrame(filmLoop);
+    frame.style.setProperty('--film-zoom', (1 + .06 * range(p, .7, .93)).toFixed(4));
 
-    // Captions for rooms 2–4.
+    // Captions over the film.
     lines.forEach((spans, k) => {
       const [a, b, c, d] = lineWindows[k];
       const tin = ease(range(p, a, b)), tout = ease(range(p, c, d));
@@ -254,6 +281,7 @@
   render();
 
   /* ---------- Preloader and opening ---------- */
+  loadFilm();
   const preloader = document.querySelector('.preloader');
   const startIntro = () => {
     body.classList.add('intro-wait');
@@ -262,17 +290,12 @@
   if (preloader && doc.classList.contains('is-preloading')) {
     if (lenis) lenis.stop();
     const count = preloader.querySelector('.preloader-count');
-    const images = scenes.map(s => s.querySelector('img'));
-    let loaded = 0, shown = 0, done = false;
+    let shown = 0, done = false;
     const started = performance.now();
-    images.forEach(img => {
-      const mark = () => { loaded++; };
-      if (img.complete) mark(); else { img.addEventListener('load', mark, { once: true }); img.addEventListener('error', mark, { once: true }); }
-    });
     body.classList.add('intro-wait');
     const tick = now => {
-      const target = Math.min(100, (loaded / Math.max(1, images.length)) * 100, ((now - started) / 1300) * 100);
-      const forced = now - started > 4000 ? 100 : target;
+      const target = Math.min(100, filmState.progress * 100, ((now - started) / 1300) * 100);
+      const forced = now - started > 9000 ? 100 : target;
       shown += (forced - shown) * .14;
       if (forced === 100 && shown > 99.4) shown = 100;
       count.textContent = `${Math.round(shown)}%`;

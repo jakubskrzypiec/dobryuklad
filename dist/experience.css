@@ -198,6 +198,18 @@ body.xp ::selection{background:var(--xp-caramel);color:#fff}
 .xp .xp-has-glow{overflow:clip}
 .xp :is(.button,.contact-submit,.shop-buy)>.btn-label{font-size:inherit;line-height:inherit;letter-spacing:inherit}
 
+
+/* Scroll-scrubbed entrance film */
+.intro-poster,.intro-film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:scale(var(--film-zoom,1));transform-origin:50% 55%}
+.intro-film{opacity:0;transition:opacity .4s}
+.intro.film-ready .intro-film{opacity:1}
+.intro.film-ready .intro-poster{visibility:hidden}
+.xp.intro-wait .intro-poster,.xp.intro-wait .intro-film{transform:scale(1.12)}
+.xp .intro-poster,.xp .intro-film{transition:transform 2.4s var(--xp-ease),opacity .4s}
+.xp .intro.is-scrolling :is(.intro-poster,.intro-film){transition:opacity .4s}
+.intro-shade{background:linear-gradient(90deg,#120e0b8c,transparent 60%),linear-gradient(0deg,#0d0a08b3,transparent 55%),linear-gradient(180deg,#0d0a0866,transparent 26%)}
+.intro-hud{gap:0}
+
 /* Following section joins the cream outro without a seam. */
 .xp.home-page .home-about{padding-top:clamp(70px,9vw,130px)}
 
