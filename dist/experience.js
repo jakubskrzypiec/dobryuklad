@@ -15,7 +15,7 @@
   /* ---------- Smooth scrolling ---------- */
   let lenis = null;
   if (!reduced && window.Lenis) {
-    lenis = new window.Lenis({ lerp: .085, smoothWheel: true, wheelMultiplier: .95 });
+    lenis = new window.Lenis({ lerp: .14, smoothWheel: true, wheelMultiplier: 1 });
     const raf = time => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
   }
@@ -157,16 +157,18 @@
       film.load();
     })).catch(() => { filmState.progress = 1; });
   }
-  // Ease the displayed time towards the scroll target and never queue a seek while one is running.
+  // Lenis already smooths the scroll, so the film follows it directly. A new seek is only
+  // issued once the previous one has landed; the latest target always wins.
   function filmLoop() {
     filmState.raf = 0;
     if (!filmState.ready || !film.duration) return;
-    const dur = film.duration - .05;
-    const goal = filmState.target * dur;
-    const cur = filmState.shown < 0 ? goal : filmState.shown + (goal - filmState.shown) * .22;
-    filmState.shown = Math.abs(goal - cur) < .002 ? goal : cur;
-    if (!film.seeking && Math.abs(film.currentTime - filmState.shown) > 1 / 60) film.currentTime = filmState.shown;
-    if (filmState.shown !== goal || film.seeking) filmState.raf = requestAnimationFrame(filmLoop);
+    const goal = filmState.target * (film.duration - .05);
+    if (film.seeking) { filmState.raf = requestAnimationFrame(filmLoop); return; }
+    if (Math.abs(film.currentTime - goal) > 1 / 90) {
+      if (film.fastSeek && Math.abs(film.currentTime - goal) > 1.5) film.fastSeek(goal);
+      else film.currentTime = goal;
+      filmState.raf = requestAnimationFrame(filmLoop);
+    }
   }
   if (film) film.addEventListener('seeked', () => { if (!filmState.raf) filmState.raf = requestAnimationFrame(filmLoop); });
   let introParts = null;
