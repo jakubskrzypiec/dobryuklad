@@ -13,7 +13,7 @@
   const caps = [...wrap.querySelectorAll('.hero-caption')];
   const bar = wrap.querySelector('.hero-progress i');
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-  let target = 0, current = 0, running = false, enabled = false, dead = false;
+  let target = 0, current = 0, running = false, enabled = false;
 
   function measure() {
     const range = wrap.offsetHeight - innerHeight;
@@ -34,7 +34,7 @@
   function render() {
     current = reduced ? target : current + (target - current) * 0.12;
     if (Math.abs(target - current) < 0.0004) current = target;
-    if (!video.seeking && video.duration) {
+    if (!video.seeking && video.duration && wrap.classList.contains('video-ready')) {
       const t = current * (video.duration - 0.05);
       if (Math.abs(video.currentTime - t) > 1 / 60) video.currentTime = t;
     }
@@ -47,26 +47,28 @@
   }
   function kick() { if (!enabled) return; measure(); pinFallback(); if (!running) { running = true; requestAnimationFrame(render); } }
 
+  // Pin immediately: the poster + captions work even before (or without) the film.
   function enable() {
-    if (enabled || dead) return;
-    if (scrollY > 80) { dead = true; return; }      // user already scrolled: keep the page as is, no layout jump
+    if (enabled) return;
     enabled = true;
-    video.pause(); video.currentTime = 0;
     wrap.classList.add('is-scrub');
-    if (photo) video.addEventListener('seeked', () => { photo.style.visibility = 'hidden'; }, { once: true });
     measure(); current = target; kick();
   }
-  function tryEnable() { if (video.readyState >= 1 && video.duration) enable(); }
-
-  video.addEventListener('canplay', tryEnable);
-  video.addEventListener('loadeddata', tryEnable);
-  video.addEventListener('error', () => { dead = true; });
+  function videoReady() {
+    if (!video.duration) return;
+    video.pause();
+    wrap.classList.add('video-ready');
+    video.currentTime = current * (video.duration - 0.05);
+    video.addEventListener('seeked', () => { wrap.classList.add('video-on'); if (photo) photo.style.visibility = 'hidden'; }, { once: true });
+    kick();
+  }
+  video.addEventListener('loadedmetadata', videoReady);
+  video.addEventListener('loadeddata', videoReady, { once: true });
   // iOS/Safari ignore preload: a muted play() kicks the download off
   const p = video.play && video.play();
-  if (p && p.catch) p.then(() => { if (!enabled) video.pause(); tryEnable(); }).catch(() => {});
-  video.addEventListener('loadedmetadata', tryEnable);
-  tryEnable();
-  setTimeout(() => { if (!enabled) enable(); }, 2500);   // even if the film is slow, keep the pinned captions
+  if (p && p.catch) p.then(() => video.pause()).catch(() => {});
+  enable();
+  if (video.readyState >= 1) videoReady();
 
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', kick, { passive: true });
@@ -83,7 +85,7 @@
   const tick = () => {
     const w = document.getElementById('hero-scroll'), v = w && w.querySelector('.hero-video');
     box.textContent = [
-      'build 3', 'ua: ' + navigator.userAgent.slice(0, 90),
+      'build 4', 'ua: ' + navigator.userAgent.slice(0, 90),
       'reduced-motion: ' + matchMedia('(prefers-reduced-motion: reduce)').matches,
       'wrap class: ' + (w && w.className), 'wrap h: ' + (w && w.offsetHeight) + ' vh: ' + innerHeight,
       'scrollY: ' + Math.round(scrollY),
