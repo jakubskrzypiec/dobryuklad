@@ -1,55 +1,8 @@
-/* Home-page story layer: layered "sheet" sections, kinetic headings, hero finale, new buttons.
-   Loaded last; scoped to body.home-page so subpages are untouched.
-   PALETTE: every colour used here lives in the variables below — swap them to re-theme. */
-body.home-page{
-  --c-paper:#ffffff;   /* main light sections */
-  --c-soft:#f3f1ee;    /* offer */
-  --c-stone:#e8e4e1;   /* shop */
-  --c-dark:#2e2d2a;    /* buttons, text accents */
-  --c-contact:#f5f3f0; /* contact section */
-  --c-ink:#161615;
-  --c-on-dark:#ffffff;
-  --sheet-shadow:0 -24px 70px #17151114;
-}
-
-/* ---------- hero finale: CTA with the last caption + sheet that slides over the film ---------- */
+/* Preserve the approved film's finale and overlap timing. All section styling lives in site-ui.css. */
 .hero-caption .hero-actions{margin-top:30px;opacity:0;transform:translateY(14px);transition:opacity .8s .25s,transform .8s .25s;display:flex;gap:13px;flex-wrap:wrap}
 .hero-caption.is-on .hero-actions{opacity:1;transform:none}
 .hero-caption.is-on .hero-actions a{pointer-events:auto}
 .hero-scroll{margin-bottom:-50vh;margin-bottom:-50svh}
-body.home-page .home-about{position:relative;z-index:5;border-radius:38px 38px 0 0;box-shadow:0 -30px 80px #0006}
-
-/* ---------- sheets: sections overlap as rounded layers, original backgrounds ---------- */
-body.home-page .home-section,body.home-page .home-social{position:relative;border-radius:34px 34px 0 0;margin-top:-34px;padding-bottom:max(110px,8vw);box-shadow:var(--sheet-shadow)}
-body.home-page .home-about{background:var(--c-paper);margin-top:0;padding-top:110px}
-body.home-page .home-portfolio{background:var(--c-paper);z-index:6}
-body.home-page .home-offer{background:var(--c-soft);z-index:7;padding-top:110px}
-body.home-page .brief-comparison{background:var(--c-paper);z-index:8}
-body.home-page .home-reviews{background:var(--c-paper);border-top:0;z-index:9}
-body.home-page .home-shop{background:var(--c-stone);z-index:10}
-body.home-page .home-contact{background:var(--c-contact);color:var(--c-ink);z-index:11}
-body.home-page .home-social{background:var(--c-paper);z-index:12}
-body.home-page .project-interlude,body.home-page .quote-interlude{z-index:1}
-body.home-page .home-offer-card{border-radius:22px;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s}
-body.home-page .home-offer-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px #1715111f}
-
-/* ---------- readable type (the old tiny sizes) ---------- */
-body.home-page .home-kicker{font-size:11px;letter-spacing:.22em}
-body.home-page .home-offer-eyebrow{font-size:10px}
-body.home-page .home-offer-description{font-size:14px;line-height:1.85}
-body.home-page .studio-photo-placeholder small{font-size:10px}
-body.home-page .home-about-copy>p:not(.home-overline){font-size:15px}
-body.home-page .home-section h2{font-size:clamp(42px,5vw,82px);line-height:1.06}
-
-/* ---------- kinetic type ---------- */
-.sw{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em 0;margin:-.14em 0}
-.sw>span{display:inline-block;transform:translate3d(0,112%,0);transition:transform 1.05s cubic-bezier(.16,.8,.2,1);transition-delay:calc(var(--i)*55ms)}
-.sw-on .sw>span,.sw.sw-on>span{transform:none}
-.qw{opacity:.16;transition:opacity .25s linear;display:inline}
-.quote-interlude h2{max-width:1100px;font-size:clamp(40px,5.6vw,92px)!important;line-height:1.08!important}
-
-/* footer: plain wordmark instead of the small logo */
-.site-footer .footer-logo{font:400 clamp(34px,3.2vw,48px)/1.05 'Playfair Display',Georgia,serif;letter-spacing:-.04em;color:#f2efeb;text-transform:none;display:block}
-
-@media(max-width:760px){body.home-page .home-section,body.home-page .home-social{border-radius:24px 24px 0 0;margin-top:-24px}body.home-page .home-section h2{font-size:clamp(36px,10vw,52px)}.hero-caption .hero-actions{margin-top:22px}}
-@media(prefers-reduced-motion:reduce){.sw>span{transform:none;transition:none}.qw{opacity:1}body.home-page .home-offer-card{transition:none}}
+body.home-page .home-about{position:relative;z-index:5;background:#fff}
+@media(max-width:760px){.hero-caption .hero-actions{margin-top:22px}}
+@media(prefers-reduced-motion:reduce){.hero-caption .hero-actions{transition:none}}
