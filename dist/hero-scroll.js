@@ -71,3 +71,25 @@
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', kick, { passive: true });
 })();
+
+/* Diagnostics: open the page with #debug to see what the hero is doing on this device. */
+(() => {
+  if (location.hash !== '#debug') return;
+  const box = document.createElement('pre');
+  box.style.cssText = 'position:fixed;z-index:99999;left:8px;bottom:8px;margin:0;padding:10px;background:#000c;color:#0f0;font:12px/1.4 monospace;white-space:pre-wrap;max-width:92vw';
+  document.body.appendChild(box);
+  const errs = [];
+  addEventListener('error', e => errs.push(e.message));
+  const tick = () => {
+    const w = document.getElementById('hero-scroll'), v = w && w.querySelector('.hero-video');
+    box.textContent = [
+      'build 3', 'ua: ' + navigator.userAgent.slice(0, 90),
+      'reduced-motion: ' + matchMedia('(prefers-reduced-motion: reduce)').matches,
+      'wrap class: ' + (w && w.className), 'wrap h: ' + (w && w.offsetHeight) + ' vh: ' + innerHeight,
+      'scrollY: ' + Math.round(scrollY),
+      'video: ' + (v ? 'ready=' + v.readyState + ' net=' + v.networkState + ' t=' + v.currentTime.toFixed(2) + ' dur=' + v.duration + ' err=' + (v.error && v.error.code) : 'none'),
+      'errors: ' + errs.join(' | ')
+    ].join('\n');
+  };
+  setInterval(tick, 300);
+})();
