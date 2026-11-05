@@ -48,40 +48,8 @@ body.home-page .home-section h2{font-size:clamp(42px,5vw,82px);line-height:1.06}
 .qw{opacity:.16;transition:opacity .25s linear;display:inline}
 .quote-interlude h2{max-width:1100px;font-size:clamp(40px,5.6vw,92px)!important;line-height:1.08!important}
 
-/* ---------- buttons: no leaf-shadow texture; fill sweeps in, arrow slides ---------- */
-body.home-page .home-cta,body.home-page .home-offer-footer .home-cta{
-  position:relative;isolation:isolate;overflow:hidden;gap:16px;min-height:54px;padding:16px 30px;border:1px solid var(--c-dark);border-radius:999px;
-  background:transparent;color:var(--c-dark);box-shadow:none;
-  font:500 13px/1.2 'Manrope',Arial,sans-serif;letter-spacing:.06em;text-transform:none;
-  transition:color .45s cubic-bezier(.2,.7,.2,1),border-color .45s}
-body.home-page .home-cta::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--c-dark);transform:translateY(102%);border-radius:inherit;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-body.home-page .home-cta::after{content:'';position:relative;inset:auto;z-index:auto;width:26px;height:10px;flex:none;background:currentColor;opacity:1;mix-blend-mode:normal;animation:none;border:0;box-shadow:none;transform:none;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 26 10%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.2%27%3E%3Cpath d=%27M0 5h25M20.5 .8 25 5l-4.5 4.2%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 26 10%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.2%27%3E%3Cpath d=%27M0 5h25M20.5 .8 25 5l-4.5 4.2%27/%3E%3C/svg%3E") center/contain no-repeat;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
-body.home-page .home-cta:hover,body.home-page .home-cta:focus-visible{color:var(--c-on-dark);border-color:var(--c-dark);background:transparent;box-shadow:none}
-body.home-page .home-cta:hover::before,body.home-page .home-cta:focus-visible::before{transform:none}
-body.home-page .home-cta:hover::after,body.home-page .home-cta:focus-visible::after{transform:translateX(6px)}
-/* light variant (on photos) */
-body.home-page .home-cta-light{color:var(--c-on-dark);border-color:#ffffffb8}
-body.home-page .home-cta-light::before{background:#fff}
-body.home-page .home-cta-light:hover,body.home-page .home-cta-light:focus-visible{color:var(--c-dark);border-color:#fff;background:transparent}
-/* the same leaf texture on form/shop buttons goes too */
-body.home-page .button::after,body.home-page .contact-submit::after,body.home-page .shop-buy::after,body.home-page .hero-button::after{display:none}
-body.home-page .hero-button,body.home-page .button,body.home-page .contact-submit{box-shadow:none}
-body.home-page .hero-button{border-radius:999px;min-width:210px;min-height:54px;padding:0 30px;font:500 13px/1.2 'Manrope',Arial,sans-serif;letter-spacing:.06em;text-align:center;display:inline-flex;align-items:center;justify-content:center}
-
-/* portfolio interlude button: square, solid, no arrow */
-body.home-page .home-cta-light{border-radius:0;background:#fff;color:var(--c-dark);border-color:#fff;min-width:260px;justify-content:center}
-body.home-page .home-cta-light::after{display:none}
-body.home-page .home-cta-light::before{background:var(--c-dark);border-radius:0}
-body.home-page .home-cta-light:hover,body.home-page .home-cta-light:focus-visible{color:#fff;border-color:var(--c-dark);background:#fff}
-
 /* footer: plain wordmark instead of the small logo */
 .site-footer .footer-logo{font:400 clamp(34px,3.2vw,48px)/1.05 'Playfair Display',Georgia,serif;letter-spacing:-.04em;color:#f2efeb;text-transform:none;display:block}
 
-/* ---------- clock rail ---------- */
-.daylight{position:fixed;z-index:70;right:22px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;color:#fff;mix-blend-mode:difference;font:500 11px/1 'Manrope',Arial,sans-serif;letter-spacing:.2em;pointer-events:none}
-.daylight-time{writing-mode:vertical-rl;transform:rotate(180deg);font-variant-numeric:tabular-nums}
-.daylight-rail{position:relative;width:1px;height:120px;background:#fff6}
-.daylight-rail i{position:absolute;left:-3px;top:0;width:7px;height:7px;border-radius:50%;background:#fff;transform:translateY(calc(var(--day,0)*113px))}
-@media(max-width:900px){.daylight{display:none}}
 @media(max-width:760px){body.home-page .home-section,body.home-page .home-social{border-radius:24px 24px 0 0;margin-top:-24px}body.home-page .home-section h2{font-size:clamp(36px,10vw,52px)}.hero-caption .hero-actions{margin-top:22px}}
-@media(prefers-reduced-motion:reduce){.sw>span{transform:none;transition:none}.qw{opacity:1}body.home-page .home-offer-card,body.home-page .home-cta,body.home-page .home-cta::before,body.home-page .home-cta::after{transition:none}}
+@media(prefers-reduced-motion:reduce){.sw>span{transform:none;transition:none}.qw{opacity:1}body.home-page .home-offer-card{transition:none}}

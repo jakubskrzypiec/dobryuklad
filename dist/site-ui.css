@@ -1,0 +1,90 @@
+/* Shared UI layer for ALL pages: one button style, sheet-style sections, shared overlay colour.
+   PALETTE: change colours here (and in the :root block of story.css for the home page). */
+body.motion-site{
+  --c-paper:#ffffff;
+  --c-soft:#f3f1ee;
+  --c-stone:#e8e4e1;
+  --c-dark:#2e2d2a;
+  --c-ink:#161615;
+  --c-contact:#f5f3f0;
+  --c-overlay:74,60,48;        /* warm taupe used instead of the old black gradient on photo breaks */
+  --sheet-shadow:0 -24px 70px #17151114;
+}
+
+/* ================= BUTTONS — one style everywhere =================
+   Square, solid, no arrow. Hover: a fill sweeps in from the bottom.
+   Variants: default (dark, for light backgrounds) · light (white, for photos/dark) · outline */
+body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light){
+  position:relative;isolation:isolate;overflow:hidden;
+  display:inline-flex;align-items:center;justify-content:center;align-self:auto;
+  min-width:230px;min-height:54px;padding:16px 34px;margin-bottom:0;
+  border:1px solid var(--c-dark);border-radius:0;background:var(--c-dark);color:#fff;box-shadow:none;
+  font:500 13px/1.2 'Manrope',Arial,sans-serif;letter-spacing:.06em;text-transform:none;text-align:center;white-space:normal;
+  transition:color .45s cubic-bezier(.2,.7,.2,1),border-color .45s}
+body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light)::before{
+  content:'';position:absolute;inset:0;z-index:-1;background:#fff;border-radius:0;transform:translateY(102%);transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light)::after{display:none}
+body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light):is(:hover,:focus-visible){color:var(--c-dark);border-color:var(--c-dark);background:var(--c-dark);box-shadow:none}
+body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light):is(:hover,:focus-visible)::before{transform:none}
+body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button,.shop-link-light):focus-visible{outline:2px solid var(--c-dark);outline-offset:4px}
+
+/* light variant */
+body.motion-site :is(.home-cta-light,.hero-button-solid,.shop-link-light,.about-contact .home-cta,.shop-closing .home-cta,.project-interlude .home-cta){background:#fff;color:var(--c-dark);border-color:#fff}
+body.motion-site :is(.home-cta-light,.hero-button-solid,.shop-link-light,.about-contact .home-cta,.shop-closing .home-cta,.project-interlude .home-cta)::before{background:var(--c-dark)}
+body.motion-site :is(.home-cta-light,.hero-button-solid,.shop-link-light,.about-contact .home-cta,.shop-closing .home-cta,.project-interlude .home-cta):is(:hover,:focus-visible){color:#fff;background:#fff;border-color:var(--c-dark)}
+body.motion-site :is(.home-cta-light,.hero-button-solid,.about-contact .home-cta,.project-interlude .home-cta):focus-visible{outline-color:#fff}
+/* outline on dark/photo */
+body.motion-site .hero-button-outline{background:transparent;color:#fff;border-color:#ffffffb8}
+body.motion-site .hero-button-outline::before{background:#fff}
+body.motion-site .hero-button-outline:is(:hover,:focus-visible){color:var(--c-dark);background:transparent;border-color:#fff}
+/* outline on light */
+body.motion-site .home-cta-outline{background:transparent;color:var(--c-dark)}
+body.motion-site .home-cta-outline::before{background:var(--c-dark)}
+body.motion-site .home-cta-outline:is(:hover,:focus-visible){color:#fff;background:transparent}
+/* disabled form button */
+body.motion-site :is(.contact-submit,.button)[disabled]{opacity:.4;pointer-events:none}
+/* inside cards the button fills the card width */
+body.motion-site :is(.home-offer-card,.shop-card,.course-card) :is(.home-card-link,.home-cta){align-self:stretch;margin-top:auto}
+body.motion-site .offer-package-actions{gap:14px;flex-wrap:wrap}
+body.motion-site .hero-actions{gap:12px}
+@media(max-width:560px){body.motion-site :is(.home-cta,.home-card-link,.package-contact,.button){min-width:0;width:100%}body.motion-site .hero-button{min-width:0;flex:1;padding:16px 14px}}
+
+/* ================= footer wordmark (all pages) ================= */
+.site-footer .footer-logo{font:400 clamp(34px,3.2vw,48px)/1.05 'Playfair Display',Georgia,serif;letter-spacing:-.04em;color:#f2efeb;text-transform:none;display:block}
+
+/* ================= kinetic type (all pages) ================= */
+.sw{display:inline-block;overflow:hidden;vertical-align:top;padding:.14em 0;margin:-.14em 0}
+.sw>span{display:inline-block;transform:translate3d(0,112%,0);transition:transform 1.05s cubic-bezier(.16,.8,.2,1);transition-delay:calc(var(--i)*55ms)}
+.sw-on .sw>span,.sw.sw-on>span{transform:none}
+
+/* ================= sheets on subpages: sections overlap as rounded layers ================= */
+:where(body.about-page main>section){background-color:var(--c-paper)}
+body.about-page main>section:not(:first-child){position:relative;border-radius:34px 34px 0 0;margin-top:-34px;box-shadow:var(--sheet-shadow)}
+body.about-page main>section:not(:first-child):not(.about-contact):not(.contact-closing):not(.shop-closing){padding-top:max(var(--sheet-pad-top,0px),0px)}
+@media(max-width:760px){body.about-page main>section:not(:first-child){border-radius:24px 24px 0 0;margin-top:-24px}}
+
+/* ================= photo-break overlays: warm taupe instead of the black gradient ================= */
+body.motion-site .about-contact:after{background:linear-gradient(90deg,rgba(var(--c-overlay),.88),rgba(var(--c-overlay),.3))}
+body.motion-site .project-interlude:after{background:linear-gradient(90deg,rgba(var(--c-overlay),.82),rgba(var(--c-overlay),.14) 82%)}
+body.motion-site .quote-interlude:before{background:linear-gradient(90deg,rgba(var(--c-overlay),.8),rgba(var(--c-overlay),.35) 55%,rgba(var(--c-overlay),.08))}
+
+/* ================= contact page: closing block ================= */
+body.contact-page .contact-closing{background:var(--c-soft);color:var(--c-ink);padding:110px 7% 120px;gap:8%;align-items:end}
+body.contact-page .contact-closing h2{font-size:clamp(44px,5.4vw,84px);line-height:1.04;color:var(--c-ink)}
+body.contact-page .contact-closing .contact-eyebrow{color:#746d66;font-size:11px;letter-spacing:.22em}
+body.contact-page .contact-closing>div+div{color:#4a4540;font-size:16px}
+body.contact-page .contact-closing>div+div a{margin-top:26px;border-bottom:0;font-size:13px;overflow-wrap:anywhere}
+body.contact-page .contact-closing>div+div a{display:inline-flex}
+
+/* ================= offer page: packages on white, no images ================= */
+body.offer-page .offer-packages-section{background:var(--c-paper)}
+body.offer-page .offer-package{height:auto;min-height:0;justify-content:flex-start;background:#fff;color:var(--c-ink);border:1px solid #e4e0db;border-radius:0;padding:44px 34px 34px;overflow:visible;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s}
+body.offer-page .offer-package:hover{transform:translateY(-8px);box-shadow:0 30px 60px #1715111a}
+body.offer-page .offer-package:after{display:none}
+body.offer-page .offer-package>.package-number{position:static;display:block;font:400 64px/1 'Playfair Display',Georgia,serif;letter-spacing:-.05em;color:var(--c-dark);margin:0 0 38px}
+body.offer-page .offer-package .package-copy{display:flex;flex-direction:column;flex:1;color:var(--c-ink)}
+body.offer-page .offer-package .package-tag{color:#746d66;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+body.offer-page .offer-package h3{color:var(--c-ink);font-family:'Playfair Display',Georgia,serif;font-weight:400;letter-spacing:-.04em;font-size:clamp(28px,2.4vw,38px);line-height:1.12}
+body.offer-page .offer-package .package-description{color:#4a4540;font-size:15px;line-height:1.85;margin-top:18px}
+body.offer-page .offer-package .package-contact{margin-top:auto;align-self:stretch;margin-top:34px}
+@media(prefers-reduced-motion:reduce){body.offer-page .offer-package,body.motion-site :is(.home-cta,.home-card-link,.package-contact,.hero-button,.button)::before{transition:none}.sw>span{transform:none;transition:none}}
