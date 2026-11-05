@@ -1,4 +1,4 @@
-**Aktualne portfolio — zwykła karuzela projektów.** Na głównej jest biała, pozioma karuzela trzech obrazów koncepcyjnych. Można ją przesuwać dotykiem, przewijać poziomo lub wybierać projekt przyciskami. Automatyczna zmiana co 6,5 s pauzuje na najechaniu, przy klawiaturze, poza ekranem i w ukrytej karcie; jest też przycisk zatrzymania. Ograniczony ruch wyłącza automat. Brak przypinania sekcji, spaceru, WebGL i przechwytywania pionowego scrolla. Wspólne animacje pozostałych stron zostają.
+**Portfolio na głównej — przywrócona pierwotna karuzela.** Białe kwadratowe kafelki bez zdjęć, logo na najechaniu, płynny ruch w nieskończonej pętli. Oryginalny układ z wersji 5560e00; bez przycisków, kropek i przejścia 3D. Szablon: `scripts/templates/home-project-carousel.html`, style: `home.css` i `home-atmosphere.css`. Pozostałe sekcje oraz podstrony zachowane.
 
 **Strona główna: wersja 2D (gałąź `claude/strona-2d`).** Wracamy do pierwszej, zwykłej strony bez 3D: fotograficzne hero „Przestrzeń ma znaczenie.”, sekcje oferty i portfolio (`dist/index.html` z commita fb2a94a). Wszystkie wersje 3D zostają w repo do dalszej zabawy: nocna wersja w palecie studia na gałęzi `claude/paleta-studia`, przebudowa `node scripts/build-home-noc.cjs`; jasna wersja z mapą Koszalina: `node scripts/build-home-koszalin.cjs`.
 
@@ -23,7 +23,7 @@ Strona znajduje się w katalogu `dist/`. Nie wymaga instalowania zależności an
 
 Po przebudowie stron starszymi generatorami uruchom na końcu `node scripts/build-site-motion.cjs`. Polecenie ponownie podpina wspólne animacje i galerię; można uruchamiać je wielokrotnie. Główna zachowuje również stonowane tła z `home-atmosphere.css`.
 
-Karuzela korzysta z natywnego poziomego przewijania i scroll-snap. Kod: `dist/space-gallery.css/js`; starsza trasa CSS pozostaje zarchiwizowana w repo i nie jest ładowana przez stronę główną. Obrazy nadal są oznaczone jako koncepcyjne, do zastąpienia materiałami studia.
+Karuzela korzysta z ciągłej animacji CSS i dwóch identycznych grup, co daje płynną nieskończoną pętlę. Przy ograniczonym ruchu staje się ręcznie przewijaną galerią. Pliki eksperymentalnych przejść pozostają w repo, lecz główna ich nie ładuje.
 
 Każdy push zmian w `dist/` na `main` uruchamia GitHub Actions i publikuje stronę w GitHub Pages. Konfiguracja: `.github/workflows/pages.yml`.
 
