@@ -1,14 +1,19 @@
 /* Scroll-driven hero film: the section is pinned while scrolling plays the video. */
-.hero-scroll{position:relative;height:420svh}
-.hero-scroll>.hero.hero-v3{position:sticky;top:0;overflow:hidden}
+.hero-scroll{position:relative;background:#191613}
+.hero-scroll.is-scrub{height:420vh;height:420svh}
+.hero-scroll.is-scrub>.hero.hero-v3{position:sticky;top:0;overflow:hidden}
+.hero-scroll.pin-js>.hero.hero-v3{position:absolute;top:0;left:0;right:0}
+.hero-scroll.pin-js.pin-fixed>.hero.hero-v3{position:fixed}
+.hero-scroll.pin-js.pin-end>.hero.hero-v3{top:auto;bottom:0}
+.hero-scroll:not(.is-scrub) .hero-captions,.hero-scroll:not(.is-scrub) .hero-progress{display:none}
 .hero-v3 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%;z-index:0;background:#191613}
 .hero-scroll .hero-foliage-scene,.hero-scroll .hero-canopy{display:none}
 .hero-left{will-change:opacity,transform}
 .hero-scroll-hint{position:absolute;z-index:2;right:6.5%;bottom:7.5%;display:flex;flex-direction:column;align-items:center;gap:12px;color:#fff;font:500 10px/1 'Manrope',Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;transition:opacity .3s}
 .hero-scroll-hint i{display:block;width:1px;height:54px;background:linear-gradient(#fff,#fff0);transform-origin:top;animation:heroHint 2.2s ease-in-out infinite}
 @keyframes heroHint{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
-@media(max-width:760px){.hero-scroll{height:360svh}.hero-scroll-hint{right:7%;bottom:calc(7% + 4px)}.hero-scroll-hint i{height:40px}}
-@media(prefers-reduced-motion:reduce){.hero-scroll{height:auto}.hero-scroll>.hero.hero-v3{position:relative}.hero-v3 .hero-video,.hero-scroll-hint{display:none}.hero-scroll-hint i{animation:none}}
+@media(max-width:760px){.hero-scroll.is-scrub{height:360vh;height:360svh}.hero-scroll-hint{right:7%;bottom:calc(7% + 4px)}.hero-scroll-hint i{height:40px}}
+@media(prefers-reduced-motion:reduce){.hero-v3 .hero-video,.hero-scroll-hint{display:none}.hero-scroll-hint i{animation:none}}
 /* Chapter captions that appear while the film plays. */
 .hero-captions{position:absolute;z-index:2;left:6.5%;bottom:7.5%;max-width:70%;pointer-events:none}
 .hero-caption{position:absolute;left:0;bottom:0;width:max-content;max-width:100%;color:#fff;opacity:0;transform:translate3d(0,26px,0);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1);text-shadow:0 2px 28px #0008}
@@ -20,3 +25,4 @@
 .hero-progress i{display:block;height:100%;width:100%;background:#fff;transform:scaleX(0);transform-origin:left}
 @media(max-width:760px){.hero-captions{left:7%;right:7%;max-width:none}.hero-caption p{font-size:clamp(34px,9.4vw,54px)}}
 @media(prefers-reduced-motion:reduce){.hero-captions,.hero-progress{display:none}}
+.hero-scroll:not(.is-scrub) .hero-video{opacity:0}
