@@ -4,9 +4,9 @@ const gallery=fs.readFileSync("scripts/templates/home-project-carousel.html","ut
 for(const page of pages){
  let html=fs.readFileSync(`dist/${page}`,'utf8');
  html=html.replace(/<body class="([^"]*)"/,(_,classes)=>`<body class="${classes.split(' ').filter(c=>c!=='motion-site').join(' ')} motion-site"`);
- html=html.replace(/<link rel="stylesheet" href="site-motion\.css[^\"]*">/g,'').replace(/<script src="site-motion\.js[^\"]*"[^>]*><\/script>/g,'');
- html=html.replace('</head>','<link rel="stylesheet" href="site-motion.css?v=1"></head>');
- html=html.replace('</body>','<script src="site-motion.js?v=1" defer></script></body>');
+ html=html.replace(/<link rel="stylesheet" href="(?:site-motion|experience)\.css[^\"]*">/g,'').replace(/<script src="(?:site-motion\.js|experience\.js|vendor\/lenis\.min\.js)[^\"]*"[^>]*><\/script>/g,'');
+ html=html.replace('</head>','<link rel="stylesheet" href="site-motion.css?v=1"><link rel="stylesheet" href="experience.css?v=1"></head>');
+ html=html.replace('</body>','<script src="site-motion.js?v=1" defer></script><script src="vendor/lenis.min.js" defer></script><script src="experience.js?v=1" defer></script></body>');
  if(page==='index.html'){
   html=html.replace(/<script src="home-atmosphere\.js[^\"]*"><\/script>/,'');
   html=html.replace(/<section class="home-section home-portfolio"[\s\S]*?<\/section>/,gallery);
@@ -20,4 +20,4 @@ for(const page of pages){
  }
  fs.writeFileSync(`dist/${page}`,html);
 }
-console.log(`Shared motion added to ${pages.length} studio pages; experiments left separate.`);
+console.log(`Shared motion and experience layer added to ${pages.length} studio pages; experiments left separate.`);
