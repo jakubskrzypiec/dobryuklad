@@ -1,3 +1,5 @@
+[Archiwalna wersja 2D ze screena (a85332c)](https://jakubskrzypiec.github.io/dobryuklad/wersja-2d/) — osobny, kompletny podgląd wcześniejszej strony.
+
 **Portfolio na głównej — przywrócona pierwotna karuzela.** Białe kwadratowe kafelki bez zdjęć, logo na najechaniu, płynny ruch w nieskończonej pętli. Oryginalny układ z wersji 5560e00; bez przycisków, kropek i przejścia 3D. Szablon: `scripts/templates/home-project-carousel.html`, style: `home.css` i `home-atmosphere.css`. Pozostałe sekcje oraz podstrony zachowane.
 
 **Strona główna: wersja 2D (gałąź `claude/strona-2d`).** Wracamy do pierwszej, zwykłej strony bez 3D: fotograficzne hero „Przestrzeń ma znaczenie.”, sekcje oferty i portfolio (`dist/index.html` z commita fb2a94a). Wszystkie wersje 3D zostają w repo do dalszej zabawy: nocna wersja w palecie studia na gałęzi `claude/paleta-studia`, przebudowa `node scripts/build-home-noc.cjs`; jasna wersja z mapą Koszalina: `node scripts/build-home-koszalin.cjs`.

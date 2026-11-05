@@ -1,0 +1,44 @@
+/* Shared reading sizes across the homepage, About and Offer. */
+:root{--serif:'Playfair Display',Georgia,serif;--sans:'Manrope',Arial,sans-serif;--copy-size:16px;--small-size:14px;--label-size:13px;--readable-muted:#514b45}
+body{font-family:var(--sans);font-size:var(--copy-size);line-height:1.8}
+.header nav{font-size:14px;letter-spacing:.08em;gap:28px}
+.home-page .hero-statement{font-size:16px;line-height:1.8;max-width:500px}.home-page .hero-button{font-size:14px;min-height:52px;letter-spacing:0}
+.home-page .home-cta,.about-page .home-cta{font:500 14px/1.6 var(--sans);letter-spacing:.025em;min-height:52px;padding:15px 26px}
+.home-page .home-card-link,.about-page .home-card-link{font:500 14px/1.7 var(--sans);letter-spacing:.035em;padding:12px 0}
+.home-page .home-offer-footer .home-cta{font-size:14px;min-height:52px;letter-spacing:.035em}.home-page .home-offer-card .home-card-link{font-size:14px}
+.home-page .home-kicker{font-size:13px;line-height:1.8;letter-spacing:.11em}.home-page .home-overline{font-size:13px;line-height:1.8;letter-spacing:.08em;color:var(--readable-muted)}
+.home-page .home-about-copy>p:not(.home-overline){font-size:16px;line-height:1.9}.home-page .home-about-copy>.home-lead{font-size:18px!important;line-height:1.8!important}.home-page .home-heading>p{font-size:14px;line-height:1.85;color:var(--readable-muted)}
+.home-page .home-offer-eyebrow{font-size:12px;line-height:1.8;letter-spacing:.08em;color:var(--readable-muted)}.home-page .home-offer-description{font-size:16px;line-height:1.85;margin-top:30px;color:#3e3832}.home-page .home-offer-card{min-height:660px}.home-page .home-offer-card h3{font-size:20px;line-height:1.55;min-height:95px;letter-spacing:.02em}
+.home-page .project-slot{font-size:13px;line-height:1.8;letter-spacing:.08em;padding:20px;text-align:center;color:#5c5349}.home-page .project-index{font-size:14px;color:#5c5349}
+.home-page .placeholder-top,.home-page .placeholder-bottom,.home-page .studio-photo-placeholder small{font-size:12px;line-height:1.8;letter-spacing:.06em;color:#5c5349}
+.home-page .brief-compare-panel small{font-size:13px;line-height:1.8;white-space:normal;color:#5c5349;max-width:220px}.home-page .brief-compare-panel>span{color:#5c5349}.home-page .brief-compare-note,.home-page .home-material-note{font-size:14px;line-height:1.85;color:var(--readable-muted)}
+.home-page .home-reviews-grid small{font-size:12px;line-height:1.8;letter-spacing:.04em;color:#65594e}.home-page .home-reviews-grid p{color:#65594e}
+.home-page .brief-shop-intro{font-size:16px;line-height:1.85;color:var(--readable-muted)}.home-page .home-shop .course-photo span{font-size:13px;line-height:1.8;letter-spacing:.07em;color:#5c5349}.home-page .course-caption>span{font-size:14px;color:#5c5349}
+.home-page .home-contact-layout>div>p{font-size:16px;line-height:1.85;color:var(--readable-muted)}.home-page .home-contact-layout>div>a{font-size:14px;color:var(--readable-muted)}
+.home-page .home-contact form label,.content-dialog form label{font:400 14px/1.7 var(--sans);color:var(--readable-muted)}.home-page .home-contact form input,.home-page .home-contact form select,.home-page .home-contact form textarea,.content-dialog input,.content-dialog select,.content-dialog textarea{font:400 16px/1.7 var(--sans);color:#211e1b;padding:12px 0}
+.home-page .home-contact form .form-note,.content-dialog .form-note{font-size:14px;line-height:1.85;color:var(--readable-muted)}.home-page .home-contact form .button,.content-dialog .button{font:500 14px/1.6 var(--sans);letter-spacing:.025em;min-height:52px}.home-page .home-contact .form-status,.content-dialog #form-status{font-size:14px;line-height:1.8}
+.home-page .social-text>span{font-size:14px;line-height:1.8;color:var(--readable-muted)}.home-page .social-text small{font-size:14px;line-height:1.8;color:#65594e}.home-page .social-text strong{font-size:22px}
+.home-page .project-interlude-copy .home-kicker,.home-page .quote-interlude-copy .home-kicker{font-size:12px;line-height:1.85;letter-spacing:.1em}
+.about-page:not(.offer-page) .about-hero-copy>p{font-size:11px;line-height:1.8;letter-spacing:.15em}
+.about-page:not(.offer-page) .about-eyebrow{font-size:13px;line-height:1.8;letter-spacing:.08em;color:var(--readable-muted)}.about-page:not(.offer-page) .founder-role{font-size:13px;line-height:1.8;letter-spacing:.06em;color:#39332d}
+.about-page:not(.offer-page) .founder-copy h2{font-size:var(--section-heading-size);line-height:1.14}.about-page:not(.offer-page) .founder-copy>p:not(.about-eyebrow):not(.founder-role){font-size:16px;line-height:1.85}.about-page:not(.offer-page) .founder-copy .founder-lead{font-size:18px!important;line-height:1.8!important}
+.about-page:not(.offer-page) .photo-slot .slot-center{font-size:14px;line-height:1.8;color:#65594e}.about-page:not(.offer-page) .team-credits p{font-size:14px;line-height:1.85;color:var(--readable-muted)}
+.about-page:not(.offer-page) .about-contact .about-eyebrow{font-size:11px;color:#eee7df;letter-spacing:.09em}
+.home-page .site-footer .footer-label,.about-page .site-footer .footer-label{font-size:12px;color:#b9b0a7;line-height:1.8}
+.home-page .footer-studio>p:not(.footer-label),.about-page .footer-studio>p:not(.footer-label),.home-page .site-footer nav a,.about-page .site-footer nav a,.home-page .footer-contact>a,.about-page .footer-contact>a{font-size:14px;line-height:2}
+.home-page .site-footer .footer-bottom,.about-page .site-footer .footer-bottom,.home-page .site-footer .footer-bottom a,.about-page .site-footer .footer-bottom a{font-size:12px;color:#b9b0a7;line-height:1.8}
+.content-dialog{font-family:var(--sans)}.content-dialog>p:not(.eyebrow),.scope-grid p,.materials p{font-size:16px;line-height:1.85;color:#3e3832}.content-dialog .eyebrow,.content-dialog .close-dialog{font-size:13px;line-height:1.8}.content-dialog .direct-email{font-size:16px}.process-track p{font-size:14px;line-height:1.8}.content-dialog .material-note{font-size:14px}
+@media(max-width:1150px) and (min-width:761px){.header nav{font-size:13px;gap:20px;letter-spacing:.045em}.home-page .home-offer-card{padding-left:23px;padding-right:23px}.home-page .home-offer-card h3{font-size:19px}}
+@media(max-width:760px){
+.home-page .hero-statement{font-size:16px;line-height:1.75}.home-page .hero-button{font-size:14px;min-height:52px;padding-left:12px;padding-right:12px}
+.home-page .home-kicker{font-size:12px;letter-spacing:.08em}.home-page .home-offer-card{min-height:0;padding:35px 30px}.home-page .home-offer-card h3{font-size:21px;min-height:0}.home-page .home-offer-description{font-size:16px;line-height:1.85;margin-top:28px}.home-page .home-offer-card .home-card-link{margin-top:0}
+.home-page .home-about-copy .home-overline{font-size:12px}.home-page .home-reviews-grid small{font-size:11px;letter-spacing:.01em}.home-page .brief-compare-panel small{font-size:13px;max-width:130px}.home-page .brief-compare-note{font-size:14px}
+.home-page .home-shop .course-photo span{font-size:13px;letter-spacing:.05em}.home-page .social-text>span,.home-page .social-text small{font-size:14px}.home-page .project-interlude-copy .home-kicker,.home-page .quote-interlude-copy .home-kicker{font-size:11px;letter-spacing:.08em}
+.home-page .home-contact form .form-row{margin-bottom:25px;gap:22px}.home-page .home-contact-layout>div>a{font-size:14px;overflow-wrap:anywhere}
+.about-page:not(.offer-page) .about-hero-copy>p{font-size:10px;letter-spacing:.1em}.about-page:not(.offer-page) .about-eyebrow{font-size:12px}.about-page:not(.offer-page) .founder-role{font-size:12px;letter-spacing:.045em}.about-page:not(.offer-page) .team-credits p{font-size:14px}.about-page:not(.offer-page) .photo-slot .slot-center{font-size:14px}
+.content-dialog{padding:60px 25px 35px}.content-dialog h2{font-size:36px;line-height:1.14}.content-dialog .form-row{grid-template-columns:1fr;gap:22px}.content-dialog .button{letter-spacing:.025em}.content-dialog .direct-email{font-size:14px;overflow-wrap:anywhere}
+}
+@media(max-width:360px){.home-page .hero-actions{flex-wrap:wrap}.home-page .hero-button{flex:1 0 100%}}
+.home-page .contact-intro-new>p,.home-page .contact-intro-new>a{color:var(--readable-muted)!important}
+/* New service illustrations have pale paper at their upper edge. */
+.offer-page .offer-package>.package-number{color:#211e1b}
