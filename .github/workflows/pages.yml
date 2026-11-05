@@ -28,7 +28,8 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
       - name: Check JavaScript
-        run: for script in dist/*.js; do node --check "$script"; done
+        run: |
+          for script in dist/*.js dist/wersja-2d/*.js; do node --check "$script"; done
       - name: Check camera motion and interior geometry
         run: |
           node scripts/check-walkthrough-motion.mjs
@@ -37,6 +38,7 @@ jobs:
           node scripts/check-curtain-transition.mjs
           node scripts/check-home-journey.mjs
           node scripts/check-portfolio-walk.mjs
+          node scripts/check-2d-refresh.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload website

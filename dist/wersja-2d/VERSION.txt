@@ -1,3 +1,3 @@
-DOBRY UKŁAD — wersja 2D ze screena
-Commit: a85332c
-Białe kafelki, logo po najechaniu, nieskończona pętla.
+DOBRY UKŁAD — edytowana wersja 2D
+Baza: a85332c
+Naturalna paleta materiałów, nowe kadry, proste przyciski i płaska oferta.

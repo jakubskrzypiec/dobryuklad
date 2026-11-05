@@ -1,4 +1,6 @@
-[Archiwalna wersja 2D ze screena (a85332c)](https://jakubskrzypiec.github.io/dobryuklad/wersja-2d/) — osobny, kompletny podgląd wcześniejszej strony.
+[Wersja 2D — aktualnie poprawiany projekt](https://jakubskrzypiec.github.io/dobryuklad/wersja-2d/) — osobny podgląd oparty na wersji ze screena.
+
+Wersja 2D ma nowe naturalne kadry w ciemniejszej palecie studia, jedno wspólne hero wszystkich podstron i osobne hero głównej, nowe przerywniki z niezależnym ruchem cieni liści, jednolite przyciski bez tekstur i strzałek oraz białe płaskie karty oferty bez ilustracji. Paleta materiałów: biel, czerń, grafit, taupe i beż; bez filtrów monochromatycznych. [Cztery finalne obrazy i prompty imagegen](references/STUDIO_REFRESH_IMAGES_V2.md). Po zmianach generatorów tej kopii: `node scripts/refresh-2d.cjs`; kontrola: `node scripts/check-2d-refresh.mjs`. Generator oryginalnego archiwum zabezpieczono przed nadpisaniem poprawianej wersji.
 
 **Portfolio na głównej — przywrócona pierwotna karuzela.** Białe kwadratowe kafelki bez zdjęć, logo na najechaniu, płynny ruch w nieskończonej pętli. Oryginalny układ z wersji 5560e00; bez przycisków, kropek i przejścia 3D. Szablon: `scripts/templates/home-project-carousel.html`, style: `home.css` i `home-atmosphere.css`. Pozostałe sekcje oraz podstrony zachowane.
 

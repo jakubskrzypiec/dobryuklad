@@ -1,6 +1,7 @@
 // Self-contained copy of the version requested from the chat screenshot.
 const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
 const commit='a85332c',destination='dist/wersja-2d',pending=['index.html'],seen=new Set();
+if(fs.existsSync(path.join(destination,'studio-refresh.css')))throw Error('The 2D copy is now an edited working version. Do not overwrite it with the original archive.');
 function enqueue(reference,source){
  if(!reference||/^(?:https?:|data:|mailto:|tel:|#|\/\/)/i.test(reference))return;
  const clean=reference.split(/[?#]/)[0];if(!clean)return;
