@@ -16,7 +16,7 @@
   let target = 0, current = 0, running = false, enabled = false;
 
   function measure() {
-    const range = wrap.offsetHeight - innerHeight;
+    const range = wrap.offsetHeight - innerHeight * 1.5;   // the next section slides over the last half screen
     const top = wrap.getBoundingClientRect().top;
     target = range > 0 ? clamp(-top / range) : 0;
   }
