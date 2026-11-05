@@ -3,7 +3,9 @@
 (() => {
   const wrap = document.getElementById('hero-scroll');
   const video = wrap && wrap.querySelector('.hero-video');
-  if (!wrap || !video || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!wrap || !video) return;
+  // scrubbing is driven by the user, so it stays on with reduced motion (only easing is dropped)
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hero = wrap.querySelector('.hero');
   const copy = wrap.querySelector('.hero-left');
   const hint = wrap.querySelector('.hero-scroll-hint');
@@ -30,7 +32,7 @@
     }
   }
   function render() {
-    current += (target - current) * 0.12;
+    current = reduced ? target : current + (target - current) * 0.12;
     if (Math.abs(target - current) < 0.0004) current = target;
     if (!video.seeking && video.duration) {
       const t = current * (video.duration - 0.05);
@@ -54,7 +56,7 @@
     if (photo) video.addEventListener('seeked', () => { photo.style.visibility = 'hidden'; }, { once: true });
     measure(); current = target; kick();
   }
-  function tryEnable() { if (video.readyState >= 3 && video.duration) enable(); }
+  function tryEnable() { if (video.readyState >= 1 && video.duration) enable(); }
 
   video.addEventListener('canplay', tryEnable);
   video.addEventListener('loadeddata', tryEnable);
@@ -62,7 +64,9 @@
   // iOS/Safari ignore preload: a muted play() kicks the download off
   const p = video.play && video.play();
   if (p && p.catch) p.then(() => { if (!enabled) video.pause(); tryEnable(); }).catch(() => {});
+  video.addEventListener('loadedmetadata', tryEnable);
   tryEnable();
+  setTimeout(() => { if (!enabled) enable(); }, 2500);   // even if the film is slow, keep the pinned captions
 
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', kick, { passive: true });
