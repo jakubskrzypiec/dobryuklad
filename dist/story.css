@@ -5,7 +5,8 @@ body.home-page{
   --c-paper:#ffffff;   /* main light sections */
   --c-soft:#f3f1ee;    /* offer */
   --c-stone:#e8e4e1;   /* shop */
-  --c-dark:#2e2d2a;    /* contact, buttons */
+  --c-dark:#2e2d2a;    /* buttons, text accents */
+  --c-contact:#f5f3f0; /* contact section */
   --c-ink:#161615;
   --c-on-dark:#ffffff;
   --sheet-shadow:0 -24px 70px #17151114;
@@ -26,7 +27,7 @@ body.home-page .home-offer{background:var(--c-soft);z-index:7;padding-top:110px}
 body.home-page .brief-comparison{background:var(--c-paper);z-index:8}
 body.home-page .home-reviews{background:var(--c-paper);border-top:0;z-index:9}
 body.home-page .home-shop{background:var(--c-stone);z-index:10}
-body.home-page .home-contact{background:var(--c-dark);color:var(--c-on-dark);z-index:11}
+body.home-page .home-contact{background:var(--c-contact);color:var(--c-ink);z-index:11}
 body.home-page .home-social{background:var(--c-paper);z-index:12}
 body.home-page .project-interlude,body.home-page .quote-interlude{z-index:1}
 body.home-page .home-offer-card{border-radius:22px;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s}
@@ -63,8 +64,18 @@ body.home-page .home-cta-light{color:var(--c-on-dark);border-color:#ffffffb8}
 body.home-page .home-cta-light::before{background:#fff}
 body.home-page .home-cta-light:hover,body.home-page .home-cta-light:focus-visible{color:var(--c-dark);border-color:#fff;background:transparent}
 /* the same leaf texture on form/shop buttons goes too */
-body.home-page .button::after,body.home-page .contact-submit::after,body.home-page .shop-buy::after{display:none}
-body.home-page .hero-button{border-radius:999px}
+body.home-page .button::after,body.home-page .contact-submit::after,body.home-page .shop-buy::after,body.home-page .hero-button::after{display:none}
+body.home-page .hero-button,body.home-page .button,body.home-page .contact-submit{box-shadow:none}
+body.home-page .hero-button{border-radius:999px;min-width:210px;min-height:54px;padding:0 30px;font:500 13px/1.2 'Manrope',Arial,sans-serif;letter-spacing:.06em;text-align:center;display:inline-flex;align-items:center;justify-content:center}
+
+/* portfolio interlude button: square, solid, no arrow */
+body.home-page .home-cta-light{border-radius:0;background:#fff;color:var(--c-dark);border-color:#fff;min-width:260px;justify-content:center}
+body.home-page .home-cta-light::after{display:none}
+body.home-page .home-cta-light::before{background:var(--c-dark);border-radius:0}
+body.home-page .home-cta-light:hover,body.home-page .home-cta-light:focus-visible{color:#fff;border-color:var(--c-dark);background:#fff}
+
+/* footer: plain wordmark instead of the small logo */
+.site-footer .footer-logo{font:400 clamp(34px,3.2vw,48px)/1.05 'Playfair Display',Georgia,serif;letter-spacing:-.04em;color:#f2efeb;text-transform:none;display:block}
 
 /* ---------- clock rail ---------- */
 .daylight{position:fixed;z-index:70;right:22px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;color:#fff;mix-blend-mode:difference;font:500 11px/1 'Manrope',Arial,sans-serif;letter-spacing:.2em;pointer-events:none}
