@@ -59,9 +59,12 @@ assert.ok(walkJS.includes('Math.min(Math.abs(index - current), Math.abs(index - 
 assert.ok(walkJS.includes('current = next.position;'),'Playhead advances independently of image decoding');
 assert.ok(!walkJS.includes('else velocity = 0;'),'Do not stall scrolling on a missed exact frame');
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-walk.js?v=11'));
+assert.ok(html.includes('entrance-walk.js?v=12'));
 assert.ok(walkJS.includes('function settleScroll()'), 'Camera must stop at the final scroll position');
-assert.ok(walkJS.includes('current = target;'), 'Remove lag at gesture end');
+assert.ok(walkJS.includes('duration: 200'), 'Ease out across 200ms instead of abruptly stopping');
+assert.ok(walkJS.includes('const tangent = Math.sign(delta)'), 'Preserve incoming camera velocity');
+assert.ok(walkJS.includes('settle = null; // A new scroll gesture'), 'New scrolling cancels idle braking');
+assert.ok(!walkJS.includes('current = target;\n    velocity = 0;\n    previous = 0;'), 'No sudden snap when scrolling stops');
 assert.ok(walkJS.includes('scrollIdleTimer = setTimeout(settleScroll, 85)'), 'Settle promptly without changing in-motion easing');
 assert.ok(walkJS.includes('clearTimeout(scrollIdleTimer); scrollIdleTimer = 0;'), 'Prevent stale idle timers on reload');
 for(const name of ['opening-crop.webp','hero-final-crop.webp']){

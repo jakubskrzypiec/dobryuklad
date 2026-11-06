@@ -22,6 +22,7 @@ function initWalk() {
   const frames = new Map(), decoding = new Set(), packs = new Map(), pendingPacks = new Map(), failedPacks = new Map(), controllers = new Set();
   let manifest, generation = 0, prepared = false, disabled = false, active = true;
   let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0, scrollIdleTimer = 0;
+  let settle = null;
   let width = 1, height = 1, start = 0, range = 1, phase = '';
   let firstFrameFailure = false;
   const failures = new Map();
@@ -206,9 +207,26 @@ function initWalk() {
     previous = now;
     const seek = Math.round(target);
     const jumping = Math.abs(target - current) > 55 && frames.has(seek);
-    const next = jumping ? { position: target, velocity: 0 } : advanceFrame(current, velocity, target, dt);
+    let next;
+    if (settle) {
+      // Cubic Hermite ease: keep the current frame and travelling speed
+      // continuous, then gradually bring the camera to a complete stop.
+      const u = Math.min(1, (now - settle.start) / settle.duration);
+      const u2 = u * u, u3 = u2 * u;
+      const delta = settle.to - settle.from;
+      const tangent = Math.sign(delta) * Math.min(
+        Math.abs(settle.velocity) * settle.duration / 1000,
+        Math.abs(delta) * 2
+      );
+      const position = (2 * u3 - 3 * u2 + 1) * settle.from
+        + (u3 - 2 * u2 + u) * tangent
+        + (-2 * u3 + 3 * u2) * settle.to;
+      next = { position, velocity: u < 1 ? (position - current) / Math.max(dt, 1 / 120) : 0 };
+      if (u >= 1) settle = null;
+    } else {
+      next = jumping ? { position: target, velocity: 0 } : advanceFrame(current, velocity, target, dt);
+    }
     // Advance the playhead even if the exact frame is still decoding.
-    // The previous implementation reset velocity to zero, causing hard stalls.
     current = next.position;
     velocity = next.velocity;
     const index = nearestFrame(Math.round(current), 6);
@@ -224,17 +242,20 @@ function initWalk() {
     if (!raf && prepared && !disabled && active && !document.hidden) raf = requestAnimationFrame(tick);
   }
 
-  // Keep the pleasant smoothing while the visitor scrolls, but never let
-  // the camera continue travelling after the scroll gesture has stopped.
+  // Smoothly brake after a scroll gesture; never jump to the final frame.
   function settleScroll() {
     clearTimeout(scrollIdleTimer); scrollIdleTimer = 0;
     if (!prepared || disabled || !active || document.hidden) return;
-    current = target;
-    velocity = 0;
-    previous = 0;
-    const frame = nearestFrame(Math.round(target), 6);
-    if (frame >= 0 && frame !== drawn) draw(frame);
-    fillWindow(); // Prioritize the exact final frame if it is not decoded yet.
+    if (Math.abs(target - current) > .015) {
+      settle = {
+        start: performance.now(),
+        duration: 200,
+        from: current,
+        to: target,
+        velocity
+      };
+    }
+    fillWindow();
     schedule();
   }
 
@@ -256,6 +277,7 @@ function initWalk() {
       setPhase('hero');
     }
     if (active) {
+      settle = null; // A new scroll gesture resumes the original motion model.
       clearTimeout(scrollIdleTimer);
       scrollIdleTimer = setTimeout(settleScroll, 85);
       fillWindow();
@@ -267,7 +289,7 @@ function initWalk() {
     generation++; controllers.forEach(c => c.abort()); controllers.clear();
     cancelAnimationFrame(raf); raf = 0; clearTimeout(retryTimer); clearTimeout(scrollIdleTimer); scrollIdleTimer = 0;
     frames.forEach(bitmap => bitmap.close?.()); frames.clear(); decoding.clear(); packs.clear(); pendingPacks.clear(); failedPacks.clear(); failures.clear();
-    drawn = -1; prepared = false; previous = 0; velocity = 0;
+    drawn = -1; prepared = false; previous = 0; velocity = 0; settle = null;
   }
 
   function staticHero() {
