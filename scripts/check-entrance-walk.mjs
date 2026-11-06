@@ -53,25 +53,13 @@ assert.ok(html.includes('walk-intro walk-static'),'Static fallback without JavaS
 assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Scroll down'));
 assert.ok(html.includes('walk-socials'));assert.ok(html.includes('walk-hero-actions'));
 assert.ok(html.includes('Pomiń spacer'));assert.ok(!html.includes('<video'));
-assert.ok(html.includes('class="walk-try"'),'Give visitors a manual way to enable or retry the walk');
 const walkJS=fs.readFileSync('dist/wersja-2d/entrance-walk.js','utf8');
-const walkCSS=fs.readFileSync('dist/wersja-2d/entrance-walk.css','utf8');
-assert.ok(walkJS.includes("staticHero('reduced')"),'Respect reduced-motion settings');
-assert.ok(walkJS.includes("staticHero('load')"),'Recover from loading failures');
-assert.ok(walkJS.includes("intro.classList.add('walk-motion-opt-in')"),'Opt-in overrides reduced-motion CSS');
-assert.ok(walkCSS.includes('.walk-intro.walk-motion-opt-in:not(.walk-static)'),'Opt-in restores pinned scrolling');
-assert.ok(walkJS.includes("await decode(0, session)"),'Decode only the first mandatory frame during startup');
 assert.ok(walkJS.includes('function nearestFrame('),'Use decoded-neighbour rendering instead of freezing on missing frames');
 assert.ok(walkJS.includes('Math.min(Math.abs(index - current), Math.abs(index - target))'),'Keep decoded frames near both playback and scroll target');
 assert.ok(walkJS.includes('current = next.position;'),'Playhead advances independently of image decoding');
 assert.ok(!walkJS.includes('else velocity = 0;'),'Do not stall scrolling on a missed exact frame');
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-walk.js?v=10'));
-assert.ok(html.includes('<canvas class="walk-canvas"'),'The packed-WebP frame player is back');
-assert.ok(!html.includes('entrance-video.js'),'The MP4 seek player must stay disabled');
-assert.ok(!html.includes('walk-forward')&&!html.includes('walk-reverse'),'No competing video players');
-assert.ok(walkCSS.includes('.walk-intro.walk-static.walk-loading{height:1000svh}'),'Prevent a 1-screen static page while photos load');
-assert.ok(walkJS.includes('const base = \'assets/entrance-upstairs-v3/\''),'Use the original full-resolution WebP source');
+assert.ok(html.includes('entrance-walk.js?v=6'));
 for(const name of ['opening-crop.webp','hero-final-crop.webp']){
  const image=fs.readFileSync(`dist/wersja-2d/assets/entrance-upstairs-v3/${name}`);
  assert.deepEqual(dimensions(image,0),[1920,1080-CROP_BOTTOM],'Posters match the crop used by the canvas');

@@ -6,15 +6,11 @@ if (intro) initWalk();
 function initWalk() {
   const stage = intro.querySelector('.walk-stage');
   const canvas = intro.querySelector('canvas');
-  let context;
-  try { context = canvas.getContext('2d', { alpha: false }); }
-  catch (_) { context = null; }
+  const context = canvas.getContext('2d', { alpha: false });
   const poster = intro.querySelector('.hero-photo');
   const opening = intro.querySelector('.walk-opening');
   const startButton = intro.querySelector('.walk-start');
   const startLabel = startButton.querySelector('span');
-  const retryButton = intro.querySelector('.walk-try');
-  const retryInfo = intro.querySelector('.walk-retry-info');
   const hero = intro.querySelector('.hero-left');
   const heroActions = intro.querySelector('.walk-hero-actions');
   const header = document.querySelector('.header');
@@ -27,7 +23,7 @@ function initWalk() {
   let manifest, generation = 0, prepared = false, disabled = false, active = true;
   let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
   let width = 1, height = 1, start = 0, range = 1, phase = '';
-  let firstFrameFailure = false, motionOptIn = false;
+  let firstFrameFailure = false;
   const failures = new Map();
 
   function setPhase(next) {
@@ -109,22 +105,12 @@ function initWalk() {
         const objectUrl = URL.createObjectURL(blob);
         try {
           bitmap = new Image();
-          // Older WebViews do not implement HTMLImageElement.decode().
-          if (typeof bitmap.decode === 'function') {
-            bitmap.src = objectUrl;
-            await bitmap.decode();
-          } else {
-            await new Promise((resolve, reject) => {
-              bitmap.onload = resolve;
-              bitmap.onerror = () => reject(new Error('WebP frame cannot be decoded'));
-              bitmap.src = objectUrl;
-            });
-          }
+          bitmap.src = objectUrl;
+          await bitmap.decode();
         } finally { URL.revokeObjectURL(objectUrl); }
       }
       if (disabled || session !== generation) { bitmap.close?.(); return; }
       frames.set(index, bitmap); evict();
-      if (index === 0) firstFrameFailure = false;
       if (index === 0 && drawn < 0) draw(0);
       schedule();
     } catch (_) {
@@ -265,23 +251,11 @@ function initWalk() {
     drawn = -1; prepared = false; previous = 0; velocity = 0;
   }
 
-  function staticHero(reason = 'load') {
+  function staticHero() {
     disabled = true; cleanup();
     document.body.classList.remove('walk-cinematic', 'walk-preparing', 'walk-active');
-    intro.classList.add('walk-static', 'walk-fallback'); intro.classList.remove('walk-loading');
+    intro.classList.add('walk-static'); intro.classList.remove('walk-loading');
     poster.src = `${base}hero-final-crop.webp`; stage.classList.remove('has-frame');
-    intro.dataset.walkFailure = reason;
-    if (reason === 'reduced') {
-      retryInfo.textContent = 'Na tym urządzeniu włączono ograniczenie ruchu. Spacer możesz uruchomić ręcznie.';
-      retryButton.textContent = 'Uruchom spacer';
-    } else if (reason === 'unsupported') {
-      retryInfo.textContent = 'Ta przeglądarka nie obsługuje spaceru. Spróbuj w Chrome lub Safari.';
-      retryButton.hidden = true;
-    } else {
-      retryInfo.textContent = 'Nie udało się załadować spaceru. Sprawdź połączenie i spróbuj ponownie.';
-      retryButton.textContent = 'Ponów ładowanie spaceru';
-    }
-    if (reason !== 'unsupported') retryButton.hidden = false;
     setPhase('static'); measure();
   }
 
@@ -295,8 +269,6 @@ function initWalk() {
     cleanup(); disabled = false; firstFrameFailure = false;
     const session = generation;
     intro.classList.add('walk-static', 'walk-loading');
-    intro.classList.remove('walk-fallback');
-    delete intro.dataset.walkFailure;
     document.body.classList.add('walk-cinematic', 'walk-preparing');
     poster.src = `${base}opening-crop.webp`; stage.classList.remove('has-frame');
     startButton.disabled = true; startLabel.textContent = 'Loading 0%'; setPhase('loading');
@@ -312,21 +284,14 @@ function initWalk() {
       await loadPack(0, session);
       if (session !== generation) return;
       if (!packs.has(0)) throw new Error('Opening frames unavailable');
-      // Decode the required first frame sequentially. Launching ten image decoders
-      // simultaneously could exhaust memory in mobile WebViews and force a static hero.
-      await decode(0, session);
+      await Promise.all(Array.from({ length: 10 }, (_, i) => i).filter(i => !frames.has(i)).map(i => decode(i, session)));
       if (firstFrameFailure || !frames.has(0)) throw new Error('Image decoder unavailable');
       prepared = true;
       intro.classList.remove('walk-static', 'walk-loading');
       document.body.classList.remove('walk-preparing');
       startButton.disabled = false; startLabel.textContent = 'Scroll down';
       current = 0; setPhase('opening'); measure(); fillWindow(); schedule();
-    } catch (error) {
-      if (session === generation) {
-        console.warn('Dobry Układ: spacer unavailable, retry offered.', error);
-        staticHero('load');
-      }
-    }
+    } catch (_) { if (session === generation) staticHero(); }
     finally { clearTimeout(deadline); controllers.delete(controller); }
   }
 
@@ -340,18 +305,9 @@ function initWalk() {
     scrollTo({ top: start + range * (1 - HOLD_RATIO), behavior: 'instant' });
     fillWindow(); schedule();
   });
-  retryButton.addEventListener('click', () => {
-    motionOptIn = true;
-    intro.classList.add('walk-motion-opt-in');
-    prepare();
-  });
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', measure, { passive: true });
   document.addEventListener('visibilitychange', () => { previous = 0; if (!document.hidden) onScroll(); });
-  const sync = () => {
-    if (!context) staticHero('unsupported');
-    else if (reduced.matches && !motionOptIn) staticHero('reduced');
-    else prepare();
-  };
+  const sync = () => reduced.matches || !context ? staticHero() : prepare();
   reduced.addEventListener('change', sync); sync();
 }

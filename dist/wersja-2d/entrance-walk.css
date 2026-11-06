@@ -95,36 +95,3 @@
 /* Keep the menu right-aligned after removing the corner logo on the 2D homepage. */
 .home-page .header #navigation{margin-left:auto}
 .home-page .header .menu-toggle{margin-left:auto}
-
-/* A recoverable, clearly labeled fallback instead of an unexplained single photo. */
-.walk-retry{
-  display:none;position:absolute;z-index:8;right:6.5%;bottom:25px;
-  max-width:min(360px,86vw);padding:15px 18px;
-  color:#fff;background:rgba(23,22,20,.70);border:1px solid rgba(255,255,255,.28);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  font:400 12px/1.6 'Manrope',Arial,sans-serif;
-  flex-direction:column;align-items:flex-start;gap:10px
-}
-.walk-intro.walk-fallback .walk-retry{display:flex}
-.walk-retry-info{margin:0;color:#f6eee6}
-.walk-try{background:#ede5dc;color:#211e1b;border:1px solid #ede5dc;
-  padding:9px 15px;font:500 12px/1.4 'Manrope',Arial,sans-serif;cursor:pointer}
-.walk-try:hover,.walk-try:focus-visible{background:#fff;border-color:#fff}
-.walk-try[hidden]{display:none}
-.walk-js-notice{padding:18px;background:#eee5da;color:#27231f;text-align:center}
-@media(max-width:760px){.walk-retry{left:7%;right:7%;bottom:22px;max-width:none}}
-@media(prefers-reduced-motion:reduce){
-  /* Respect OS settings until the visitor explicitly selects "Uruchom spacer". */
-  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1000svh}
-  .walk-intro.walk-motion-opt-in:not(.walk-static) .walk-stage.hero.hero-v3{position:sticky}
-  .walk-intro.walk-motion-opt-in .walk-opening{display:flex}
-}
-
-/* Keep the immersive 2D entrance pinned while its initial frame pack loads.
-   Without this, slow networks get a 1-screen static hero until loading ends. */
-.walk-intro.walk-static.walk-loading{height:1000svh}
-.walk-intro.walk-static.walk-loading .walk-stage.hero.hero-v3{position:sticky}
-@media(prefers-reduced-motion:reduce){
- .walk-intro.walk-static.walk-loading:not(.walk-motion-opt-in){height:100svh}
- .walk-intro.walk-static.walk-loading:not(.walk-motion-opt-in) .walk-stage.hero.hero-v3{position:relative}
-}
