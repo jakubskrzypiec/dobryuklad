@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -42,10 +42,13 @@ jobs:
           node scripts/check-entrance-walk.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Install FFmpeg for video encoding
+      - name: Prepare FFmpeg for video encoding
+        timeout-minutes: 5
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            timeout 120s sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update -qq
+            timeout 120s sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y ffmpeg
+          fi
           ffmpeg -hide_banner -encoders | grep libx264
       - name: Build optimized walkthrough video and smaller Pages artifact
         run: |
