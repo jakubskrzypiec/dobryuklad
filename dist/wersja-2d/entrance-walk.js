@@ -19,7 +19,7 @@ function initWalk() {
   const portrait = innerWidth <= 760 && innerHeight > innerWidth;
   const profile = portrait ? 'mobile' : 'desktop';
   const limit = portrait ? 28 : 24;
-  const frames = new Map(), decoding = new Set(), packs = new Map(), controllers = new Set();
+  const frames = new Map(), decoding = new Set(), packs = new Map(), pendingPacks = new Map(), failedPacks = new Map(), controllers = new Set();
   let manifest, generation = 0, prepared = false, disabled = false, active = true;
   let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
   let width = 1, height = 1, start = 0, range = 1, phase = '';
@@ -32,7 +32,7 @@ function initWalk() {
     const isHero = next === 'hero' || next === 'static';
     intro.classList.toggle('is-at-hero', isHero);
     document.body.classList.toggle('walk-hero', isHero);
-    hero.inert = !isHero; heroActions.inert = !isHero; header.inert = !isHero;
+    hero.inert = !isHero; heroActions.inert = !isHero; header.inert = false;
     opening.inert = next !== 'opening' && next !== 'loading';
     stage.dataset.phase = next;
   }
@@ -86,11 +86,16 @@ function initWalk() {
       const local = index - pack.first;
       const blob = new Blob([new Uint8Array(bytes, pack.offsets[local], pack.offsets[local + 1] - pack.offsets[local])], { type: 'image/webp' });
       let bitmap;
-      if ('createImageBitmap' in window) bitmap = await createImageBitmap(blob);
-      else {
+      if ('createImageBitmap' in window) {
+        try { bitmap = await createImageBitmap(blob); } catch (_) { /* Safari/WebKit fallback below. */ }
+      }
+      if (!bitmap) {
         const objectUrl = URL.createObjectURL(blob);
-        try { bitmap = new Image(); bitmap.src = objectUrl; await bitmap.decode(); }
-        finally { URL.revokeObjectURL(objectUrl); }
+        try {
+          bitmap = new Image();
+          bitmap.src = objectUrl;
+          await bitmap.decode();
+        } finally { URL.revokeObjectURL(objectUrl); }
       }
       if (disabled || session !== generation) { bitmap.close?.(); return; }
       frames.set(index, bitmap); evict();
@@ -105,17 +110,55 @@ function initWalk() {
     }
   }
 
+  // Fetch only the footage needed for the current scroll position. The old
+  // implementation fetched every pack (~80 MB desktop) before allowing scroll.
+  async function loadPack(packIndex, session = generation) {
+    if (!manifest || packIndex < 0 || packIndex >= manifest.packs.length ||
+        packs.has(packIndex) || pendingPacks.has(packIndex) ||
+        pendingPacks.size >= 3 || (failedPacks.get(packIndex) || 0) > performance.now()) return;
+    const controller = new AbortController();
+    controllers.add(controller);
+    const deadline = setTimeout(() => controller.abort(), 30000);
+    const task = (async () => {
+      try {
+        const pack = manifest.packs[packIndex];
+        const bytes = await (await request(`${base}${profile}/${pack.file}`, controller.signal)).arrayBuffer();
+        if (session !== generation || disabled) return;
+        if (bytes.byteLength !== pack.offsets[pack.offsets.length - 1]) throw new Error('Incomplete frame pack');
+        packs.set(packIndex, bytes);
+        failedPacks.delete(packIndex);
+      } catch (_) {
+        if (session === generation && !disabled) {
+          failedPacks.set(packIndex, performance.now() + 5000);
+          setTimeout(() => { if (session === generation && active) { fillWindow(); schedule(); } }, 5100);
+        }
+      } finally {
+        clearTimeout(deadline);
+        controllers.delete(controller);
+        pendingPacks.delete(packIndex);
+        if (session === generation && prepared && active) { fillWindow(); schedule(); }
+      }
+    })();
+    pendingPacks.set(packIndex, task);
+    return task;
+  }
+
   function fillWindow() {
     if (!prepared || disabled || !active || document.hidden) return;
-    const centre = Math.round(current), direction = Math.abs(velocity) > 5 ? Math.sign(velocity) : target < current ? -1 : 1;
-    const needed = [centre];
+    const centre = Math.round(current), seek = Math.round(target);
+    const direction = Math.abs(velocity) > 5 ? Math.sign(velocity) : target < current ? -1 : 1;
+    const needed = [seek, centre];
     for (let offset = 1; offset <= limit; offset++) {
       needed.push(centre + offset * direction);
       if (offset <= 7) needed.push(centre - offset * direction);
+      if (offset <= 5) { needed.push(seek + offset, seek - offset); }
     }
-    for (const index of needed.filter(i => i >= 0 && i < FRAME_COUNT).slice(0, limit - 4)) {
-      if (decoding.size >= (portrait ? 3 : 4)) break;
-      if (!frames.has(index) && !decoding.has(index) && (failures.get(index) || 0) < performance.now()) decode(index);
+    for (const index of new Set(needed.filter(i => i >= 0 && i < FRAME_COUNT))) {
+      if (frames.has(index) || decoding.has(index) || (failures.get(index) || 0) > performance.now()) continue;
+      const packIndex = Math.floor(index / manifest.packSize);
+      if (!packs.has(packIndex)) { loadPack(packIndex); continue; }
+      if (decoding.size >= (portrait ? 3 : 4)) continue;
+      decode(index);
     }
   }
 
@@ -124,14 +167,16 @@ function initWalk() {
     if (disabled || !prepared || !active || document.hidden) return;
     const dt = previous ? (now - previous) / 1000 : 1 / 60;
     previous = now;
-    const next = advanceFrame(current, velocity, target, dt);
+    const seek = Math.round(target);
+    const jumping = Math.abs(target - current) > 40 && frames.has(seek);
+    const next = jumping ? { position: target, velocity: 0 } : advanceFrame(current, velocity, target, dt);
     const index = Math.round(next.position);
-    // Keep the playhead within decoded footage; never jump ahead after buffering.
+    // If a visitor jumps several screens, seek to the decoded target instead of freezing.
     if (frames.has(index)) { current = next.position; velocity = next.velocity; if (index !== drawn) draw(index); }
     else velocity = 0;
     fillWindow();
-    const atEnd = target === FRAME_COUNT - 1 && drawn === FRAME_COUNT - 1;
-    setPhase(atEnd ? 'hero' : drawn <= 6 ? 'opening' : 'travel');
+    const atEnd = target === FRAME_COUNT - 1 && (drawn === FRAME_COUNT - 1 || scrollY >= start + range - 1);
+    setPhase(atEnd ? 'hero' : Math.max(drawn, target) <= 6 ? 'opening' : 'travel');
     if (Math.abs(current - target) > .015) schedule();
     else previous = 0;
   }
@@ -148,7 +193,14 @@ function initWalk() {
     document.body.classList.toggle('walk-active', active && !disabled);
     document.body.style.setProperty('--walk-header-y', `${Math.min(0, range - (scrollY - start))}px`);
     if (prepared && progress >= 1) {
-      current = target = FRAME_COUNT - 1; velocity = 0; draw(FRAME_COUNT - 1); setPhase('hero');
+      target = FRAME_COUNT - 1;
+      if (frames.has(target)) {
+        current = target; velocity = 0; draw(target);
+      } else {
+        poster.src = `${base}hero-final-crop.webp`;
+        stage.classList.remove('has-frame');
+      }
+      setPhase('hero');
     }
     if (active) { fillWindow(); schedule(); }
   }
@@ -156,7 +208,7 @@ function initWalk() {
   function cleanup() {
     generation++; controllers.forEach(c => c.abort()); controllers.clear();
     cancelAnimationFrame(raf); raf = 0; clearTimeout(retryTimer);
-    frames.forEach(bitmap => bitmap.close?.()); frames.clear(); decoding.clear(); packs.clear(); failures.clear();
+    frames.forEach(bitmap => bitmap.close?.()); frames.clear(); decoding.clear(); packs.clear(); pendingPacks.clear(); failedPacks.clear(); failures.clear();
     drawn = -1; prepared = false; previous = 0; velocity = 0;
   }
 
@@ -188,23 +240,13 @@ function initWalk() {
       if (manifest.frameCount !== FRAME_COUNT) throw new Error('Unexpected frame count');
       stage.dataset.source = `${manifest.width}x${manifest.height}`;
       measure();
-      let nextPack = 0, loaded = 0;
-      async function worker() {
-        while (nextPack < manifest.packs.length && session === generation) {
-          const index = nextPack++;
-          const bytes = await (await request(`${base}${profile}/${manifest.packs[index].file}`, controller.signal)).arrayBuffer();
-          if (session !== generation) return;
-          const pack = manifest.packs[index];
-          if (bytes.byteLength !== pack.offsets.at(-1)) throw new Error('Incomplete frame pack');
-          packs.set(index, bytes); loaded++;
-          startLabel.textContent = `Loading ${Math.round(loaded / manifest.packs.length * 100)}%`;
-          if (index === 0) await decode(0, session);
-        }
-      }
-      await Promise.all(Array.from({ length: 4 }, worker));
+      // Start after the first 48-frame pack; the other packs stream when required.
+      startLabel.textContent = 'Ładowanie spaceru…';
+      await loadPack(0, session);
       if (session !== generation) return;
-      await Promise.all([0, 1, 2, 3, FRAME_COUNT - 1].filter(i => !frames.has(i)).map(i => decode(i, session)));
-      if (firstFrameFailure || !frames.has(0) || !frames.has(FRAME_COUNT - 1)) throw new Error('Image decoder unavailable');
+      if (!packs.has(0)) throw new Error('Opening frames unavailable');
+      await Promise.all([0, 1, 2, 3].filter(i => !frames.has(i)).map(i => decode(i, session)));
+      if (firstFrameFailure || !frames.has(0)) throw new Error('Image decoder unavailable');
       prepared = true;
       intro.classList.remove('walk-static', 'walk-loading');
       document.body.classList.remove('walk-preparing');
@@ -227,6 +269,6 @@ function initWalk() {
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', measure, { passive: true });
   document.addEventListener('visibilitychange', () => { previous = 0; if (!document.hidden) onScroll(); });
-  const sync = () => reduced.matches || !context || navigator.connection?.saveData === true ? staticHero() : prepare();
+  const sync = () => reduced.matches || !context ? staticHero() : prepare();
   reduced.addEventListener('change', sync); sync();
 }

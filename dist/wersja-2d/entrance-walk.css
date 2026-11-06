@@ -29,10 +29,10 @@
 .walk-start:hover::after{width:120px}.walk-start:disabled{cursor:progress;opacity:.8}
 .walk-intro[data-phase='travel'] .walk-opening,.walk-intro[data-phase='hero'] .walk-opening{opacity:0;visibility:hidden;pointer-events:none}
 .walk-cinematic>.header{transition:opacity .65s;position:fixed;transform:translateY(var(--walk-header-y,0px))}
-.walk-cinematic:not(.walk-hero)>.header{opacity:0;visibility:hidden;pointer-events:none}
+.walk-cinematic:not(.walk-hero)>.header{opacity:1;visibility:visible;pointer-events:auto}
 .walk-cinematic.walk-hero>.header{opacity:1;visibility:visible}
 .walk-active>.header nav{text-shadow:0 1px 10px #0008}
-.walk-cinematic.walk-preparing{overflow:hidden}
+.walk-cinematic.walk-preparing{overflow:visible}
 .walk-intro .studio-leaf-shadow,.walk-intro>.motion-lines{display:none!important}
 .walk-skip{position:absolute;left:25px;bottom:25px;z-index:5;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;padding:0;background:#fff;color:#111}
 .walk-skip:focus-visible{width:auto;height:auto;clip-path:none;padding:12px 20px}
@@ -52,3 +52,42 @@
 }
 @media(max-height:560px) and (min-width:761px){.walk-stage .hero-left{bottom:25%;gap:12px}.walk-stage .hero-left h1{font-size:44px}.walk-stage .hero-statement{font-size:13px}.walk-opening>img{width:230px}.walk-opening{gap:12px}.walk-stage .walk-hero-actions{bottom:20px}}
 @media(prefers-reduced-motion:reduce){.walk-intro{height:100svh}.walk-stage.hero.hero-v3{position:relative}.walk-opening{display:none}.walk-stage .hero-left,.walk-cinematic>.header{transition:none}}
+
+/* 2026-11-06: readable branding/navigation and a compact, two-line hero. */
+.walk-cinematic>.header{opacity:1;visibility:visible;pointer-events:auto;z-index:30}
+.walk-cinematic>.header .brand-logo{position:relative;isolation:isolate}
+.walk-cinematic>.header .brand-logo::before{
+  content:"";position:absolute;inset:9px -17px;z-index:-1;
+  background:linear-gradient(115deg,rgba(18,17,16,.40),rgba(18,17,16,.15));
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  border-radius:3px;box-shadow:0 8px 28px rgba(0,0,0,.12);pointer-events:none
+}
+.walk-opening .walk-logo-wrap{position:relative;isolation:isolate;width:clamp(310px,35vw,480px);padding:12px}
+.walk-opening .walk-logo-wrap::before{
+  content:"";position:absolute;inset:-6% -9%;z-index:-1;
+  background:radial-gradient(ellipse at center,rgba(20,18,16,.48),rgba(25,21,18,.25) 53%,transparent 78%);
+  filter:blur(20px);pointer-events:none
+}
+.walk-opening .walk-logo-wrap img{display:block;width:100%;height:auto;filter:drop-shadow(0 2px 14px rgba(0,0,0,.25))}
+.walk-stage .hero-left{max-width:min(790px,87vw);bottom:7.5%;gap:17px}
+.walk-stage .hero-left h1{font-size:clamp(52px,5.1vw,88px);line-height:1.05;max-width:none}
+.walk-stage .hero-left h1 .hero-title-first{white-space:nowrap}
+.walk-stage .hero-statement{max-width:470px;font-size:15px;line-height:1.65}
+.walk-stage .walk-hero-actions{
+  position:static;left:auto;right:auto;bottom:auto;z-index:auto;
+  align-self:flex-start;margin:4px 0 0;gap:14px;max-width:100%
+}
+@media(max-width:760px){
+  .walk-opening .walk-logo-wrap{width:min(82vw,350px);padding:8px}
+  .walk-stage .hero-left{left:7%;right:7%;bottom:6%;max-width:none;gap:13px}
+  .walk-stage .hero-left h1{font-size:clamp(30px,8.65vw,54px);line-height:1.08;letter-spacing:-.06em}
+  .walk-stage .hero-statement{font-size:13px;line-height:1.6;max-width:345px}
+  .walk-stage .walk-hero-actions{align-self:stretch;gap:10px;margin-top:4px}
+  .walk-cinematic>.header .brand-logo::before{inset:8px -10px}
+}
+@media(max-height:560px) and (min-width:761px){
+  .walk-stage .hero-left{bottom:5%;gap:9px}
+  .walk-stage .hero-left h1{font-size:clamp(42px,4.2vw,62px)}
+  .walk-stage .hero-statement{font-size:13px;line-height:1.5}
+  .walk-stage .walk-hero-actions{margin-top:2px}
+}

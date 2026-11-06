@@ -54,7 +54,7 @@ assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Scroll down'))
 assert.ok(html.includes('walk-socials'));assert.ok(html.includes('walk-hero-actions'));
 assert.ok(html.includes('Pomiń spacer'));assert.ok(!html.includes('<video'));
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-walk.js?v=4'));
+assert.ok(html.includes('entrance-walk.js?v=5'));
 for(const name of ['opening-crop.webp','hero-final-crop.webp']){
  const image=fs.readFileSync(`dist/wersja-2d/assets/entrance-upstairs-v3/${name}`);
  assert.deepEqual(dimensions(image,0),[1920,1080-CROP_BOTTOM],'Posters match the crop used by the canvas');
