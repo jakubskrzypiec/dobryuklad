@@ -49,6 +49,11 @@ for(const profile of ['desktop','mobile']){
  assert.equal(count,FRAME_COUNT);
 }
 const html=fs.readFileSync('dist/wersja-2d/index.html','utf8');
+const staticHTML=fs.readFileSync('dist/wersja-statyczna/index.html','utf8');
+assert.ok(staticHTML.includes('src="assets/hero-v2.webp"'),'Static hero must match warm graphite, walnut and taupe interludes');
+assert.ok(staticHTML.includes('href="assets/hero-v2.webp"'),'Preload selected dark hero');
+assert.ok(!staticHTML.includes('class="walk-canvas"'),'Static 2D must remain free of scroll canvas');
+assert.ok(!staticHTML.includes('<video'),'Static 2D must remain free of video');
 const rootHTML=fs.readFileSync('dist/index.html','utf8');
 assert.ok(rootHTML.includes('<base href="./wersja-2d/">'),'Main URL loads the published 2D site assets');
 assert.ok(rootHTML.includes('<canvas class="walk-canvas"'),'Main URL serves the accepted WebP scroll animation');
