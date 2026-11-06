@@ -49,6 +49,14 @@ for(const profile of ['desktop','mobile']){
  assert.equal(count,FRAME_COUNT);
 }
 const html=fs.readFileSync('dist/wersja-2d/index.html','utf8');
+const rootHTML=fs.readFileSync('dist/index.html','utf8');
+assert.ok(rootHTML.includes('<base href="./wersja-2d/">'),'Main URL loads the published 2D site assets');
+assert.ok(rootHTML.includes('<canvas class="walk-canvas"'),'Main URL serves the accepted WebP scroll animation');
+assert.ok(rootHTML.includes('entrance-walk.js?v=12'),'Main URL uses the same approved controller version');
+assert.ok(!rootHTML.includes('hero-scroll.js'),'Do not serve previous MP4 intro on main URL');
+assert.ok(rootHTML.includes('href="/dobryuklad/#main"'),'Skip navigation stays on main URL');
+assert.ok(rootHTML.includes('href="portfolio.html"'),'Keep the original navigation and portfolio links');
+
 assert.ok(html.includes('walk-intro walk-static'),'Static fallback without JavaScript');
 assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Scroll down'));
 assert.ok(html.includes('walk-socials'));assert.ok(html.includes('walk-hero-actions'));
