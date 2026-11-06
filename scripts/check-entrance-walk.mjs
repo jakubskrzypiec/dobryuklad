@@ -59,7 +59,11 @@ assert.ok(walkJS.includes('Math.min(Math.abs(index - current), Math.abs(index - 
 assert.ok(walkJS.includes('current = next.position;'),'Playhead advances independently of image decoding');
 assert.ok(!walkJS.includes('else velocity = 0;'),'Do not stall scrolling on a missed exact frame');
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-walk.js?v=6'));
+assert.ok(html.includes('entrance-walk.js?v=11'));
+assert.ok(walkJS.includes('function settleScroll()'), 'Camera must stop at the final scroll position');
+assert.ok(walkJS.includes('current = target;'), 'Remove lag at gesture end');
+assert.ok(walkJS.includes('scrollIdleTimer = setTimeout(settleScroll, 85)'), 'Settle promptly without changing in-motion easing');
+assert.ok(walkJS.includes('clearTimeout(scrollIdleTimer); scrollIdleTimer = 0;'), 'Prevent stale idle timers on reload');
 for(const name of ['opening-crop.webp','hero-final-crop.webp']){
  const image=fs.readFileSync(`dist/wersja-2d/assets/entrance-upstairs-v3/${name}`);
  assert.deepEqual(dimensions(image,0),[1920,1080-CROP_BOTTOM],'Posters match the crop used by the canvas');

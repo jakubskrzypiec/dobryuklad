@@ -21,7 +21,7 @@ function initWalk() {
   const limit = portrait ? 24 : 36;
   const frames = new Map(), decoding = new Set(), packs = new Map(), pendingPacks = new Map(), failedPacks = new Map(), controllers = new Set();
   let manifest, generation = 0, prepared = false, disabled = false, active = true;
-  let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
+  let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0, scrollIdleTimer = 0;
   let width = 1, height = 1, start = 0, range = 1, phase = '';
   let firstFrameFailure = false;
   const failures = new Map();
@@ -224,6 +224,20 @@ function initWalk() {
     if (!raf && prepared && !disabled && active && !document.hidden) raf = requestAnimationFrame(tick);
   }
 
+  // Keep the pleasant smoothing while the visitor scrolls, but never let
+  // the camera continue travelling after the scroll gesture has stopped.
+  function settleScroll() {
+    clearTimeout(scrollIdleTimer); scrollIdleTimer = 0;
+    if (!prepared || disabled || !active || document.hidden) return;
+    current = target;
+    velocity = 0;
+    previous = 0;
+    const frame = nearestFrame(Math.round(target), 6);
+    if (frame >= 0 && frame !== drawn) draw(frame);
+    fillWindow(); // Prioritize the exact final frame if it is not decoded yet.
+    schedule();
+  }
+
   function onScroll() {
     const progress = Math.max(0, Math.min(1, (scrollY - start) / range));
     target = frameAtProgress(progress);
@@ -241,12 +255,17 @@ function initWalk() {
       }
       setPhase('hero');
     }
-    if (active) { fillWindow(); schedule(); }
+    if (active) {
+      clearTimeout(scrollIdleTimer);
+      scrollIdleTimer = setTimeout(settleScroll, 85);
+      fillWindow();
+      schedule();
+    }
   }
 
   function cleanup() {
     generation++; controllers.forEach(c => c.abort()); controllers.clear();
-    cancelAnimationFrame(raf); raf = 0; clearTimeout(retryTimer);
+    cancelAnimationFrame(raf); raf = 0; clearTimeout(retryTimer); clearTimeout(scrollIdleTimer); scrollIdleTimer = 0;
     frames.forEach(bitmap => bitmap.close?.()); frames.clear(); decoding.clear(); packs.clear(); pendingPacks.clear(); failedPacks.clear(); failures.clear();
     drawn = -1; prepared = false; previous = 0; velocity = 0;
   }
