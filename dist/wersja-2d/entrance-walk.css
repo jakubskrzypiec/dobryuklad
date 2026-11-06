@@ -119,3 +119,22 @@
   .walk-intro.walk-motion-opt-in:not(.walk-static) .walk-stage.hero.hero-v3{position:sticky}
   .walk-intro.walk-motion-opt-in .walk-opening{display:flex}
 }
+
+/* Optimized hardware-decoded video layer. The separate HD opening/final
+   posters stay sharp while the timeline seeks, including on slower devices. */
+.walk-stage .walk-video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center;pointer-events:none;z-index:0;opacity:0;
+  transition:opacity .12s linear;background:#171613
+}
+.walk-stage.has-video-frame .walk-video{opacity:1}
+.walk-stage.has-video-frame .hero-photo{opacity:0}
+.walk-stage .walk-canvas{display:none}
+.walk-intro.walk-loading:not(.walk-static){height:1000svh}
+.walk-intro.walk-loading .walk-start{opacity:1;cursor:pointer}
+@media(prefers-reduced-motion:reduce){
+  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1000svh}
+  .walk-intro.walk-motion-opt-in:not(.walk-static) .walk-stage.hero.hero-v3{position:sticky}
+  .walk-intro.walk-motion-opt-in .walk-opening{display:flex}
+  .walk-stage .walk-video{transition:none}
+}

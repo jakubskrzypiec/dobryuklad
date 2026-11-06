@@ -42,10 +42,13 @@ jobs:
           node scripts/check-entrance-walk.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Build optimized walkthrough video and smaller Pages artifact
+        run: |
+          python3 scripts/build-entrance-videos.py --site-root "$RUNNER_TEMP/pages-site"
       - name: Upload website
         uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
+          path: ${{ runner.temp }}/pages-site
           # A re-run must not produce another artifact called "github-pages".
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Deploy website
