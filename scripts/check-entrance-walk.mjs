@@ -68,15 +68,20 @@ assert.ok(walkJS.includes('Math.min(Math.abs(index - current), Math.abs(index - 
 assert.ok(walkJS.includes('current = next.position;'),'Playhead advances independently of image decoding');
 assert.ok(!walkJS.includes('else velocity = 0;'),'Do not stall scrolling on a missed exact frame');
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-video.js?v=3'));
+assert.ok(html.includes('entrance-video.js?v=4'));
 const nativePlayer=fs.readFileSync('dist/wersja-2d/entrance-video.js','utf8');
 assert.ok(nativePlayer.includes("active.playbackRate=rate"),'Native decoding must play continuously');
+assert.ok(nativePlayer.includes('syncPosition(active,desired,stationary)'), 'Catch up after large scroll');
+assert.ok(nativePlayer.includes('performance.now()-lastScrollAt>135'), 'Sync when scroll stops');
+assert.ok(nativePlayer.includes('if(active.seeking)return'), 'Do not create overlapping seeks');
+assert.ok(nativePlayer.includes('distance>.58'), 'Bound video lag behind the scroll');
 assert.ok(nativePlayer.includes('switchDirection(wanted)'), 'Changing scroll direction must use reverse playback');
 assert.ok(nativePlayer.includes('if(!ready){')&&nativePlayer.includes('forward.play()'),
   'First mobile interaction must unlock video even before loadeddata');
 assert.ok(nativePlayer.includes("walk-reverse.mp4"),'Reverse clip must be loaded on demand');
 assert.ok(!nativePlayer.includes('video.currentTime=targetTime'),'Avoid seeking once per animation frame');
 assert.ok(fs.readFileSync('scripts/build-entrance-videos.py','utf8').includes('encode(True)'),'Build both playback directions');
+assert.ok(fs.readFileSync('scripts/build-entrance-videos.py','utf8').includes('"-g", "4"'),'Faster seek keyframes every 4 frames');
 assert.ok(nativePlayer.includes("reduced.matches&&!motionOptIn"),'Honor reduced motion until user opt-in');
 assert.ok(nativePlayer.includes("intro.classList.remove('walk-static','walk-fallback')"),'Video should pin the walkthrough');
 assert.ok(fs.existsSync('scripts/build-entrance-videos.py'),'Deploy must generate short-GOP MP4 videos');

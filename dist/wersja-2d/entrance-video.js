@@ -20,14 +20,25 @@
   var motionOptIn=false,ready=false,failed=false,initialized=false;
   var active=forward,direction=1,profile='',pendingDirection=0,swapId=0;
   var start=0,range=1,targetTime=0,duration=30,raf=0,timeout=0,resizeTimer=0,phase='',currentPoster='';
-  var scrollActive=false;
+  var scrollActive=false, lastScrollAt=0, lastSeekAt=0, lastTarget=0;
   function pickProfile(){return innerWidth<=760&&innerHeight>innerWidth?'mobile':'desktop';}
   function clamp(n,lo,hi){return Math.max(lo,Math.min(hi,n));}
   function setPoster(src){if(currentPoster!==src){currentPoster=src;poster.src=src;}}
   function endTime(){return Math.max(0,duration-1/24);}
   function timeline(){return clamp(direction===1?active.currentTime:endTime()-active.currentTime,0,endTime());}
   function pauseAll(){forward.pause();reverse.pause();}
-  function schedule(){if(!raf)raf=requestAnimationFrame(tick);}
+  function schedule(){if(!raf&&!document.hidden)raf=requestAnimationFrame(tick);}
+  // Coalesce seeks while the decoder is busy. Continuous playback remains the
+  // default; a bounded-lag seek handles large mouse-wheel/touch jumps.
+  function syncPosition(media, actualTarget, force){
+    if(!ready||failed||pendingDirection||media!==active||media.seeking)return false;
+    var now=performance.now();
+    if(now-lastSeekAt<(force?90:170))return false;
+    if(Math.abs(actualTarget-media.currentTime)<(force?.09:.4))return false;
+    lastSeekAt=now;media.pause();
+    try{media.currentTime=clamp(actualTarget,0,endTime());return true;}
+    catch(_){return false;}
+  }
   function setPhase(next){
     if(phase===next)return;
     phase=next;intro.dataset.phase=next;
@@ -75,6 +86,10 @@
     document.body.classList.toggle('walk-active',scrollActive);
     document.body.style.setProperty('--walk-header-y',Math.min(0,range-(scrollY-start))+'px');
     targetTime=fraction*endTime();
+    if(Math.abs(targetTime-lastTarget)>.004){
+      lastScrollAt=performance.now();
+      lastTarget=targetTime;
+    }
     var wasHero=phase==='hero';
     if(p>=1-HOLD-.002)setPhase('hero');
     else if(!ready)setPhase('loading');
@@ -82,11 +97,9 @@
     else setPhase('travel');
     if(!ready)return;
     if(phase==='hero'){pauseAll();return;}
-    // Leaving the final poster: a single seek restores the correct position.
-    // Never seek continuously while scroll events arrive.
-    if(wasHero&&Math.abs(targetTime-timeline())>2){
-      pauseAll();
-      try{active.currentTime=clamp(direction===1?targetTime:endTime()-targetTime,0,endTime());}catch(_){}
+    if(wasHero&&Math.abs(targetTime-timeline())>.35){
+      // Returning from hero must restore the camera at the current scroll.
+      syncPosition(active,direction===1?targetTime:endTime()-targetTime,true);
     }
     if(scrollActive)schedule();
   }
@@ -108,7 +121,9 @@
     var token=++swapId;
     var from=active;
     var next=wanted===1?forward:reverse;
-    var at=timeline();
+    // The reverse/forward switch begins near the requested scroll position,
+    // not at an old frame that would take seconds to catch up.
+    var at=Math.abs(targetTime-timeline())>.35?targetTime:timeline();
     from.pause();
     if(next===reverse)loadReverse();
     function settle(){
@@ -144,23 +159,24 @@
     if(pendingDirection)return;
     var difference=targetTime-timeline();
     var distance=Math.abs(difference);
-    // Deadband prevents repeated direction switches at the target.
-    if(distance<=.13){
-      active.pause();
-      return;
-    }
+    // During slow scroll: play every frame. After a large or finished
+    // gesture: one accurate seek prevents the cinematic camera lagging behind.
+    var stationary=performance.now()-lastScrollAt>135;
+    if(distance<.07){active.pause();return;}
+    if(active.seeking)return; // Resume on seeked event; do not spin.
     var wanted=difference>0?1:-1;
     if(wanted!==direction){
-      if(distance>.25)switchDirection(wanted);
+      if(distance>.18)switchDirection(wanted);
       else active.pause();
       return;
     }
-    if(active.seeking||active.readyState<2){
-      active.pause();schedule();return;
+    if(active.readyState<2){active.pause();return;}
+    var desired=direction===1?targetTime:endTime()-targetTime;
+    if(distance>.58 || (stationary&&distance>.18)){
+      if(syncPosition(active,desired,stationary))return;
     }
-    // While the user scrolls, advance by decoding *every* video frame normally.
-    // Seeking on every animation frame was the cause of slide-like jumps.
-    var rate=clamp(.6+distance*1.3,.65,2.6);
+    // Cap playback rate so the decoder does not discard most frames.
+    var rate=clamp(.82+distance*.82,.82,1.5);
     try{active.playbackRate=rate;}catch(_){active.playbackRate=1;}
     play(active);
     schedule();
@@ -196,7 +212,8 @@
   }
   function startFilm(){
     clearTimeout(timeout);cancelAnimationFrame(raf);raf=0;swapId++;
-    pendingDirection=0;ready=false;failed=false;pauseAll();
+    pendingDirection=0;ready=false;failed=false;
+    lastScrollAt=performance.now();lastSeekAt=0;lastTarget=0;pauseAll();
     if(!forward||!reverse||!forward.canPlayType||!forward.canPlayType('video/mp4; codecs="avc1.42E01E"')){
       fallback('unsupported');return;
     }
@@ -230,8 +247,9 @@
     if(pendingDirection===-1){pendingDirection=0;swapId++;schedule();}
   });
   [forward,reverse].forEach(function(media){
-    media.addEventListener('seeked',function(){if(!failed)schedule();});
-    media.addEventListener('waiting',function(){if(!failed&&ready)schedule();});
+    media.addEventListener('seeked',function(){if(!failed&&ready)schedule();});
+    media.addEventListener('canplay',function(){if(!failed&&ready)schedule();});
+    media.addEventListener('waiting',function(){if(!failed&&ready)media.pause();});
   });
   startButton.addEventListener('click',function(){
     if(failed){motionOptIn=true;intro.classList.add('walk-motion-opt-in');startFilm();return;}

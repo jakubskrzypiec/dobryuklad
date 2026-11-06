@@ -24,7 +24,7 @@ def encode_profile(root: Path, profile: str) -> None:
             "-f", "image2pipe", "-framerate", str(FPS), "-vcodec", "webp",
             "-i", "pipe:0", "-vf", f"crop=iw:ih-{CROP_BOTTOM}:0:0",
             "-c:v", "libx264", "-preset", "fast", "-crf", "19" if reverse else "18",
-            "-g", "12", "-keyint_min", "12", "-sc_threshold", "0", "-bf", "0",
+            "-g", "4", "-keyint_min", "4", "-sc_threshold", "0", "-bf", "0",
             "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", str(output)
         ]
         process = subprocess.Popen(command, stdin=subprocess.PIPE)
