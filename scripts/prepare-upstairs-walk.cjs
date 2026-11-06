@@ -26,3 +26,5 @@ for(const [name,profile] of Object.entries(profiles)){
 }
 run(['-i',source,'-vf','select=eq(n\\,0)','-frames:v','1','-c:v','libwebp','-quality','92','-y',path.join(target,'opening.webp')]);
 run(['-i',source,'-vf','select=eq(n\\,720)','-frames:v','1','-c:v','libwebp','-quality','94','-y',path.join(target,'hero-final.webp')]);
+run(['-i',source,'-vf','select=eq(n\\,0),crop=1920:1004:0:0','-frames:v','1','-c:v','libwebp','-quality','94','-y',path.join(target,'opening-crop.webp')]);
+run(['-i',source,'-vf','select=eq(n\\,720),crop=1920:1004:0:0','-frames:v','1','-c:v','libwebp','-quality','94','-y',path.join(target,'hero-final-crop.webp')]);

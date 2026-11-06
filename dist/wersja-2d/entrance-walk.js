@@ -1,4 +1,4 @@
-import { FRAME_COUNT, HOLD_RATIO, frameAtProgress, approachFrame } from './entrance-walk-motion.mjs?v=3';
+import { FRAME_COUNT, HOLD_RATIO, CROP_BOTTOM, frameAtProgress, advanceFrame } from './entrance-walk-motion.mjs?v=4';
 
 const intro = document.querySelector('.walk-intro');
 if (intro) initWalk();
@@ -12,6 +12,7 @@ function initWalk() {
   const startButton = intro.querySelector('.walk-start');
   const startLabel = startButton.querySelector('span');
   const hero = intro.querySelector('.hero-left');
+  const heroActions = intro.querySelector('.walk-hero-actions');
   const header = document.querySelector('.header');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const base = 'assets/entrance-upstairs-v3/';
@@ -20,7 +21,7 @@ function initWalk() {
   const limit = portrait ? 28 : 24;
   const frames = new Map(), decoding = new Set(), packs = new Map(), controllers = new Set();
   let manifest, generation = 0, prepared = false, disabled = false, active = true;
-  let current = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
+  let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
   let width = 1, height = 1, start = 0, range = 1, phase = '';
   let firstFrameFailure = false;
   const failures = new Map();
@@ -31,7 +32,7 @@ function initWalk() {
     const isHero = next === 'hero' || next === 'static';
     intro.classList.toggle('is-at-hero', isHero);
     document.body.classList.toggle('walk-hero', isHero);
-    hero.inert = !isHero; header.inert = !isHero;
+    hero.inert = !isHero; heroActions.inert = !isHero; header.inert = !isHero;
     opening.inert = next !== 'opening' && next !== 'loading';
     stage.dataset.phase = next;
   }
@@ -39,7 +40,7 @@ function initWalk() {
   function measure() {
     start = intro.getBoundingClientRect().top + scrollY;
     range = Math.max(1, intro.offsetHeight - stage.offsetHeight);
-    const sourceWidth = manifest?.width || 1920, sourceHeight = manifest?.height || 1080;
+    const sourceWidth = manifest?.width || 1920, sourceHeight = (manifest?.height || 1080) - CROP_BOTTOM;
     const sourceDensity = Math.min(sourceWidth / stage.clientWidth, sourceHeight / stage.clientHeight);
     const ratio = Math.min(devicePixelRatio || 1, 2, sourceDensity);
     width = Math.max(1, Math.round(stage.clientWidth * ratio));
@@ -48,14 +49,16 @@ function initWalk() {
       canvas.width = width; canvas.height = height;
       if (frames.has(drawn)) draw(drawn);
     }
+    if (context) context.imageSmoothingQuality = 'high';
     onScroll();
   }
 
   function draw(index) {
     const bitmap = frames.get(index); if (!bitmap) return;
-    const scale = Math.max(width / bitmap.width, height / bitmap.height);
-    const w = bitmap.width * scale, h = bitmap.height * scale;
-    context.drawImage(bitmap, (width - w) / 2, (height - h) / 2, w, h);
+    const viewHeight = bitmap.height - CROP_BOTTOM;
+    const scale = Math.max(width / bitmap.width, height / viewHeight);
+    const w = bitmap.width * scale, h = viewHeight * scale;
+    context.drawImage(bitmap, 0, 0, bitmap.width, viewHeight, (width - w) / 2, (height - h) / 2, w, h);
     drawn = index; stage.classList.add('has-frame');
     stage.dataset.frame = String(index);
   }
@@ -104,7 +107,7 @@ function initWalk() {
 
   function fillWindow() {
     if (!prepared || disabled || !active || document.hidden) return;
-    const centre = Math.round(current), direction = target < current ? -1 : 1;
+    const centre = Math.round(current), direction = Math.abs(velocity) > 5 ? Math.sign(velocity) : target < current ? -1 : 1;
     const needed = [centre];
     for (let offset = 1; offset <= limit; offset++) {
       needed.push(centre + offset * direction);
@@ -121,10 +124,11 @@ function initWalk() {
     if (disabled || !prepared || !active || document.hidden) return;
     const dt = previous ? (now - previous) / 1000 : 1 / 60;
     previous = now;
-    const next = approachFrame(current, target, dt);
-    const index = Math.round(next);
+    const next = advanceFrame(current, velocity, target, dt);
+    const index = Math.round(next.position);
     // Keep the playhead within decoded footage; never jump ahead after buffering.
-    if (frames.has(index)) { current = next; if (index !== drawn) draw(index); }
+    if (frames.has(index)) { current = next.position; velocity = next.velocity; if (index !== drawn) draw(index); }
+    else velocity = 0;
     fillWindow();
     const atEnd = target === FRAME_COUNT - 1 && drawn === FRAME_COUNT - 1;
     setPhase(atEnd ? 'hero' : drawn <= 6 ? 'opening' : 'travel');
@@ -144,7 +148,7 @@ function initWalk() {
     document.body.classList.toggle('walk-active', active && !disabled);
     document.body.style.setProperty('--walk-header-y', `${Math.min(0, range - (scrollY - start))}px`);
     if (prepared && progress >= 1) {
-      current = target = FRAME_COUNT - 1; draw(FRAME_COUNT - 1); setPhase('hero');
+      current = target = FRAME_COUNT - 1; velocity = 0; draw(FRAME_COUNT - 1); setPhase('hero');
     }
     if (active) { fillWindow(); schedule(); }
   }
@@ -153,14 +157,14 @@ function initWalk() {
     generation++; controllers.forEach(c => c.abort()); controllers.clear();
     cancelAnimationFrame(raf); raf = 0; clearTimeout(retryTimer);
     frames.forEach(bitmap => bitmap.close?.()); frames.clear(); decoding.clear(); packs.clear(); failures.clear();
-    drawn = -1; prepared = false; previous = 0;
+    drawn = -1; prepared = false; previous = 0; velocity = 0;
   }
 
   function staticHero() {
     disabled = true; cleanup();
     document.body.classList.remove('walk-cinematic', 'walk-preparing', 'walk-active');
     intro.classList.add('walk-static'); intro.classList.remove('walk-loading');
-    poster.src = `${base}hero-final.webp`; stage.classList.remove('has-frame');
+    poster.src = `${base}hero-final-crop.webp`; stage.classList.remove('has-frame');
     setPhase('static'); measure();
   }
 
@@ -175,7 +179,7 @@ function initWalk() {
     const session = generation;
     intro.classList.add('walk-static', 'walk-loading');
     document.body.classList.add('walk-cinematic', 'walk-preparing');
-    poster.src = `${base}opening.webp`; stage.classList.remove('has-frame');
+    poster.src = `${base}opening-crop.webp`; stage.classList.remove('has-frame');
     startButton.disabled = true; startLabel.textContent = 'Loading 0%'; setPhase('loading');
     const controller = new AbortController(); controllers.add(controller);
     const deadline = setTimeout(() => controller.abort(), 60000);
@@ -204,7 +208,7 @@ function initWalk() {
       prepared = true;
       intro.classList.remove('walk-static', 'walk-loading');
       document.body.classList.remove('walk-preparing');
-      startButton.disabled = false; startLabel.textContent = 'Click to scroll';
+      startButton.disabled = false; startLabel.textContent = 'Scroll down';
       current = 0; setPhase('opening'); measure(); fillWindow(); schedule();
     } catch (_) { if (session === generation) staticHero(); }
     finally { clearTimeout(deadline); controllers.delete(controller); }
@@ -216,7 +220,7 @@ function initWalk() {
   });
   intro.querySelector('.walk-skip').addEventListener('click', () => {
     if (!prepared) { staticHero(); return; }
-    current = target = FRAME_COUNT - 1; draw(FRAME_COUNT - 1); setPhase('hero');
+    current = target = FRAME_COUNT - 1; velocity = 0; draw(FRAME_COUNT - 1); setPhase('hero');
     scrollTo({ top: start + range * (1 - HOLD_RATIO), behavior: 'instant' });
     fillWindow(); schedule();
   });

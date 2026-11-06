@@ -1,20 +1,23 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import {FRAME_COUNT,HOLD_RATIO,frameAtProgress,approachFrame} from '../dist/wersja-2d/entrance-walk-motion.mjs';
+import {FRAME_COUNT,HOLD_RATIO,CROP_BOTTOM,frameAtProgress,advanceFrame} from '../dist/wersja-2d/entrance-walk-motion.mjs';
 assert.equal(FRAME_COUNT,721);
 assert.equal(frameAtProgress(-1),0);assert.equal(frameAtProgress(0),0);
 assert.equal(frameAtProgress(1-HOLD_RATIO),720);
 assert.equal(frameAtProgress(.95),720,'Final hero holds before leaving the pinned stage');
 assert.equal(frameAtProgress(2),720);
+assert.equal((1-HOLD_RATIO)*9,7,'Preserve seven screen heights for the film');
+assert.equal(HOLD_RATIO*9,2,'Double the final hero hold to two screen heights');
+assert.equal(CROP_BOTTOM,76);
 let previous=-1;
 for(let i=0;i<=1000;i++){const f=frameAtProgress(i/1000);assert.ok(f>=previous);previous=f;}
 const results=[];
 for(const fps of [30,60,120]){
- let f=0;
- for(let i=0;i<fps/2;i++){const next=approachFrame(f,700,1/fps);assert.ok(next>=f&&next<=700);assert.ok(next-f<=110/fps+.0001,'Bound sudden wheel jumps');f=next;}
+ let f=0,velocity=0;
+ for(let i=0;i<fps/2;i++){const next=advanceFrame(f,velocity,700,1/fps);assert.ok(next.position>=f&&next.position<=700);assert.ok(Math.abs(next.velocity)<=125);assert.ok(Math.abs(next.velocity-velocity)<=700/fps+.0001,'Bound acceleration at wheel events');f=next.position;velocity=next.velocity;}
  results.push(f);
- for(let i=0;i<fps*4;i++){const next=approachFrame(f,0,1/fps);assert.ok(next<=f&&next>=0);f=next;}
+ for(let i=0;i<fps*4;i++){const next=advanceFrame(f,velocity,0,1/fps);assert.ok(next.position>=0&&next.position<=721);f=next.position;velocity=next.velocity;}
  assert.equal(f,0,'Reverse scroll settles exactly');
 }
 assert.ok(Math.max(...results)-Math.min(...results)<.01,'Speed bound is refresh-rate independent');
@@ -47,8 +50,13 @@ for(const profile of ['desktop','mobile']){
 }
 const html=fs.readFileSync('dist/wersja-2d/index.html','utf8');
 assert.ok(html.includes('walk-intro walk-static'),'Static fallback without JavaScript');
-assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Click to scroll'));
+assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Scroll down'));
+assert.ok(html.includes('walk-socials'));assert.ok(html.includes('walk-hero-actions'));
 assert.ok(html.includes('Pomiń spacer'));assert.ok(!html.includes('<video'));
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-walk.js?v=3'));
+assert.ok(html.includes('entrance-walk.js?v=4'));
+for(const name of ['opening-crop.webp','hero-final-crop.webp']){
+ const image=fs.readFileSync(`dist/wersja-2d/assets/entrance-upstairs-v3/${name}`);
+ assert.deepEqual(dimensions(image,0),[1920,1080-CROP_BOTTOM],'Posters match the crop used by the canvas');
+}
 console.log('PASS: 721 complete full-resolution frames/profile, packed integrity, bounded forward/reverse motion at 30/60/120 fps, final hold, logo opening and static fallback.');
