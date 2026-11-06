@@ -166,7 +166,20 @@
     schedule();
   }
   function unlockVideo(){
-    if(failed||!ready)return;
+    if(failed)return;
+    // Safari and embedded mobile browsers may refuse to preload video until a
+    // trusted interaction. A tap primes the silent stream before loadeddata.
+    if(!ready){
+      var attempt;
+      try{attempt=forward.play();}catch(_){return;}
+      if(attempt&&typeof attempt.then==='function')
+        attempt.then(function(){
+          forward.pause();
+          if(!failed&&forward.readyState>=2)mediaReady();
+        }).catch(function(){});
+      else forward.pause();
+      return;
+    }
     if(active.paused&&phase!=='hero'&&Math.abs(targetTime-timeline())>.14)play(active);
   }
   function mediaReady(){

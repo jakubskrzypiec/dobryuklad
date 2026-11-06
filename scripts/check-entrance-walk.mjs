@@ -68,10 +68,12 @@ assert.ok(walkJS.includes('Math.min(Math.abs(index - current), Math.abs(index - 
 assert.ok(walkJS.includes('current = next.position;'),'Playhead advances independently of image decoding');
 assert.ok(!walkJS.includes('else velocity = 0;'),'Do not stall scrolling on a missed exact frame');
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-video.js?v=2'));
+assert.ok(html.includes('entrance-video.js?v=3'));
 const nativePlayer=fs.readFileSync('dist/wersja-2d/entrance-video.js','utf8');
 assert.ok(nativePlayer.includes("active.playbackRate=rate"),'Native decoding must play continuously');
 assert.ok(nativePlayer.includes('switchDirection(wanted)'), 'Changing scroll direction must use reverse playback');
+assert.ok(nativePlayer.includes('if(!ready){')&&nativePlayer.includes('forward.play()'),
+  'First mobile interaction must unlock video even before loadeddata');
 assert.ok(nativePlayer.includes("walk-reverse.mp4"),'Reverse clip must be loaded on demand');
 assert.ok(!nativePlayer.includes('video.currentTime=targetTime'),'Avoid seeking once per animation frame');
 assert.ok(fs.readFileSync('scripts/build-entrance-videos.py','utf8').includes('encode(True)'),'Build both playback directions');
