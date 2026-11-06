@@ -1,4 +1,4 @@
 DOBRY UKŁAD — edytowana wersja 2D
 Baza: a85332c
 Naturalna paleta materiałów, nowe kadry, proste przyciski i płaska oferta.
-Wejście: spacer z filmu użytkownika, sterowany scrollem, z zatrzymaniem ostatniej klatki jako hero.
+Wejście v3: 30-sekundowy spacer na piętro, Full HD, logo i Click to scroll na początku, bez napisów w trakcie, hero na końcu.

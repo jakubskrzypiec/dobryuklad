@@ -1,4 +1,4 @@
-import { FRAME_COUNT, HOLD_RATIO, frameAtProgress, approachFrame } from './entrance-walk-motion.mjs';
+import { FRAME_COUNT, HOLD_RATIO, frameAtProgress, approachFrame } from './entrance-walk-motion.mjs?v=3';
 
 const intro = document.querySelector('.walk-intro');
 if (intro) initWalk();
@@ -7,66 +7,81 @@ function initWalk() {
   const stage = intro.querySelector('.walk-stage');
   const canvas = intro.querySelector('canvas');
   const context = canvas.getContext('2d', { alpha: false });
-  const label = intro.querySelector('[data-walk-label]');
+  const poster = intro.querySelector('.hero-photo');
+  const opening = intro.querySelector('.walk-opening');
+  const startButton = intro.querySelector('.walk-start');
+  const startLabel = startButton.querySelector('span');
+  const hero = intro.querySelector('.hero-left');
+  const header = document.querySelector('.header');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const mobile = matchMedia('(max-width: 760px)').matches;
-  const folder = `assets/entrance-walk/${mobile ? 'mobile' : 'desktop'}/`;
-  const limit = mobile ? 24 : 40;
-  const blobs = new Map(), pendingFetch = new Map(), frames = new Map(), decoding = new Set(), failures = new Map();
-  let current = 0, target = 0, drawn = -1, previous = 0, raf = 0, direction = 1;
-  let progress = 0, start = 0, range = 1, active = true, disabled = false, generation = 0;
-  let width = 1, height = 1, prefetchIndex = 0, prefetchStarted = false;
-  const url = index => `${folder}frame-${String(index).padStart(4, '0')}.webp`;
-  const valid = index => index >= 0 && index < FRAME_COUNT;
+  const base = 'assets/entrance-upstairs-v3/';
+  const portrait = innerWidth <= 760 && innerHeight > innerWidth;
+  const profile = portrait ? 'mobile' : 'desktop';
+  const limit = portrait ? 28 : 24;
+  const frames = new Map(), decoding = new Set(), packs = new Map(), controllers = new Set();
+  let manifest, generation = 0, prepared = false, disabled = false, active = true;
+  let current = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
+  let width = 1, height = 1, start = 0, range = 1, phase = '';
+  let firstFrameFailure = false;
+  const failures = new Map();
+
+  function setPhase(next) {
+    if (phase === next) return;
+    phase = next; intro.dataset.phase = next;
+    const isHero = next === 'hero' || next === 'static';
+    intro.classList.toggle('is-at-hero', isHero);
+    document.body.classList.toggle('walk-hero', isHero);
+    hero.inert = !isHero; header.inert = !isHero;
+    opening.inert = next !== 'opening' && next !== 'loading';
+    stage.dataset.phase = next;
+  }
 
   function measure() {
     start = intro.getBoundingClientRect().top + scrollY;
     range = Math.max(1, intro.offsetHeight - stage.offsetHeight);
-    const ratio = Math.min(devicePixelRatio || 1, 1.5, 1920 / stage.clientWidth);
-    width = canvas.width = Math.max(1, Math.round(stage.clientWidth * ratio));
-    height = canvas.height = Math.max(1, Math.round(stage.clientHeight * ratio));
-    if (frames.has(drawn)) draw(drawn);
+    const sourceWidth = manifest?.width || 1920, sourceHeight = manifest?.height || 1080;
+    const sourceDensity = Math.min(sourceWidth / stage.clientWidth, sourceHeight / stage.clientHeight);
+    const ratio = Math.min(devicePixelRatio || 1, 2, sourceDensity);
+    width = Math.max(1, Math.round(stage.clientWidth * ratio));
+    height = Math.max(1, Math.round(stage.clientHeight * ratio));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width; canvas.height = height;
+      if (frames.has(drawn)) draw(drawn);
+    }
     onScroll();
   }
 
-  async function fetchFrame(index) {
-    if (blobs.has(index)) return blobs.get(index);
-    if (pendingFetch.has(index)) return pendingFetch.get(index);
-    if ((failures.get(index) || 0) > performance.now()) throw new Error('Frame retry deferred');
-    const pending = (async () => {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
-      try {
-        const response = await fetch(url(index), { signal: controller.signal, cache: 'force-cache' });
-        if (!response.ok) throw new Error(`Frame ${response.status}`);
-        const blob = await response.blob();
-        blobs.set(index, blob);
-        return blob;
-      } catch (error) { failures.set(index, performance.now() + 10000); throw error; }
-      finally { clearTimeout(timeout); pendingFetch.delete(index); }
-    })();
-    pendingFetch.set(index, pending);
-    return pending;
+  function draw(index) {
+    const bitmap = frames.get(index); if (!bitmap) return;
+    const scale = Math.max(width / bitmap.width, height / bitmap.height);
+    const w = bitmap.width * scale, h = bitmap.height * scale;
+    context.drawImage(bitmap, (width - w) / 2, (height - h) / 2, w, h);
+    drawn = index; stage.classList.add('has-frame');
+    stage.dataset.frame = String(index);
   }
 
   function evict() {
     while (frames.size > limit) {
       let farthest = -1, distance = -1;
       for (const index of frames.keys()) {
-        if (index === drawn) continue;
-        const score = Math.abs(index - current);
-        if (score > distance) { farthest = index; distance = score; }
+        if (index === drawn || index === 0 || index === FRAME_COUNT - 1) continue;
+        const d = Math.abs(index - current);
+        if (d > distance) { farthest = index; distance = d; }
       }
       if (farthest < 0) break;
       frames.get(farthest).close?.(); frames.delete(farthest);
     }
+    stage.dataset.buffered = String(frames.size);
   }
 
-  async function decode(index) {
-    const session = generation;
+  async function decode(index, session = generation) {
     decoding.add(index);
     try {
-      const blob = await fetchFrame(index);
+      const packIndex = Math.floor(index / manifest.packSize);
+      const pack = manifest.packs[packIndex], bytes = packs.get(packIndex);
+      if (!bytes) return;
+      const local = index - pack.first;
+      const blob = new Blob([new Uint8Array(bytes, pack.offsets[local], pack.offsets[local + 1] - pack.offsets[local])], { type: 'image/webp' });
       let bitmap;
       if ('createImageBitmap' in window) bitmap = await createImageBitmap(blob);
       else {
@@ -76,115 +91,138 @@ function initWalk() {
       }
       if (disabled || session !== generation) { bitmap.close?.(); return; }
       frames.set(index, bitmap); evict();
-      if (drawn < 0 && index === Math.round(current)) draw(index);
-      if (!prefetchStarted && frames.size >= 4) {
-        prefetchStarted = true;
-        for (let worker = 0; worker < 2; worker++) prefetch();
-      }
+      if (index === 0 && drawn < 0) draw(0);
       schedule();
     } catch (_) {
-      // Do not strand a visitor in a long pinned section if loading is unavailable.
-      if (index === 0 && drawn < 0 && !disabled) {
-        disabled = true; generation++;
-        intro.classList.add('walk-static');
-        intro.querySelector('.hero-photo').src = 'assets/entrance-walk/hero-final.webp';
-        document.body.classList.remove('walk-active');
-        measure();
-      }
-    } finally { decoding.delete(index); if (!disabled && active) fillWindow(); }
+      failures.set(index, performance.now() + 2500);
+      if (index === 0) firstFrameFailure = true;
+      clearTimeout(retryTimer); retryTimer = setTimeout(() => { fillWindow(); schedule(); }, 2600);
+    } finally {
+      if (session === generation) { decoding.delete(index); if (prepared && active) fillWindow(); }
+    }
   }
 
   function fillWindow() {
-    if (disabled || !active || document.hidden) return;
-    const centre = Math.round(current);
+    if (!prepared || disabled || !active || document.hidden) return;
+    const centre = Math.round(current), direction = target < current ? -1 : 1;
     const needed = [centre];
-    for (let offset = 1; offset <= 22; offset++) {
+    for (let offset = 1; offset <= limit; offset++) {
       needed.push(centre + offset * direction);
-      if (offset <= 12) needed.push(centre - offset * direction);
+      if (offset <= 7) needed.push(centre - offset * direction);
     }
-    for (const index of needed.filter(valid).slice(0, limit - 2)) {
-      if (decoding.size >= 4) break;
-      if (valid(index) && !frames.has(index) && !decoding.has(index) && (failures.get(index) || 0) < performance.now()) decode(index);
+    for (const index of needed.filter(i => i >= 0 && i < FRAME_COUNT).slice(0, limit - 4)) {
+      if (decoding.size >= (portrait ? 3 : 4)) break;
+      if (!frames.has(index) && !decoding.has(index) && (failures.get(index) || 0) < performance.now()) decode(index);
     }
-  }
-
-  async function prefetch() {
-    // Compressed frames only: decoded images are kept in a bounded moving window.
-    while (prefetchIndex < FRAME_COUNT && !disabled) {
-      if (document.hidden || !active) { prefetchStarted = false; return; }
-      const index = prefetchIndex++;
-      try { await fetchFrame(index); } catch (_) { /* Visible frames retry independently. */ }
-    }
-  }
-
-  function draw(index) {
-    const bitmap = frames.get(index);
-    if (!bitmap) return;
-    const scale = Math.max(width / bitmap.width, height / bitmap.height);
-    const w = bitmap.width * scale, h = bitmap.height * scale;
-    context.drawImage(bitmap, (width - w) / 2, (height - h) / 2, w, h);
-    drawn = index;
-    stage.classList.add('has-frame');
-    stage.dataset.frame = String(index);
   }
 
   function tick(now) {
     raf = 0;
-    if (disabled || document.hidden || !active) return;
+    if (disabled || !prepared || !active || document.hidden) return;
     const dt = previous ? (now - previous) / 1000 : 1 / 60;
     previous = now;
-    current = approachFrame(current, target, dt);
+    const next = approachFrame(current, target, dt);
+    const index = Math.round(next);
+    // Keep the playhead within decoded footage; never jump ahead after buffering.
+    if (frames.has(index)) { current = next; if (index !== drawn) draw(index); }
     fillWindow();
-    const desired = Math.round(current);
-    if (desired !== drawn) {
-      if (frames.has(desired)) draw(desired);
-      else {
-        // Never flash an unrelated frame when the user scrolls faster than loading.
-        const available = [...frames.keys()].filter(index => direction > 0 ? index >= drawn && index <= desired : index <= drawn && index >= desired);
-        if (available.length) draw(available.reduce((a, b) => Math.abs(b - desired) < Math.abs(a - desired) ? b : a));
-      }
-    }
-    const atHero = target === FRAME_COUNT - 1 && drawn === FRAME_COUNT - 1;
-    intro.classList.toggle('is-at-hero', atHero);
-    label.textContent = atHero ? 'Przestrzeń dla Ciebie. Przewiń dalej.' : 'Przewiń, aby wejść do wnętrza';
+    const atEnd = target === FRAME_COUNT - 1 && drawn === FRAME_COUNT - 1;
+    setPhase(atEnd ? 'hero' : drawn <= 6 ? 'opening' : 'travel');
     if (Math.abs(current - target) > .015) schedule();
     else previous = 0;
   }
 
-  function schedule() { if (!raf && !disabled && active && !document.hidden) raf = requestAnimationFrame(tick); }
+  function schedule() {
+    if (!raf && prepared && !disabled && active && !document.hidden) raf = requestAnimationFrame(tick);
+  }
+
   function onScroll() {
-    progress = Math.max(0, Math.min(1, (scrollY - start) / range));
-    const next = frameAtProgress(progress);
-    if (Math.abs(next - target) > .01) direction = next > target ? 1 : -1;
-    target = next;
+    const progress = Math.max(0, Math.min(1, (scrollY - start) / range));
+    target = frameAtProgress(progress);
     const rect = intro.getBoundingClientRect();
     active = rect.bottom > 0 && rect.top < innerHeight;
     document.body.classList.toggle('walk-active', active && !disabled);
     document.body.style.setProperty('--walk-header-y', `${Math.min(0, range - (scrollY - start))}px`);
-    intro.style.setProperty('--walk-progress', String(Math.min(1, progress / (1 - HOLD_RATIO))));
+    if (prepared && progress >= 1) {
+      current = target = FRAME_COUNT - 1; draw(FRAME_COUNT - 1); setPhase('hero');
+    }
     if (active) { fillWindow(); schedule(); }
   }
 
-  function syncPreference() {
-    disabled = reduced.matches || !context || navigator.connection?.saveData === true;
-    generation++;
-    intro.classList.toggle('walk-static', disabled);
-    intro.querySelector('.hero-photo').src = disabled ? 'assets/entrance-walk/hero-final.webp' : 'assets/entrance-walk/desktop/frame-0000.webp';
-    if (disabled) {
-      cancelAnimationFrame(raf); raf = 0; frames.forEach(image => image.close?.()); frames.clear();
-      stage.classList.remove('has-frame'); drawn = -1; document.body.classList.remove('walk-active');
-    }
-    measure();
+  function cleanup() {
+    generation++; controllers.forEach(c => c.abort()); controllers.clear();
+    cancelAnimationFrame(raf); raf = 0; clearTimeout(retryTimer);
+    frames.forEach(bitmap => bitmap.close?.()); frames.clear(); decoding.clear(); packs.clear(); failures.clear();
+    drawn = -1; prepared = false; previous = 0;
   }
 
+  function staticHero() {
+    disabled = true; cleanup();
+    document.body.classList.remove('walk-cinematic', 'walk-preparing', 'walk-active');
+    intro.classList.add('walk-static'); intro.classList.remove('walk-loading');
+    poster.src = `${base}hero-final.webp`; stage.classList.remove('has-frame');
+    setPhase('static'); measure();
+  }
+
+  async function request(url, signal) {
+    const response = await fetch(url, { cache: 'force-cache', signal });
+    if (!response.ok) throw new Error('Walkthrough asset unavailable');
+    return response;
+  }
+
+  async function prepare() {
+    cleanup(); disabled = false; firstFrameFailure = false;
+    const session = generation;
+    intro.classList.add('walk-static', 'walk-loading');
+    document.body.classList.add('walk-cinematic', 'walk-preparing');
+    poster.src = `${base}opening.webp`; stage.classList.remove('has-frame');
+    startButton.disabled = true; startLabel.textContent = 'Loading 0%'; setPhase('loading');
+    const controller = new AbortController(); controllers.add(controller);
+    const deadline = setTimeout(() => controller.abort(), 60000);
+    try {
+      manifest = await (await request(`${base}${profile}/index.json`, controller.signal)).json();
+      if (manifest.frameCount !== FRAME_COUNT) throw new Error('Unexpected frame count');
+      stage.dataset.source = `${manifest.width}x${manifest.height}`;
+      measure();
+      let nextPack = 0, loaded = 0;
+      async function worker() {
+        while (nextPack < manifest.packs.length && session === generation) {
+          const index = nextPack++;
+          const bytes = await (await request(`${base}${profile}/${manifest.packs[index].file}`, controller.signal)).arrayBuffer();
+          if (session !== generation) return;
+          const pack = manifest.packs[index];
+          if (bytes.byteLength !== pack.offsets.at(-1)) throw new Error('Incomplete frame pack');
+          packs.set(index, bytes); loaded++;
+          startLabel.textContent = `Loading ${Math.round(loaded / manifest.packs.length * 100)}%`;
+          if (index === 0) await decode(0, session);
+        }
+      }
+      await Promise.all(Array.from({ length: 4 }, worker));
+      if (session !== generation) return;
+      await Promise.all([0, 1, 2, 3, FRAME_COUNT - 1].filter(i => !frames.has(i)).map(i => decode(i, session)));
+      if (firstFrameFailure || !frames.has(0) || !frames.has(FRAME_COUNT - 1)) throw new Error('Image decoder unavailable');
+      prepared = true;
+      intro.classList.remove('walk-static', 'walk-loading');
+      document.body.classList.remove('walk-preparing');
+      startButton.disabled = false; startLabel.textContent = 'Click to scroll';
+      current = 0; setPhase('opening'); measure(); fillWindow(); schedule();
+    } catch (_) { if (session === generation) staticHero(); }
+    finally { clearTimeout(deadline); controllers.delete(controller); }
+  }
+
+  startButton.addEventListener('click', () => {
+    if (!prepared) return;
+    scrollTo({ top: start + range * (1 - HOLD_RATIO) * .045, behavior: 'smooth' });
+  });
   intro.querySelector('.walk-skip').addEventListener('click', () => {
-    // Keep a visible stretch of the final hero after skipping the journey.
+    if (!prepared) { staticHero(); return; }
+    current = target = FRAME_COUNT - 1; draw(FRAME_COUNT - 1); setPhase('hero');
     scrollTo({ top: start + range * (1 - HOLD_RATIO), behavior: 'instant' });
-    current = target = FRAME_COUNT - 1; direction = 1; fillWindow(); schedule();
+    fillWindow(); schedule();
   });
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', measure, { passive: true });
   document.addEventListener('visibilitychange', () => { previous = 0; if (!document.hidden) onScroll(); });
-  reduced.addEventListener('change', syncPreference);
-  syncPreference();
+  const sync = () => reduced.matches || !context || navigator.connection?.saveData === true ? staticHero() : prepare();
+  reduced.addEventListener('change', sync); sync();
 }
