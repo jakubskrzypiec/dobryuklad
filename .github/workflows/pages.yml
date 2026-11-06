@@ -42,6 +42,11 @@ jobs:
           node scripts/check-entrance-walk.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Install FFmpeg for video encoding
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          ffmpeg -hide_banner -encoders | grep libx264
       - name: Build optimized walkthrough video and smaller Pages artifact
         run: |
           python3 scripts/build-entrance-videos.py --site-root "$RUNNER_TEMP/pages-site"
