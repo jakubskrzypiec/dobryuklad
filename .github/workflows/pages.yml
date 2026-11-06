@@ -43,15 +43,15 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload website
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
           # A re-run must not produce another artifact called "github-pages".
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Deploy website
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-          # The large image walkthrough may take longer to sync on Pages.
-          timeout: 1200000
+          # GitHub Pages caps the deployment timeout at ten minutes.
+          timeout: 600000
