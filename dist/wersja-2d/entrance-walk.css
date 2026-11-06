@@ -91,3 +91,7 @@
   .walk-stage .hero-statement{font-size:13px;line-height:1.5}
   .walk-stage .walk-hero-actions{margin-top:2px}
 }
+
+/* Keep the menu right-aligned after removing the corner logo on the 2D homepage. */
+.home-page .header #navigation{margin-left:auto}
+.home-page .header .menu-toggle{margin-left:auto}
