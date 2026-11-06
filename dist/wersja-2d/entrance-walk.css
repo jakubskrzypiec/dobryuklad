@@ -138,3 +138,23 @@
   .walk-intro.walk-motion-opt-in .walk-opening{display:flex}
   .walk-stage .walk-video{transition:none}
 }
+
+/* Continuous forward and reverse movie playback: the scroll position adjusts
+   playback speed, never requests a separate video decode every animation frame. */
+.walk-intro{height:1400svh}
+.walk-intro.walk-loading:not(.walk-static){height:1400svh}
+.walk-stage .walk-video{transition:none}
+.walk-stage.has-video-frame .walk-video{opacity:0}
+.walk-stage.has-video-frame .walk-video.is-current{opacity:1}
+@media(max-width:760px){
+  .walk-intro{height:1200svh}
+  .walk-intro.walk-loading:not(.walk-static){height:1200svh}
+}
+@media(prefers-reduced-motion:reduce){
+  .walk-intro:not(.walk-motion-opt-in){height:100svh}
+  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1400svh}
+  .walk-intro.walk-motion-opt-in:not(.walk-static) .walk-stage.hero.hero-v3{position:sticky}
+}
+@media(prefers-reduced-motion:reduce) and (max-width:760px){
+  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1200svh}
+}

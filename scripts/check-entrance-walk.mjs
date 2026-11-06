@@ -53,7 +53,8 @@ assert.ok(html.includes('walk-intro walk-static'),'Static fallback without JavaS
 assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Scroll down'));
 assert.ok(html.includes('walk-socials'));assert.ok(html.includes('walk-hero-actions'));
 assert.ok(html.includes('Pomiń spacer'));
-assert.ok(html.includes('class="walk-video"'),'The native MP4 scrubber must be present');
+assert.ok(html.includes('class="walk-video walk-forward is-current"'),'Forward video should be present');
+assert.ok(html.includes('class="walk-video walk-reverse"'),'Reverse video should be present');
 assert.ok(html.includes('class="walk-try"'),'Give visitors a manual way to enable or retry the walk');
 const walkJS=fs.readFileSync('dist/wersja-2d/entrance-walk.js','utf8');
 const walkCSS=fs.readFileSync('dist/wersja-2d/entrance-walk.css','utf8');
@@ -67,9 +68,13 @@ assert.ok(walkJS.includes('Math.min(Math.abs(index - current), Math.abs(index - 
 assert.ok(walkJS.includes('current = next.position;'),'Playhead advances independently of image decoding');
 assert.ok(!walkJS.includes('else velocity = 0;'),'Do not stall scrolling on a missed exact frame');
 assert.equal((html.match(/id="hero-title"/g)||[]).length,1);
-assert.ok(html.includes('entrance-video.js?v=1'));
+assert.ok(html.includes('entrance-video.js?v=2'));
 const nativePlayer=fs.readFileSync('dist/wersja-2d/entrance-video.js','utf8');
-assert.ok(nativePlayer.includes('video.currentTime=targetTime'),'Scroll controls native playback');
+assert.ok(nativePlayer.includes("active.playbackRate=rate"),'Native decoding must play continuously');
+assert.ok(nativePlayer.includes('switchDirection(wanted)'), 'Changing scroll direction must use reverse playback');
+assert.ok(nativePlayer.includes("walk-reverse.mp4"),'Reverse clip must be loaded on demand');
+assert.ok(!nativePlayer.includes('video.currentTime=targetTime'),'Avoid seeking once per animation frame');
+assert.ok(fs.readFileSync('scripts/build-entrance-videos.py','utf8').includes('encode(True)'),'Build both playback directions');
 assert.ok(nativePlayer.includes("reduced.matches&&!forceMotion"),'Honor reduced motion until user opt-in');
 assert.ok(nativePlayer.includes("intro.classList.remove('walk-static','walk-fallback')"),'Video should pin the walkthrough');
 assert.ok(fs.existsSync('scripts/build-entrance-videos.py'),'Deploy must generate short-GOP MP4 videos');
