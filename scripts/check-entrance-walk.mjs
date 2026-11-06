@@ -75,7 +75,7 @@ assert.ok(nativePlayer.includes('switchDirection(wanted)'), 'Changing scroll dir
 assert.ok(nativePlayer.includes("walk-reverse.mp4"),'Reverse clip must be loaded on demand');
 assert.ok(!nativePlayer.includes('video.currentTime=targetTime'),'Avoid seeking once per animation frame');
 assert.ok(fs.readFileSync('scripts/build-entrance-videos.py','utf8').includes('encode(True)'),'Build both playback directions');
-assert.ok(nativePlayer.includes("reduced.matches&&!forceMotion"),'Honor reduced motion until user opt-in');
+assert.ok(nativePlayer.includes("reduced.matches&&!motionOptIn"),'Honor reduced motion until user opt-in');
 assert.ok(nativePlayer.includes("intro.classList.remove('walk-static','walk-fallback')"),'Video should pin the walkthrough');
 assert.ok(fs.existsSync('scripts/build-entrance-videos.py'),'Deploy must generate short-GOP MP4 videos');
 for(const name of ['opening-crop.webp','hero-final-crop.webp']){
