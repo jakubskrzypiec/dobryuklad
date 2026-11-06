@@ -42,21 +42,10 @@ jobs:
           node scripts/check-entrance-walk.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Prepare FFmpeg for video encoding
-        timeout-minutes: 5
-        run: |
-          if ! command -v ffmpeg >/dev/null 2>&1; then
-            timeout 120s sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update -qq
-            timeout 120s sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y ffmpeg
-          fi
-          ffmpeg -hide_banner -encoders | grep libx264
-      - name: Build optimized walkthrough video and smaller Pages artifact
-        run: |
-          python3 scripts/build-entrance-videos.py --site-root "$RUNNER_TEMP/pages-site"
       - name: Upload website
         uses: actions/upload-pages-artifact@v5
         with:
-          path: ${{ runner.temp }}/pages-site
+          path: dist
           # A re-run must not produce another artifact called "github-pages".
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Deploy website

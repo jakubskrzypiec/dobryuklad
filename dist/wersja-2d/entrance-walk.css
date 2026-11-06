@@ -120,41 +120,11 @@
   .walk-intro.walk-motion-opt-in .walk-opening{display:flex}
 }
 
-/* Optimized hardware-decoded video layer. The separate HD opening/final
-   posters stay sharp while the timeline seeks, including on slower devices. */
-.walk-stage .walk-video{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:center;pointer-events:none;z-index:0;opacity:0;
-  transition:opacity .12s linear;background:#171613
-}
-.walk-stage.has-video-frame .walk-video{opacity:1}
-.walk-stage.has-video-frame .hero-photo{opacity:0}
-.walk-stage .walk-canvas{display:none}
-.walk-intro.walk-loading:not(.walk-static){height:1000svh}
-.walk-intro.walk-loading .walk-start{opacity:1;cursor:pointer}
+/* Keep the immersive 2D entrance pinned while its initial frame pack loads.
+   Without this, slow networks get a 1-screen static hero until loading ends. */
+.walk-intro.walk-static.walk-loading{height:1000svh}
+.walk-intro.walk-static.walk-loading .walk-stage.hero.hero-v3{position:sticky}
 @media(prefers-reduced-motion:reduce){
-  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1000svh}
-  .walk-intro.walk-motion-opt-in:not(.walk-static) .walk-stage.hero.hero-v3{position:sticky}
-  .walk-intro.walk-motion-opt-in .walk-opening{display:flex}
-  .walk-stage .walk-video{transition:none}
-}
-
-/* Continuous forward and reverse movie playback: the scroll position adjusts
-   playback speed, never requests a separate video decode every animation frame. */
-.walk-intro{height:1400svh}
-.walk-intro.walk-loading:not(.walk-static){height:1400svh}
-.walk-stage .walk-video{transition:none}
-.walk-stage.has-video-frame .walk-video{opacity:0}
-.walk-stage.has-video-frame .walk-video.is-current{opacity:1}
-@media(max-width:760px){
-  .walk-intro{height:1200svh}
-  .walk-intro.walk-loading:not(.walk-static){height:1200svh}
-}
-@media(prefers-reduced-motion:reduce){
-  .walk-intro:not(.walk-motion-opt-in){height:100svh}
-  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1400svh}
-  .walk-intro.walk-motion-opt-in:not(.walk-static) .walk-stage.hero.hero-v3{position:sticky}
-}
-@media(prefers-reduced-motion:reduce) and (max-width:760px){
-  .walk-intro.walk-motion-opt-in:not(.walk-static){height:1200svh}
+ .walk-intro.walk-static.walk-loading:not(.walk-motion-opt-in){height:100svh}
+ .walk-intro.walk-static.walk-loading:not(.walk-motion-opt-in) .walk-stage.hero.hero-v3{position:relative}
 }
