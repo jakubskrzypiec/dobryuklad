@@ -18,7 +18,7 @@ function initWalk() {
   const base = 'assets/entrance-upstairs-v3/';
   const portrait = innerWidth <= 760 && innerHeight > innerWidth;
   const profile = portrait ? 'mobile' : 'desktop';
-  const limit = portrait ? 28 : 24;
+  const limit = portrait ? 24 : 36;
   const frames = new Map(), decoding = new Set(), packs = new Map(), pendingPacks = new Map(), failedPacks = new Map(), controllers = new Set();
   let manifest, generation = 0, prepared = false, disabled = false, active = true;
   let current = 0, velocity = 0, target = 0, drawn = -1, previous = 0, raf = 0, retryTimer = 0;
@@ -55,7 +55,8 @@ function initWalk() {
 
   function draw(index) {
     const bitmap = frames.get(index); if (!bitmap) return;
-    const viewHeight = bitmap.height - CROP_BOTTOM;
+    // Bitmap may have been downsampled to the display size to keep GPU work low.
+    const viewHeight = bitmap.height * (1 - CROP_BOTTOM / (manifest?.height || 1080));
     const scale = Math.max(width / bitmap.width, height / viewHeight);
     const w = bitmap.width * scale, h = viewHeight * scale;
     context.drawImage(bitmap, 0, 0, bitmap.width, viewHeight, (width - w) / 2, (height - h) / 2, w, h);
@@ -68,7 +69,8 @@ function initWalk() {
       let farthest = -1, distance = -1;
       for (const index of frames.keys()) {
         if (index === drawn || index === 0 || index === FRAME_COUNT - 1) continue;
-        const d = Math.abs(index - current);
+        // Preserve both ends of the journey while scrubbing a long distance.
+        const d = Math.min(Math.abs(index - current), Math.abs(index - target));
         if (d > distance) { farthest = index; distance = d; }
       }
       if (farthest < 0) break;
@@ -87,7 +89,17 @@ function initWalk() {
       const blob = new Blob([new Uint8Array(bytes, pack.offsets[local], pack.offsets[local + 1] - pack.offsets[local])], { type: 'image/webp' });
       let bitmap;
       if ('createImageBitmap' in window) {
-        try { bitmap = await createImageBitmap(blob); } catch (_) { /* Safari/WebKit fallback below. */ }
+        try {
+          const scale = Math.min(1, Math.max(0.5, stage.clientWidth * 1.25 / manifest.width));
+          const decodeWidth = Math.max(1, Math.round(manifest.width * scale));
+          const decodeHeight = Math.max(1, Math.round(manifest.height * scale));
+          bitmap = await createImageBitmap(blob, {
+            resizeWidth: decodeWidth, resizeHeight: decodeHeight, resizeQuality: 'medium'
+          });
+        } catch (_) {
+          // Older Safari implementations do not support ImageBitmap resize.
+          try { bitmap = await createImageBitmap(blob); } catch (_) { /* Image fallback below. */ }
+        }
       }
       if (!bitmap) {
         const objectUrl = URL.createObjectURL(blob);
@@ -146,20 +158,45 @@ function initWalk() {
   function fillWindow() {
     if (!prepared || disabled || !active || document.hidden) return;
     const centre = Math.round(current), seek = Math.round(target);
-    const direction = Math.abs(velocity) > 5 ? Math.sign(velocity) : target < current ? -1 : 1;
-    const needed = [seek, centre];
-    for (let offset = 1; offset <= limit; offset++) {
+    const direction = target < current ? -1 : 1;
+    const centrePack = Math.floor(centre / manifest.packSize);
+    const targetPack = Math.floor(seek / manifest.packSize);
+    // Load the two required regions first; speculative downloads must not block them.
+    if (!packs.has(centrePack)) loadPack(centrePack);
+    if (targetPack !== centrePack && !packs.has(targetPack)) loadPack(targetPack);
+
+    const needed = [centre, seek];
+    for (let offset = 1; offset <= 20; offset++) {
       needed.push(centre + offset * direction);
       if (offset <= 7) needed.push(centre - offset * direction);
-      if (offset <= 5) { needed.push(seek + offset, seek - offset); }
+      if (offset <= 7) needed.push(seek + offset * direction, seek - offset * direction);
     }
     for (const index of new Set(needed.filter(i => i >= 0 && i < FRAME_COUNT))) {
-      if (frames.has(index) || decoding.has(index) || (failures.get(index) || 0) > performance.now()) continue;
+      if (decoding.size >= (portrait ? 2 : 3)) break;
+      if (frames.has(index) || decoding.has(index) ||
+          (failures.get(index) || 0) > performance.now()) continue;
       const packIndex = Math.floor(index / manifest.packSize);
-      if (!packs.has(packIndex)) { loadPack(packIndex); continue; }
-      if (decoding.size >= (portrait ? 3 : 4)) continue;
+      if (!packs.has(packIndex)) {
+        if (pendingPacks.size < 2) loadPack(packIndex);
+        continue;
+      }
       decode(index);
     }
+    // One pack ahead gives the browser time to fetch before the camera arrives.
+    if (pendingPacks.size < 2) {
+      const ahead = Math.floor((centre + direction * 48) / manifest.packSize);
+      if (ahead >= 0 && ahead < manifest.packs.length && !packs.has(ahead)) loadPack(ahead);
+    }
+  }
+
+  function nearestFrame(index, radius = 5) {
+    if (frames.has(index)) return index;
+    let closest = -1, distance = radius + 1;
+    for (const frame of frames.keys()) {
+      const diff = Math.abs(index - frame);
+      if (diff < distance) { distance = diff; closest = frame; }
+    }
+    return closest;
   }
 
   function tick(now) {
@@ -168,12 +205,14 @@ function initWalk() {
     const dt = previous ? (now - previous) / 1000 : 1 / 60;
     previous = now;
     const seek = Math.round(target);
-    const jumping = Math.abs(target - current) > 40 && frames.has(seek);
+    const jumping = Math.abs(target - current) > 55 && frames.has(seek);
     const next = jumping ? { position: target, velocity: 0 } : advanceFrame(current, velocity, target, dt);
-    const index = Math.round(next.position);
-    // If a visitor jumps several screens, seek to the decoded target instead of freezing.
-    if (frames.has(index)) { current = next.position; velocity = next.velocity; if (index !== drawn) draw(index); }
-    else velocity = 0;
+    // Advance the playhead even if the exact frame is still decoding.
+    // The previous implementation reset velocity to zero, causing hard stalls.
+    current = next.position;
+    velocity = next.velocity;
+    const index = nearestFrame(Math.round(current), 6);
+    if (index >= 0 && index !== drawn) draw(index);
     fillWindow();
     const atEnd = target === FRAME_COUNT - 1 && (drawn === FRAME_COUNT - 1 || scrollY >= start + range - 1);
     setPhase(atEnd ? 'hero' : Math.max(drawn, target) <= 6 ? 'opening' : 'travel');
@@ -245,7 +284,7 @@ function initWalk() {
       await loadPack(0, session);
       if (session !== generation) return;
       if (!packs.has(0)) throw new Error('Opening frames unavailable');
-      await Promise.all([0, 1, 2, 3].filter(i => !frames.has(i)).map(i => decode(i, session)));
+      await Promise.all(Array.from({ length: 10 }, (_, i) => i).filter(i => !frames.has(i)).map(i => decode(i, session)));
       if (firstFrameFailure || !frames.has(0)) throw new Error('Image decoder unavailable');
       prepared = true;
       intro.classList.remove('walk-static', 'walk-loading');
