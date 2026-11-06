@@ -1,0 +1,38 @@
+/* A pinned, scroll-scrubbed film. The same canvas becomes the final hero. */
+.walk-intro{position:relative;height:700svh;background:#171613;--walk-progress:0}
+.walk-stage.hero.hero-v3{position:sticky;top:0;height:100svh;min-height:0;max-height:none;width:100%;overflow:hidden}
+.walk-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0}
+.walk-stage.has-frame .walk-canvas{opacity:1}
+.walk-stage .hero-photo{object-position:center;z-index:0;transition:opacity .2s}
+.walk-stage.has-frame .hero-photo{opacity:0}
+.studio-refresh .walk-stage.hero.hero-v3::after{z-index:1;background:linear-gradient(90deg,rgba(10,10,9,.77),rgba(10,10,9,.36) 37%,transparent 72%),linear-gradient(180deg,#1115,transparent 28%),linear-gradient(0deg,#1116,transparent 40%)}
+.walk-stage .hero-left{left:6.5%;bottom:17%;max-width:490px;gap:24px}
+.walk-stage .hero-left h1{font-size:clamp(54px,5.5vw,90px)}
+.walk-stage .hero-statement{max-width:390px;font-size:16px;line-height:1.8;color:#fff}
+.walk-stage .hero-actions{margin-top:3px}
+.studio-refresh .walk-stage .hero-button-solid{background:#fff;color:#111;border-color:#fff}
+.studio-refresh .walk-stage .hero-button-solid:hover{background:#e8e4e1;border-color:#e8e4e1}
+.walk-footer{position:absolute;inset:auto 6.5% 30px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#fff;font:400 12px/1.6 'Manrope',Arial,sans-serif}
+.walk-guide{display:flex;flex-direction:column;gap:12px;max-width:260px}
+.walk-progress{width:180px;height:1px;background:#ffffff4a;overflow:hidden}
+.walk-progress>span{display:block;height:100%;background:#fff;transform-origin:left;transform:scaleX(var(--walk-progress))}
+.walk-skip{font:500 12px/1.6 'Manrope',Arial,sans-serif;color:#fff;border-bottom:1px solid #ffffff8c;padding:9px 0;background:none;min-height:40px}
+.walk-skip:hover{border-color:#fff}
+.walk-intro.is-at-hero .walk-guide [data-walk-label]{opacity:.8}
+.walk-intro.is-at-hero .walk-skip{visibility:hidden}
+.walk-active>.header{position:fixed;transform:translateY(var(--walk-header-y,0px))}
+.walk-active>.header nav{text-shadow:0 1px 10px #0008}
+.walk-intro .studio-leaf-shadow,.walk-intro>.motion-lines{display:none!important}
+.walk-intro.walk-static{height:100svh}
+.walk-static .walk-stage{position:relative}
+.walk-static .walk-footer{display:none}
+@media(max-width:760px){
+ .walk-stage .hero-left{left:7%;right:7%;bottom:18%;max-width:none;gap:20px}
+ .walk-stage .hero-left h1{font-size:clamp(42px,10.5vw,62px)}
+ .walk-stage .hero-statement{font-size:14px;max-width:320px;line-height:1.8}
+ .walk-footer{left:7%;right:7%;bottom:22px;font-size:11px;gap:16px}
+ .walk-skip{font-size:11px;flex-shrink:0}.walk-progress{width:130px}
+ .studio-refresh .walk-stage.hero.hero-v3::after{background:linear-gradient(90deg,#111a,transparent 100%),linear-gradient(0deg,#1118,transparent 85%)}
+}
+@media(max-height:560px) and (min-width:761px){.walk-stage .hero-left{bottom:19%;gap:12px}.walk-stage .hero-left h1{font-size:44px}.walk-stage .hero-statement{font-size:13px}.walk-footer{bottom:12px}}
+@media(prefers-reduced-motion:reduce){.walk-intro{height:100svh}.walk-stage.hero.hero-v3{position:relative}.walk-footer{display:none}}

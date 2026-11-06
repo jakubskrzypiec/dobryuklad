@@ -1,6 +1,6 @@
 (() => {
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
- const banners=[...document.querySelectorAll('.hero,.about-hero,.project-interlude,.quote-interlude,.about-contact,.shop-closing-image,.shop-editorial,.contact-closing,.offer-process-invite')];
+ const banners=[...document.querySelectorAll('.hero:not(.walk-stage),.about-hero,.project-interlude,.quote-interlude,.about-contact,.shop-closing-image,.shop-editorial,.contact-closing,.offer-process-invite')];
  const active=new Set();
  banners.forEach(banner=>{
   banner.classList.add('studio-banner');

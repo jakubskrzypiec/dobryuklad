@@ -20,5 +20,5 @@ const offer=fs.readFileSync(path.join(root,'oferta.html'),'utf8');
 const cards=[...offer.matchAll(/<article class="offer-package"[\s\S]*?<\/article>/g)];assert.equal(cards.length,3);
 cards.forEach(card=>assert.ok(!card[0].includes('<img'),'Offer cards contain type, not old illustrations'));
 const home=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert.ok(home.includes('assets/studio-hero-v2.webp'));assert.ok(home.includes('project-track'),'Preserve approved infinite white carousel');
+assert.ok(home.includes('assets/entrance-walk/hero-final.webp'));assert.ok(home.includes('project-track'),'Preserve approved infinite white carousel');
 console.log('PASS: all 16 pages linked, identical subpage heroes, new homepage hero, intact carousel, flat offer and no button arrows.');

@@ -1,5 +1,6 @@
 const fs=require('node:fs');
 const root='dist/wersja-2d';
+if(fs.readFileSync(`${root}/index.html`,'utf8').includes('walk-intro'))throw new Error('The homepage now contains the scroll walkthrough. Update its assets directly to preserve the film endpoint.');
 const metadata=JSON.parse(fs.readFileSync(`${root}/assets/studio-refresh-images.json`,'utf8'));
 const roles={hero:'studio-hero-v2.webp',header:'studio-subpage-v2.webp',projects:'studio-projects-v2.webp',contact:'studio-contact-v2.webp'};
 const descriptions={hero:'Koncepcyjny salon z jasną sofą, ciemnym drewnem i grafitowym kominkiem',header:'Koncepcyjny detal wnętrza z grafitowym kamieniem, ciemnym drewnem i jasnym przejściem',projects:'Koncepcyjna jadalnia z ciemnym stołem i tapicerowanymi krzesłami w odcieniu taupe',contact:'Koncepcyjny kącik wypoczynkowy z fotelem taupe i ciemną zabudową'};

@@ -1,7 +1,7 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const pointer = matchMedia('(hover:hover) and (pointer:fine)');
-  const surfaces = [...document.querySelectorAll('main>section:not(.hero):not(.about-hero):not(.space-gallery):not(.project-interlude):not(.quote-interlude):not(.about-contact):not(.shop-closing):not(.contact-closing)')];
+  const surfaces = [...document.querySelectorAll('main>section:not(.hero):not(.walk-intro):not(.about-hero):not(.space-gallery):not(.project-interlude):not(.quote-interlude):not(.about-contact):not(.shop-closing):not(.contact-closing)')];
   const buttons = [];
   const reveals = [...document.querySelectorAll('.home-heading,.course-card,.home-reviews-grid article,.contact-intro-new,.home-social>div,.founder-copy,.founder-photos,.team-member,.portfolio-entry,.gallery-card,.offer-section-heading,.offer-package,.offer-step,.shop-intro>*,.shop-catalog-heading,.shop-card,.product-summary-copy,.product-cover-column,.product-audience,.contact-intro,.project-inquiry fieldset,.about-contact-copy,.project-interlude-copy,.quote-interlude-copy')];
   const depths = [...document.querySelectorAll('.portfolio-entry,.shop-card .product-art')];
