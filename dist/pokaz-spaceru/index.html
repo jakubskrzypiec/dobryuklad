@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171511">
+<meta name="robots" content="noindex,nofollow">
+<title>Spacer 3D — demonstracja | 21project</title>
+<meta name="description" content="Poglądowy spacer 3D sterowany scrollem — demonstracja technologii 21project.">
+<base href="../wersja-2d/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/entrance-upstairs-v3/opening-crop.webp">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="hero.css">
+<link rel="stylesheet" href="studio-refresh.css">
+<link rel="stylesheet" href="entrance-walk.css?v=6">
+<style>
+/* Only the original cinematic intro and final hero, without the rest of the client's site. */
+html,body{min-height:100%;overflow-x:clip}
+body{background:#171511;color:#fff}
+.header{display:none!important}
+.walk-stage .walk-hero-actions{display:none!important}
+.walk-stage .hero-left{z-index:3}
+.walk-stage.hero.hero-v3::after{pointer-events:none}
+.walk-intro.walk-static.walk-loading{height:1000svh}
+.walk-intro.walk-static.walk-loading .walk-stage.hero.hero-v3{position:sticky}
+@media(prefers-reduced-motion:reduce){
+.walk-intro.walk-static.walk-loading{height:100svh}
+.walk-intro.walk-static.walk-loading .walk-stage.hero.hero-v3{position:relative}
+}
+</style>
+</head>
+<body class="home-page studio-refresh">
+<header class="header" aria-hidden="true"></header>
+<main id="main">
+<section class="walk-intro walk-static" id="start" aria-labelledby="hero-title">
+<div class="hero hero-v3 walk-stage">
+<img class="hero-photo" src="assets/entrance-upstairs-v3/hero-final-crop.webp" width="1920" height="1004" fetchpriority="high" alt="Ostatni kadr spaceru 3D po nowoczesnej willi">
+<canvas class="walk-canvas" aria-hidden="true"></canvas>
+<div class="walk-opening">
+<div class="walk-logo-wrap"><img src="assets/logo-white.svg" alt="DOBRY UKŁAD — przykładowa realizacja" width="622" height="394"></div>
+<p class="walk-intro-line">Wnętrza zaprojektowane wokół Ciebie.</p>
+<button class="walk-start" type="button"><span>Scroll down</span></button>
+</div>
+<div class="hero-left">
+<h1 id="hero-title"><span class="hero-title-first">Przestrzeń ma</span><br>znaczenie.</h1>
+<p class="hero-statement">Projektujemy wnętrza, w których estetyka, funkcja i detal tworzą spójną całość.</p>
+<div class="hero-actions walk-hero-actions" aria-hidden="true"></div>
+</div>
+<button class="walk-skip" type="button">Pomiń spacer</button>
+</div>
+</section>
+</main>
+<script type="module" src="entrance-walk.js?v=12"></script>
+</body>
+</html>
