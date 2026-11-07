@@ -1,0 +1,29 @@
+name: Render smooth 3D Instagram Reel
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/render-instagram-reel.py'
+      - '.github/workflows/instagram-reel.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Render from original packed WebP frames
+        run: python3 scripts/render-instagram-reel.py
+      - name: Upload finished Instagram reel
+        uses: actions/upload-artifact@v4
+        with:
+          name: instagram-spacer-3d-60fps
+          path: instagram-spacer-3d-60fps.mp4
+          if-no-files-found: error
+          retention-days: 7
