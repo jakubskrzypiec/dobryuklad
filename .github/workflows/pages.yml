@@ -40,6 +40,7 @@ jobs:
           node scripts/check-portfolio-walk.mjs
           node scripts/check-2d-refresh.mjs
           node scripts/check-entrance-walk.mjs
+          node scripts/check-demo-frame-stability.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload website
