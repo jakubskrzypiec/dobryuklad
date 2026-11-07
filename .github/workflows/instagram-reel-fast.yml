@@ -1,0 +1,29 @@
+name: Export ready 3D Instagram Reel
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/instagram-reel-fast.yml'
+      - 'scripts/render-instagram-reel-fast.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Render full 9:16 walk with interpolated 60 fps
+        run: python3 scripts/render-instagram-reel-fast.py
+      - name: Publish video archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: instagram-spacer-3d-ready
+          path: instagram-spacer-3d-ready.mp4
+          if-no-files-found: error
+          retention-days: 7
