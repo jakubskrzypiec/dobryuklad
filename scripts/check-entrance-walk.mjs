@@ -50,18 +50,18 @@ for(const profile of ['desktop','mobile']){
 }
 const html=fs.readFileSync('dist/wersja-spacer/index.html','utf8');
 const staticHTML=fs.readFileSync('dist/wersja-statyczna/index.html','utf8');
-assert.ok(staticHTML.includes('src="assets/premium-hero.webp"'),'Static hero uses the selected monochrome image');
-assert.ok(staticHTML.includes('href="assets/premium-hero.webp"'),'Preload selected dark hero');
+assert.ok(staticHTML.includes('src="assets/real-projects/dom-nowoczesny-01.webp"'),'Static hero uses the selected authentic studio image');
+assert.ok(staticHTML.includes('href="assets/real-projects/dom-nowoczesny-01.webp"'),'Preload selected dark hero');
 assert.ok(!staticHTML.includes('class="walk-canvas"'),'Static 2D must remain free of scroll canvas');
 assert.ok(!staticHTML.includes('<video'),'Static 2D must remain free of video');
 const rootHTML=fs.readFileSync('dist/index.html','utf8');
 assert.ok(rootHTML.includes('<base href="./wersja-2d/">'),'Main URL loads the published 2D site assets');
-assert.ok(rootHTML.includes('assets/premium-hero.webp'),'Main URL serves the selected monochrome hero');
+assert.ok(rootHTML.includes('assets/real-projects/dom-nowoczesny-01.webp'),'Main URL serves the selected authentic studio hero');
 assert.ok(!rootHTML.includes('<canvas class="walk-canvas"'),'The new static homepage does not load the archived film');
 assert.ok(!rootHTML.includes('entrance-walk.js?v=12'),'The film controller remains in the separate archive');
 assert.ok(!rootHTML.includes('hero-scroll.js'),'Do not serve previous MP4 intro on main URL');
 assert.ok(rootHTML.includes('href="/dobryuklad/#main"'),'Skip navigation stays on main URL');
-assert.ok(rootHTML.includes('href="portfolio.html"'),'Keep the original navigation and portfolio links');
+assert.ok(rootHTML.includes('href="#projekty"'),'Keep navigation to the real project gallery');
 
 assert.ok(html.includes('walk-intro walk-static'),'Static fallback without JavaScript');
 assert.ok(html.includes('walk-opening'));assert.ok(html.includes('Scroll down'));
