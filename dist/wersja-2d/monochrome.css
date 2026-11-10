@@ -1,0 +1,133 @@
+/* Local black-and-white preview. Loaded last; photography keeps its original colours. */
+:root { color-scheme: dark; }
+body.studio-refresh {
+  --mono-bg: #0c0c0c;
+  --mono-surface: #171717;
+  --mono-raised: #222;
+  --mono-text: #f2f2f2;
+  --mono-muted: #b5b5b5;
+  --mono-line: #3a3a3a;
+  --ink: var(--mono-text);
+  --line: var(--mono-line);
+  --studio-white: var(--mono-text);
+  --studio-black: var(--mono-bg);
+  --studio-graphite: #333;
+  --studio-taupe: #aaa;
+  --studio-beige: #ddd;
+  --home-ink: var(--mono-text);
+  --home-muted: var(--mono-muted);
+  --home-line: var(--mono-line);
+  --offer-muted: var(--mono-muted);
+  --offer-line: var(--mono-line);
+  --shop-ink: var(--mono-text);
+  --shop-muted: var(--mono-muted);
+  --shop-line: var(--mono-line);
+  --portfolio-muted: var(--mono-muted);
+  --portfolio-line: var(--mono-line);
+  --contact-ink: var(--mono-text);
+  --contact-muted: var(--mono-muted);
+  --contact-line: var(--mono-line);
+  background: var(--mono-bg);
+  color: var(--mono-text);
+  accent-color: #ddd;
+}
+.studio-refresh .home-section {
+  --home-ink: var(--mono-text); --home-muted: var(--mono-muted); --home-line: var(--mono-line);
+  background: var(--mono-bg); color: var(--mono-text);
+}
+.studio-refresh :is(.home-offer,.home-shop,.home-contact,.offer-comparison-section) { background: #111; }
+.studio-refresh :is(.home-about,.home-offer,.home-shop,.home-contact,.home-social)::before { background: none; }
+.studio-refresh :is(.home-about,.home-offer,.home-shop,.home-contact,.home-social) > .motion-lines { display: none; }
+.studio-refresh :is(.home-lead,.social-text strong,.social-profiles .social-profile,.gallery-card h3,.offer-scope-table,.offer-step>h3,.offer-process-scopes h3,.project-metadata dt,.project-pagination) { color: var(--mono-text); }
+.studio-refresh :is(.home-overline,.home-kicker,.home-material-note,.home-reviews-grid p,.home-reviews-grid small,.home-reviews-grid article>span,.home-shop-copy ul,.home-shop-copy small,.brief-shop-intro,.brief-compare-note,.course-caption>span,.social-profile small,.social-text>span,.social-text small,.about-eyebrow,.slot-index,.slot-center small,.slot-mark,.team-member figcaption,.team-credits p,.entry-number,.gallery-slot,.project-opening-slot,.project-frame>span,.project-frame small,.step-optional,.offer-step::after) { color: var(--mono-muted); }
+.studio-refresh :is(.home-signature,.home-reviews,.home-reviews-grid article,.home-shop-copy li+li,.course-caption,.social-profiles .social-profile,.team-credits,.team-credits p+p,.offer-scope-table th,.offer-scope-table td,.offer-process-track::before,.offer-step>ul,.offer-process-scopes>div+div,.project-pagination a,.portfolio-breadcrumb a) { border-color: var(--mono-line); }
+.studio-refresh .home-contact .contact-intro-new :is(p,a) { color: var(--mono-muted)!important; }
+.studio-refresh :is(.studio-photo-placeholder,.photo-slot:nth-child(n),.team-member .photo-slot,.course-photo,.brief-project,.brief-project-2,.brief-project-3,.brief-compare,.brief-compare-before,.brief-compare-after,.project-slide:nth-child(n),.portfolio-entry,.gallery-card,.project-frame,.project-white-hero,.product-preview-placeholder) {
+  background: var(--mono-surface); color: var(--mono-muted); border-color: var(--mono-line);
+}
+.studio-refresh :is(.studio-photo-placeholder p,.placeholder-bottom,.photo-slot .slot-center,.project-slot,.project-index,.brief-compare-panel>span,.brief-compare-panel small) { color: var(--mono-muted); }
+.studio-refresh :is(.placeholder-line,.copy-rule,.shop-group-title::after) { background: var(--mono-line); }
+.studio-refresh .brief-compare-divider { background: #aaa; }
+.studio-refresh .brief-compare-divider>span { background: var(--mono-text); color: var(--mono-bg); }
+.studio-refresh .project-hover-logo { background: var(--mono-bg); }
+.studio-refresh .social-profile>.social-icon { background: var(--mono-raised); }
+.studio-refresh .social-profile:hover .social-icon { background: #333; color: #fff; }
+.studio-refresh :is(.home-offer-card,.offer-package) { background: var(--mono-surface)!important; color: var(--mono-text); border-color: var(--mono-line); }
+.studio-refresh :is(.home-offer-card:hover,.offer-package:hover,.gallery-card:hover,.portfolio-entry:hover) { border-color: #777; }
+.studio-refresh :is(.home-offer-card h3,.home-offer-number,.offer-package>.package-number,.package-copy>h3,.package-contact) { color: var(--mono-text); }
+.studio-refresh :is(.home-offer-eyebrow,.package-tag,.package-copy>.package-description) { color: var(--mono-muted); }
+.studio-refresh .package-contact { border-color: var(--mono-line); }
+.studio-refresh .step-number { background: var(--mono-surface); color: var(--mono-text); border-color: #777; }
+.studio-refresh .offer-step>ul>li::before { background: #aaa; }
+/* White primary action; graphite secondary action, including the entrance hero. */
+.studio-refresh :is(.hero-button,.home-cta,.button,.contact-submit,.shop-buy,.offer-solid),
+.studio-refresh .studio-banner :is(.hero-button,.home-cta,.button,.shop-link-light),
+.studio-refresh .shop-editorial .shop-link-light,
+.studio-refresh .shop-closing .home-cta,
+.studio-refresh .walk-stage .hero-button-solid {
+  background: var(--mono-text); color: var(--mono-bg); border-color: var(--mono-text);
+}
+.studio-refresh :is(.hero-button,.home-cta,.button,.contact-submit,.shop-buy,.offer-solid):hover,
+.studio-refresh .studio-banner :is(.hero-button,.home-cta,.button,.shop-link-light):hover,
+.studio-refresh .shop-closing .home-cta:hover,
+.studio-refresh .walk-stage .hero-button-solid:hover { background: #d0d0d0; color: #0c0c0c; border-color: #d0d0d0; }
+.studio-refresh .hero-button-outline,
+.studio-refresh .walk-stage .hero-button-outline { background: #171717!important; color: #f2f2f2!important; border-color: #aaa!important; }
+.studio-refresh .hero-button-outline:hover,
+.studio-refresh .walk-stage .hero-button-outline:hover { background: #333!important; }
+.studio-refresh :is(.home-card-link,.shop-card-link,.package-contact,.shop-link-light) { color: var(--mono-text); border-color: #777; }
+.studio-refresh :is(.home-card-link,.shop-card-link,.package-contact,.shop-link-light):hover { color: #fff; border-color: #fff; }
+.studio-refresh :is(a,button,input,select,textarea):focus-visible { outline: 2px solid #f2f2f2; outline-offset: 5px; }
+.studio-refresh ::selection { background: #f2f2f2; color: #0c0c0c; }
+/* Inputs remain dark when opened, focused, autofilled or displaying validation. */
+.studio-refresh :is(input,select,textarea),
+.studio-refresh .home-contact form :is(input,select,textarea),
+.studio-refresh .project-inquiry :is(input:not([type=file]),select,textarea),
+.studio-refresh .portfolio-filter-fields :is(input,select) { background: var(--mono-bg); color: var(--mono-text); border-color: #666; }
+.studio-refresh :is(input,textarea)::placeholder,
+.studio-refresh .project-inquiry :is(input,textarea)::placeholder { color: #999; opacity: 1; }
+.studio-refresh :is(form label,.project-inquiry label,.attachment-picker,.attachment-picker>span:not(.attachment-plus),.attachment-list button,.contact-form-status,.form-note) { color: var(--mono-muted); }
+.studio-refresh #attachment-error { color: #f2f2f2; }
+.studio-refresh .portfolio-filter-buttons button { background: var(--mono-surface); color: var(--mono-muted); }
+.studio-refresh .portfolio-filter-buttons button[aria-pressed=true] { background: var(--mono-text); color: var(--mono-bg); border-color: var(--mono-text); }
+.studio-refresh .shop-filters button[aria-pressed=true] { color: #fff; border-color: #fff; }
+.studio-refresh :is(.product-art,.cover-object) { --cover-bg: #ddd; --cover-text: #171717; }
+.studio-refresh .product-art { background: linear-gradient(135deg,#262626,#171717); }
+.studio-refresh :is(.art-kind,.art-caption) { color: var(--mono-muted); }
+.studio-refresh .cover-object { background: #ddd; color: #171717; }
+.studio-refresh :is(.screen .cover-object,.screen.tone-taupe .cover-object,.bundle .cover-object,.bundle .cover-object::before) { background: #333; color: #f2f2f2; border-color: #555; }
+.studio-refresh .tablet .cover-object { background: #ddd; color: #171717; border-color: #444; }
+.studio-refresh .bundle .cover-object::after { background: #aaa; }
+.studio-refresh .screen .cover-object::before { border-color: #aaa; }
+.studio-refresh .product-art::after { background: linear-gradient(transparent,#0003); }
+.studio-refresh :is(.product-benefits svg,.shop-list li::before,.product-topics li>span) { color: var(--mono-muted); }
+/* Neutral overlays without desaturating the studio's photography or film. */
+.studio-refresh :is(.about-hero,.hero.hero-v3,.walk-intro,.project-interlude,.quote-interlude,.studio-banner,.about-contact,.home-contact,.contact-closing,.shop-editorial,.shop-closing) { background-color: var(--mono-bg); }
+.studio-refresh .hero.hero-v3::after { background: linear-gradient(90deg,#0009,transparent 75%),linear-gradient(0deg,#0009,transparent 68%),linear-gradient(180deg,#0005,transparent 32%); }
+.studio-refresh .walk-stage.hero.hero-v3::after { background: linear-gradient(90deg,#000b,transparent 72%),linear-gradient(180deg,#0004,transparent 30%); }
+.studio-refresh :is(.about-hero,.shop-hero,.contact-hero)::after { background: linear-gradient(90deg,#000c,#0005); }
+.studio-refresh :is(.project-interlude,.about-contact)::after,
+.studio-refresh .quote-interlude::before { background: linear-gradient(180deg,#0005,#0008); }
+.studio-refresh :is(.hero-statement,.walk-intro-line,.walk-socials,.project-interlude .home-kicker,.quote-interlude .home-kicker,.about-contact .about-eyebrow,.shop-closing .shop-eyebrow,.shop-editorial p,.contact-closing p,.contact-closing a) { color: #f2f2f2; }
+.studio-refresh .walk-opening::before { background: radial-gradient(ellipse,#17171799,#7773 70%,transparent); }
+.studio-refresh .walk-opening .walk-logo-wrap::before { background: radial-gradient(ellipse,#1414147a,#19191940 53%,transparent 78%); }
+.studio-refresh footer.site-footer { background: #080808; color: #f2f2f2; }
+.studio-refresh :is(.footer-label,.site-footer .footer-bottom,.site-footer .footer-bottom a) { color: #aaa; border-color: var(--mono-line); }
+.studio-refresh .site-footer a:hover { color: #fff; }
+.studio-refresh .header { color: #f2f2f2; }
+.studio-refresh .header nav.open { background: #0c0c0c; color: #f2f2f2; }
+.studio-refresh.menu-open .menu-toggle { color: #f2f2f2; }
+.studio-refresh.menu-open .menu-toggle span { background: #f2f2f2; }
+.studio-refresh :is(.content-dialog,.gallery-dialog) { background: #171717; color: #f2f2f2; }
+@media(max-width:760px) {
+  .studio-refresh .walk-stage.hero.hero-v3::after { background: linear-gradient(0deg,#000a,transparent 95%),linear-gradient(90deg,#0006,transparent); }
+}
+/* Shared readability rules use more specific page selectors. */
+body.studio-refresh { --readable-muted: var(--mono-muted); }
+.studio-refresh .home-social { background: var(--mono-bg); color: var(--mono-text); }
+.studio-refresh.home-page :is(.placeholder-top,.studio-photo-placeholder small,.home-offer-description,.home-heading>p,.home-shop .course-photo span) { color: var(--mono-muted); }
+.studio-refresh.about-page:not(.offer-page) :is(.founder-role,.photo-slot .slot-center,.about-eyebrow) { color: var(--mono-muted); }
+.studio-refresh.about-page:not(.offer-page) .about-contact .about-eyebrow { color: #f2f2f2; }
+.studio-refresh .contact-closing>div+div { color: #f2f2f2; }
+.studio-refresh .home-contact form .button { background: var(--mono-text); color: var(--mono-bg); }
+.studio-refresh .home-contact form .button:hover { background: #d0d0d0; }
