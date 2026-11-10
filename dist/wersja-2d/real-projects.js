@@ -3,6 +3,11 @@
   if(!dialog || typeof dialog.showModal!=='function')return;
   const source=document.querySelector('script[src*="real-projects.js"]');
   const base=new URL('assets/real-projects/',source&&source.src?source.src:document.baseURI);
+  // The HTML viewer treats every fragment as local; restore cross-page offer links after its rewrite.
+  if(location.hostname==='htmlpreview.github.io')document.querySelectorAll('[data-offer-target]').forEach(link=>{
+    const target=new URL(link.dataset.offerTarget,source&&source.src?source.src:document.baseURI);
+    link.href=location.origin+location.pathname+'?'+target.href;
+  });
   const photos=[
     {file:'dom-nowoczesny-01.webp',title:'Salon — strefa wypoczynku'},
     {file:'dom-nowoczesny-02.webp',title:'Komunikacja'},
