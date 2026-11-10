@@ -9,7 +9,7 @@ for(const page of pages){
  assert.equal((html.match(/src="studio-refresh\.js/g)||[]).length,1,`${page}: leaf animation`);
  const imageTags=[...html.matchAll(/<img\b[^>]*>/g)].map(match=>match[0]);
  const headers=imageTags.filter(tag=>/class="about-hero-photo"/.test(tag));
- if(page!=='index.html'){assert.equal(headers.length,1,`${page}: shared hero exists`);assert.ok(headers[0].includes('assets/studio-subpage-v2.webp'),`${page}: identical hero image`);}
+ if(page!=='index.html'){assert.equal(headers.length,1,`${page}: shared hero exists`);assert.ok(headers[0].includes('assets/premium-subpage.webp'),`${page}: identical hero image`);}
  for(const match of html.matchAll(/(?:src|href)="([^"]+)"/g)){
   const reference=match[1];if(/^(?:https?:|mailto:|tel:|#|data:)/.test(reference))continue;
   const file=reference.split(/[?#]/)[0];if(file)assert.ok(fs.existsSync(path.resolve(root,file)),`${page}: missing ${file}`);

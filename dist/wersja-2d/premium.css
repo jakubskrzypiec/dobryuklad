@@ -1,0 +1,49 @@
+/* Premium typography, layered over the monochrome theme. */
+:root { --premium-heading: 'Cormorant Garamond', Georgia, serif; }
+body.studio-refresh { --serif: var(--premium-heading); }
+body.studio-refresh :is(h1,h2,h3,.home-signature>span,.home-reviews-grid p) {
+  font-family: var(--premium-heading)!important;
+  font-weight: 400;
+  font-style: normal;
+}
+.studio-refresh .home-section :is(h2,h3),
+.studio-refresh .project-interlude h2,
+.studio-refresh .quote-interlude h2 { letter-spacing: -.035em; }
+.studio-refresh .walk-stage .hero-left { max-width: min(950px,87vw); gap: 24px; }
+.studio-refresh .walk-stage .hero-left h1 { font-size: clamp(64px,7vw,112px); line-height: .97; letter-spacing: -.04em; }
+.studio-refresh .home-section h2 { font-size: clamp(48px,5vw,78px); line-height: 1.04; }
+.studio-refresh .home-about-copy>.home-lead { font-size: 18px!important; }
+.studio-refresh .home-overline,
+.studio-refresh .home-kicker { letter-spacing: .16em; }
+.studio-refresh :is(.project-interlude,.quote-interlude) { min-height: 560px; }
+.studio-refresh :is(.project-interlude,.quote-interlude) h2 { font-size: clamp(48px,5.2vw,82px); line-height: 1.02; }
+.studio-refresh :is(.project-interlude-photo,.quote-interlude-photo,.studio-banner-photo,.about-contact-photo) { object-position: center; }
+.studio-refresh :is(.project-interlude,.quote-interlude)::after,
+.studio-refresh .quote-interlude::before { background: linear-gradient(90deg,#0007,#0003); }
+.studio-refresh .studio-leaf-shadow { display: none; }
+.studio-refresh .home-section { padding-top: 115px; padding-bottom: 115px; }
+.studio-refresh .home-offer-card { padding: 44px 34px; }
+.studio-refresh .home-offer-card h3 { font-size: 30px; line-height: 1.15; letter-spacing: -.02em; text-transform: none; }
+.studio-refresh .home-offer-number { color: #999; }
+.studio-refresh .home-reviews-grid p { font-size: 28px; line-height: 1.25; }
+.studio-refresh .hero-button,
+.studio-refresh .home-cta { min-height: 54px; padding: 16px 28px; }
+/* Only present in the review entry, never in the production interface. */
+.type-preview-control { position: fixed; right: 20px; bottom: 20px; z-index: 100;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px; max-width: calc(100vw - 40px);
+  background: #111f; color: #f2f2f2; border: 1px solid #666; padding: 12px 16px;
+  font: 12px/1.5 Manrope,Arial,sans-serif; box-shadow: 0 8px 30px #0005; }
+.type-preview-control select { width: auto; max-width: 200px; padding: 5px; font-size: 13px; border: 1px solid #777; }
+.type-preview-control a { border-bottom: 1px solid #777; }
+@media(max-width:760px) {
+  .studio-refresh .walk-stage .hero-left { gap: 17px; bottom: 8%; }
+  .studio-refresh .walk-stage .hero-left h1 { font-size: clamp(34px,10.4vw,54px); line-height: 1.03; }
+  .studio-refresh .walk-stage .hero-left h1 .hero-title-first { white-space: normal; }
+  .studio-refresh .home-section { padding-top: 68px; padding-bottom: 68px; }
+  .studio-refresh .home-section h2 { font-size: clamp(40px,11vw,58px); }
+  .studio-refresh :is(.project-interlude,.quote-interlude) { min-height: 440px; }
+  .studio-refresh :is(.project-interlude,.quote-interlude) h2 { font-size: clamp(36px,10vw,48px); }
+  .studio-refresh .home-offer-card h3 { font-size: 28px; }
+  .type-preview-control { right: 10px; bottom: 10px; max-width: calc(100vw - 20px); gap: 8px; padding: 9px 12px; }
+  .type-preview-control label { display: none; }
+}
