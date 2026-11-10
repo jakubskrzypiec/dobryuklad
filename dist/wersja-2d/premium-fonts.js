@@ -1,14 +1,21 @@
 (() => {
-  const fonts = ['Cormorant Garamond','Bodoni Moda','Libre Baskerville','Tenor Sans','Marcellus','DM Serif Display','EB Garamond','Libre Caslon Display','Jost','Manrope'];
+  const fonts = ['Inter','Cormorant Garamond','Bodoni Moda','Libre Baskerville','Tenor Sans','Marcellus','DM Serif Display','EB Garamond','Libre Caslon Display','Jost','Manrope'];
   const key = 'dobryuklad-premium-font';
   function apply(font) {
     if (!fonts.includes(font)) font = fonts[0];
-    document.documentElement.style.setProperty('--premium-heading', `'${font}', ${['Tenor Sans','Jost','Manrope'].includes(font) ? 'Arial,sans-serif' : 'Georgia,serif'}`);
+    document.documentElement.style.setProperty('--premium-heading-weight', font === 'Inter' ? '600' : '400');
+    document.documentElement.style.setProperty('--premium-heading', `'${font}', ${['Inter','Tenor Sans','Jost','Manrope'].includes(font) ? 'Arial,sans-serif' : 'Georgia,serif'}`);
     try { localStorage.setItem(key, font); } catch (_) {}
     return font;
   }
   let selected = fonts[0];
-  try { selected = localStorage.getItem(key) || selected; } catch (_) {}
+  try {
+    if (localStorage.getItem('dobryuklad-font-direction') !== 'inter-source-code-v1') {
+      localStorage.setItem(key, 'Inter');
+      localStorage.setItem('dobryuklad-font-direction', 'inter-source-code-v1');
+    }
+    selected = localStorage.getItem(key) || selected;
+  } catch (_) {}
   selected = apply(selected);
   const control = document.querySelector('[data-font-control]');
   if (control) {

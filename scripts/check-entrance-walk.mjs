@@ -48,16 +48,17 @@ for(const profile of ['desktop','mobile']){
  }
  assert.equal(count,FRAME_COUNT);
 }
-const html=fs.readFileSync('dist/wersja-2d/index.html','utf8');
+const html=fs.readFileSync('dist/wersja-spacer/index.html','utf8');
 const staticHTML=fs.readFileSync('dist/wersja-statyczna/index.html','utf8');
-assert.ok(staticHTML.includes('src="assets/hero-v2.webp"'),'Static hero must match warm graphite, walnut and taupe interludes');
-assert.ok(staticHTML.includes('href="assets/hero-v2.webp"'),'Preload selected dark hero');
+assert.ok(staticHTML.includes('src="assets/premium-hero.webp"'),'Static hero uses the selected monochrome image');
+assert.ok(staticHTML.includes('href="assets/premium-hero.webp"'),'Preload selected dark hero');
 assert.ok(!staticHTML.includes('class="walk-canvas"'),'Static 2D must remain free of scroll canvas');
 assert.ok(!staticHTML.includes('<video'),'Static 2D must remain free of video');
 const rootHTML=fs.readFileSync('dist/index.html','utf8');
 assert.ok(rootHTML.includes('<base href="./wersja-2d/">'),'Main URL loads the published 2D site assets');
-assert.ok(rootHTML.includes('<canvas class="walk-canvas"'),'Main URL serves the accepted WebP scroll animation');
-assert.ok(rootHTML.includes('entrance-walk.js?v=12'),'Main URL uses the same approved controller version');
+assert.ok(rootHTML.includes('assets/premium-hero.webp'),'Main URL serves the selected monochrome hero');
+assert.ok(!rootHTML.includes('<canvas class="walk-canvas"'),'The new static homepage does not load the archived film');
+assert.ok(!rootHTML.includes('entrance-walk.js?v=12'),'The film controller remains in the separate archive');
 assert.ok(!rootHTML.includes('hero-scroll.js'),'Do not serve previous MP4 intro on main URL');
 assert.ok(rootHTML.includes('href="/dobryuklad/#main"'),'Skip navigation stays on main URL');
 assert.ok(rootHTML.includes('href="portfolio.html"'),'Keep the original navigation and portfolio links');
