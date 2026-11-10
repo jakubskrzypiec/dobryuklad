@@ -25,3 +25,7 @@ User selected Bodoni Moda. Inter remains the body face. Review-only controls com
 The 560px desktop / 440px mobile quote divider is replaced by a pointer-reactive spherical 3D projection centered on Europe. Poland is filled and outlined; 12 Polish cities are marked using geographic coordinates, with six keyboard-focusable city labels and pointer hover for the others. Data: Natural Earth 1:110m admin-0 country boundaries, public domain, downloaded from nvkelso/natural-earth-vector. Decorative connections are conceptual and do not identify confirmed client locations.
 
 500+ is explicitly marked as a draft number awaiting studio confirmation. Rendering pauses offscreen and when the document is hidden. Pointer rotation is disabled for reduced-motion preference. An SVG fallback uses the same coordinates if JS, canvas or the data request is unavailable.
+
+## Linea Loft reference refinement
+
+Approximation, not an identified font: DM Sans medium headings and regular body, chosen for the rounded grotesque proportions in the provided Linea Loft screenshot. Site base is deep #050505 with the original white architectural line ornaments; no page-wide grain, dots or square grid. Grain is confined to the alpha transition at top/bottom of hero/divider photographs using an inline SVG turbulence mask; picture centers and typography remain clear. The review background picker is removed. The interactive Poland globe is retained at 560px desktop / 440px mobile with thin white borders at both edges.

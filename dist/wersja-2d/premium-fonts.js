@@ -1,18 +1,18 @@
 (() => {
-  const fonts = ['Inter','Cormorant Garamond','Bodoni Moda','Libre Baskerville','Tenor Sans','Marcellus','DM Serif Display','EB Garamond','Libre Caslon Display','Jost','Manrope'];
+  const fonts = ['DM Sans','Inter','Cormorant Garamond','Bodoni Moda','Libre Baskerville','Tenor Sans','Marcellus','DM Serif Display','EB Garamond','Libre Caslon Display','Jost','Manrope'];
   const key = 'dobryuklad-premium-font';
   function apply(font) {
-    if (!fonts.includes(font)) font = 'Bodoni Moda';
-    document.documentElement.style.setProperty('--premium-heading-weight', font === 'Inter' ? '600' : '400');
-    document.documentElement.style.setProperty('--premium-heading', `'${font}', ${['Inter','Tenor Sans','Jost','Manrope'].includes(font) ? 'Arial,sans-serif' : 'Georgia,serif'}`);
+    if (!fonts.includes(font)) font = 'DM Sans';
+    document.documentElement.style.setProperty('--premium-heading-weight', font === 'DM Sans' ? '500' : font === 'Inter' ? '600' : '400');
+    document.documentElement.style.setProperty('--premium-heading', `'${font}', ${['DM Sans','Inter','Tenor Sans','Jost','Manrope'].includes(font) ? 'Arial,sans-serif' : 'Georgia,serif'}`);
     try { localStorage.setItem(key, font); } catch (_) {}
     return font;
   }
-  let selected = 'Bodoni Moda';
+  let selected = 'DM Sans';
   try {
-    if (localStorage.getItem('dobryuklad-font-direction') !== 'bodoni-background-v1') {
-      localStorage.setItem(key, 'Bodoni Moda');
-      localStorage.setItem('dobryuklad-font-direction', 'bodoni-background-v1');
+    if (localStorage.getItem('dobryuklad-font-direction') !== 'linea-dm-sans-v1') {
+      localStorage.setItem(key, 'DM Sans');
+      localStorage.setItem('dobryuklad-font-direction', 'linea-dm-sans-v1');
     }
     selected = localStorage.getItem(key) || selected;
   } catch (_) {}

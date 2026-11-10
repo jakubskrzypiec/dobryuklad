@@ -1,30 +1,24 @@
-/* Review direction: Bodoni Moda, tactile page backgrounds and feathered photographic edges. */
-:root { --premium-heading: 'Bodoni Moda',Georgia,serif; --premium-heading-weight: 400; }
-body.studio-refresh {
-  --surface-pattern: linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);
-  --pattern-size: 88px 88px;
-  background-color: #0c0c0c;
-  background-image: var(--surface-pattern);
-  background-size: var(--pattern-size);
-  background-attachment: fixed;
-}
-body.studio-refresh[data-background="dots"] { --surface-pattern: radial-gradient(#ffffff26 .7px,transparent .9px); --pattern-size: 20px 20px; }
-body.studio-refresh[data-background="grain"] {
-  --surface-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.1' filter='url(%23n)'/%3E%3C/svg%3E");
-  --pattern-size: 180px 180px;
-}
-body.studio-refresh .motion-lines,
+/* Selected direction: DM Sans, deep black with white architectural traces, grain only in photographic fades. */
+:root { --premium-heading: 'DM Sans',Arial,sans-serif; --premium-heading-weight: 500; --photo-edge-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221200%22%20height%3D%22800%22%20viewBox%3D%220%200%201200%20800%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22fade%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22white%22%20stop-opacity%3D%220%22%2F%3E%3Cstop%20offset%3D%22.17%22%20stop-color%3D%22white%22%2F%3E%3Cstop%20offset%3D%22.76%22%20stop-color%3D%22white%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22white%22%20stop-opacity%3D%220%22%2F%3E%3C%2FlinearGradient%3E%3Cfilter%20id%3D%22grain%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.58%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%20result%3D%22noise%22%2F%3E%3CfeColorMatrix%20in%3D%22noise%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%201%200%200%200%200%201%200%200%200%200%201%20.333%20.333%20.333%200%200%22%20result%3D%22alpha%22%2F%3E%3CfeComposite%20in%3D%22SourceGraphic%22%20in2%3D%22alpha%22%20operator%3D%22arithmetic%22%20k1%3D%220%22%20k2%3D%221.7%22%20k3%3D%221.2%22%20k4%3D%22-.95%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22url%28%23fade%29%22%20filter%3D%22url%28%23grain%29%22%2F%3E%3C%2Fsvg%3E"); }
+body.studio-refresh { --mono-bg:#050505; background-color:#050505; background-image:none; --surface-pattern:none; }
+body.studio-refresh .motion-lines { display:block!important; }
 body.studio-refresh .atmosphere-lines { display:none!important; }
+body.studio-refresh .motion-lines::before { border-color:#ffffff28; }
+body.studio-refresh .motion-lines::after { border-color:#ffffff13; }
 body.studio-refresh :is(.home-section,.home-social,.offer-comparison-section,.project-white-hero) { background: transparent; }
 body.studio-refresh :is(.walk-intro,.hero.hero-v3,.project-interlude,.about-hero,.about-contact,.studio-banner,.shop-closing,.shop-editorial,.contact-closing) { background: transparent; }
 body.studio-refresh :is(.hero-photo,.about-hero-photo,.project-interlude-photo,.quote-interlude-photo,.about-contact-photo,.studio-banner-photo,.shop-closing-image>img) {
-  -webkit-mask-image: linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);
-  mask-image: linear-gradient(to bottom,transparent 0%,#000 13%,#000 78%,transparent 100%);
+  -webkit-mask-image: var(--photo-edge-mask);
+  mask-image: var(--photo-edge-mask);
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
 }
 body.studio-refresh :is(.hero.hero-v3,.about-hero,.project-interlude,.about-contact,.studio-banner,.shop-closing,.shop-editorial,.contact-closing)::after,
 body.studio-refresh .quote-interlude::before {
-  -webkit-mask-image: linear-gradient(to bottom,transparent,#000 13%,#000 78%,transparent);
-  mask-image: linear-gradient(to bottom,transparent,#000 13%,#000 78%,transparent);
+  -webkit-mask-image: var(--photo-edge-mask);
+  mask-image: var(--photo-edge-mask);
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
 }
 body.studio-refresh.home-page h3,
 body.studio-refresh.about-page h3 { font-family: var(--premium-heading)!important; font-weight:400; }
@@ -34,7 +28,7 @@ body.studio-refresh .home-offer-card h3 { font-size:31px;line-height:1.15;letter
 /* Replaces the photographic quote section without increasing its footprint. */
 body.studio-refresh .network-interlude {
   display:flex;align-items:center;position:relative;isolation:isolate;overflow:clip;
-  width:100%;height:560px;min-height:560px;padding:0 6.5%;background:transparent;
+  width:100%;height:560px;min-height:560px;padding:0 6.5%;background:transparent;border-top:1px solid #ffffff44;border-bottom:1px solid #ffffff44;
 }
 body.studio-refresh .network-interlude::before,
 body.studio-refresh .network-interlude::after { content:none; }
@@ -60,23 +54,13 @@ body.studio-refresh .network-city:focus-visible { color:#fff; }
 .network-tooltip { position:absolute;z-index:4;padding:3px 8px;background:#0c0c0cdd;border:1px solid #555;color:#fff;font:11px/1.5 Inter,Arial,sans-serif;pointer-events:none; }
 .network-tooltip[hidden] { display:none; }
 .network-location-list { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
-/* Design comparison control exists only on the review entry. */
-.background-preview-control { position:fixed;right:18px;bottom:18px;z-index:100;display:flex;align-items:center;gap:6px;max-width:calc(100vw - 36px);padding:9px;background:#111f;border:1px solid #555;box-shadow:0 8px 28px #0005;color:#eee;font:11px/1.5 Inter,Arial,sans-serif; }
-.background-preview-control[hidden] { display:none; }
-.background-preview-control span { padding:0 8px;color:#aaa; }
-body.studio-refresh .background-preview-control button { background:transparent;border:1px solid transparent;color:#aaa;padding:7px 10px;font:11px/1.5 Inter,Arial,sans-serif;min-height:32px; }
-body.studio-refresh .background-preview-control button[aria-pressed="true"] { color:#fff;border-color:#777; }
-body.studio-refresh .background-preview-control button:hover { color:#fff; }
 @media(max-width:1000px) and (min-width:761px) {
   .network-copy { width:46%; }.network-scene { left:38%;right:-10%; }
   body.studio-refresh .network-interlude h2 { font-size:46px; }
   .network-stat-number { font-size:64px; }
 }
 @media(max-width:760px) {
-  body.studio-refresh { --pattern-size:64px 64px; }
-  body.studio-refresh[data-background="dots"] { --pattern-size:20px 20px; }
-  body.studio-refresh[data-background="grain"] { --pattern-size:180px 180px; }
-  body.studio-refresh .walk-stage .hero-left h1 { font-size:clamp(36px,10.5vw,55px); }
+      body.studio-refresh .walk-stage .hero-left h1 { font-size:clamp(36px,10.5vw,55px); }
   body.studio-refresh .home-section h2 { font-size:clamp(37px,10.3vw,52px); }
   body.studio-refresh .home-offer-card h3 { font-size:28px; }
   body.studio-refresh .network-interlude { height:440px;min-height:440px;padding:27px 7%;align-items:flex-start; }
@@ -88,11 +72,27 @@ body.studio-refresh .background-preview-control button:hover { color:#fff; }
   body.studio-refresh .network-stat-note { margin-top:9px;font-size:9px; }
   .network-scene { left:14%;right:-15%;top:125px;bottom:-20px;mask-image:linear-gradient(to bottom,transparent,#000 19%,#000 83%,transparent); }
   body.studio-refresh .network-city { font-size:9px!important;line-height:24px;min-height:24px;padding:0 3px; }
-  .background-preview-control { right:8px;bottom:8px;max-width:calc(100vw - 16px);padding:6px;gap:1px; }
-  .background-preview-control span { display:none; }
-  body.studio-refresh .background-preview-control button { padding:7px 9px; }
 }
 @media(prefers-reduced-motion:reduce) { body.studio-refresh .network-city { transition:none; } }
 @media(max-width:760px) {
   .network-scene { left:0;right:0;top:145px;bottom:-20px; }
+}
+
+/* The reference font is unidentified; DM Sans approximates its clean rounded grotesque proportions. */
+body.studio-refresh { --sans:'DM Sans',Arial,sans-serif; font-family:'DM Sans',Arial,sans-serif; }
+body.studio-refresh :is(p,a,button,input,select,textarea,label,small,figcaption,dt,dd,li,th,td) { font-family:'DM Sans',Arial,sans-serif!important; }
+body.studio-refresh :is(.home-kicker,.home-overline,.home-offer-eyebrow,.shop-eyebrow,.about-eyebrow,.contact-eyebrow,.package-tag,.footer-label,.home-offer-number,.network-city,.network-stat-caption) { font-family:'DM Sans',Arial,sans-serif!important; }
+body.studio-refresh :is(h1,h2,.home-signature>span) { font-weight:var(--premium-heading-weight); }
+body.studio-refresh.home-page h3,body.studio-refresh.about-page h3 { font-family:var(--premium-heading)!important;font-weight:500; }
+body.studio-refresh .walk-stage .hero-left h1 { font-size:clamp(60px,6.5vw,104px);line-height:1.02;letter-spacing:-.055em; }
+body.studio-refresh .home-section h2 { font-size:clamp(44px,4.5vw,70px);line-height:1.08;letter-spacing:-.045em; }
+body.studio-refresh .home-offer-card h3 { font-size:28px;line-height:1.2;letter-spacing:-.035em; }
+body.studio-refresh .network-interlude h2 { font-size:clamp(40px,3.9vw,60px);line-height:1.06;letter-spacing:-.05em; }
+.network-stat-number { font-family:var(--premium-heading);font-weight:500;letter-spacing:-.06em; }
+body.studio-refresh footer.site-footer { background:#050505; }
+@media(max-width:760px) {
+ body.studio-refresh .walk-stage .hero-left h1 { font-size:clamp(35px,9.7vw,52px); }
+ body.studio-refresh .home-section h2 { font-size:clamp(34px,9.7vw,49px); }
+ body.studio-refresh .home-offer-card h3 { font-size:26px; }
+ body.studio-refresh .network-interlude h2 { font-size:32px; }
 }
