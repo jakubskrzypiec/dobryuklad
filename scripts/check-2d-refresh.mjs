@@ -22,5 +22,5 @@ cards.forEach(card=>assert.ok(!card[0].includes('<img'),'Offer cards contain typ
 const home=fs.readFileSync(path.join(root,'index.html'),'utf8');
 assert.ok(home.includes('assets/real-projects/dom-nowoczesny-01.webp'));assert.ok(home.includes('editorial-project-grid'),'Real project grid is present');
 assert.equal((home.match(/data-project-open=/g)||[]).length,4,'Four editorial project views');
-assert.ok(home.includes('Cztery ujęcia jednego projektu'),'Do not present one interior as four different projects');
+assert.ok(home.includes('Wizualizacje: Dobry Układ'),'Retain studio attribution for the original project imagery');
 console.log('PASS: all 16 pages linked, identical subpage heroes, new homepage hero, real studio project grid, flat offer and no button arrows.');

@@ -14,3 +14,7 @@ The form retains its existing mail-app preparation workflow. Course names and de
 Black-dominant fixed background blends diffuse grayscale and soft white light pools. The white line ornaments are retained at lower opacity. No coloured accents are introduced. Homepage hero occupies exactly 100svh, uses the authentic studio photo across the full frame, and has no top-left brand block.
 
 The larger offer section now has three accessible linked glass cards: functional design, comprehensive design and author supervision. Frosted panels use backdrop-filter blur with a dark translucent fallback. A decorative low-opacity grayscale view of the studio project supplies depth behind the cards. The collaboration process remains a separate link below. Gallery, globe, courses, enquiry form and social links are preserved.
+
+## Black-led final polish
+
+Reduced the grayscale light pools so the page reads as continuous deep black. Removed decorative line layers and the photographic backdrop behind the offer cards. All three glass cards now align at the same height. Hero copy and photo credit sit bottom-left. The single-project explanatory sentence was removed while studio attribution and source link remain. The globe section keeps only its trust headline beside the interactive sphere; supporting text and the provisional 500+ claim are removed. Footer is solid black.

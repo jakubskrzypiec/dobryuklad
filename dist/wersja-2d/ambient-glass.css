@@ -1,20 +1,20 @@
 /* Black is dominant; diffuse neutral light gives the page depth without introducing colour. */
 body.studio-refresh {
-  background-color:#050505;
+  background-color:#020202;
   background-image:
-    radial-gradient(ellipse at 86% 72%,rgba(239,239,239,.23) 0%,rgba(143,143,143,.12) 27%,transparent 59%),
-    radial-gradient(ellipse at 9% 91%,rgba(139,139,139,.21) 0%,rgba(75,75,75,.09) 32%,transparent 58%),
-    radial-gradient(ellipse at 30% 16%,rgba(223,223,223,.07) 0%,transparent 45%),
-    linear-gradient(135deg,#020202 0%,#101010 55%,#050505 100%);
+    radial-gradient(ellipse at 84% 72%,rgba(185,185,185,.075) 0%,rgba(82,82,82,.028) 35%,transparent 68%),
+    radial-gradient(ellipse at 14% 94%,rgba(96,96,96,.06) 0%,transparent 62%),
+    linear-gradient(135deg,#010101 0%,#070707 55%,#020202 100%);
   background-size:100vw 100vh;
   background-repeat:no-repeat;
   background-attachment:fixed;
 }
-body.studio-refresh .motion-lines { opacity:.3; }
-body.studio-refresh footer.site-footer { background:transparent; }
+body.studio-refresh .motion-lines,body.studio-refresh .atmosphere-lines { display:none!important; }
+.editorial-course-cover::after { content:none; }
+body.studio-refresh footer.site-footer { background:#000; }
 /* Full viewport on desktop and mobile; navigation stays right-aligned. */
 body.studio-refresh.reference-layout .editorial-hero {
-  height:100svh;min-height:100svh;max-height:none;
+  height:100svh;min-height:100svh;max-height:none;align-items:flex-end;
   padding-top:clamp(110px,13svh,145px);padding-bottom:clamp(56px,9svh,105px);
 }
 body.studio-refresh.reference-layout .editorial-hero .hero-photo { width:100%;inset:0;object-position:50% 50%; }
@@ -25,7 +25,6 @@ body.reference-layout .glass-expertise { display:block;padding:105px 6.5% 110px;
 body.reference-layout .glass-expertise-heading h2 { font-size:clamp(40px,4.2vw,66px);line-height:1.06;margin-top:26px; }
 .glass-expertise-heading>p { max-width:330px;color:#c4c4c4;font-size:14px;line-height:1.9;margin-bottom:5px; }
 .glass-offer-stage { position:relative;margin-top:85px;isolation:isolate; }
-.glass-offer-backdrop { position:absolute;z-index:-1;left:20%;top:-42px;width:58%;height:calc(100% + 105px);object-fit:cover;object-position:50% 45%;filter:grayscale(1) brightness(.75) blur(3px);opacity:.3;mask-image:radial-gradient(ellipse at center,#000 28%,transparent 76%);pointer-events:none; }
 .glass-offer-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px; }
 body.reference-layout .glass-offer-card {
   display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:445px;
@@ -36,9 +35,9 @@ body.reference-layout .glass-offer-card {
   box-shadow:inset 0 1px 0 #ffffff15,0 20px 65px #0002;
   color:#f2f2f2;transition:transform .35s,border-color .35s,background-color .35s;
 }
-body.reference-layout .glass-offer-card-02 { transform:translateY(-22px);background:linear-gradient(145deg,rgba(245,245,245,.17),rgba(190,190,190,.045) 75%);border-color:#ffffff55; }
+body.reference-layout .glass-offer-card-02 { transform:none; }
 body.reference-layout .glass-offer-card:hover { transform:translateY(-7px);border-color:#ffffff7a;background-color:#ffffff07; }
-body.reference-layout .glass-offer-card-02:hover { transform:translateY(-29px); }
+body.reference-layout .glass-offer-card-02:hover { transform:translateY(-7px); }
 .glass-offer-card:focus-visible { outline:2px solid #f2f2f2;outline-offset:6px; }
 .glass-offer-tag { display:inline-flex;align-items:center;min-height:28px;padding:5px 10px;border:1px solid #ffffff25;border-radius:4px;background:#ffffff0d;font-size:9px;line-height:1.6;letter-spacing:.015em;color:#ddd; }
 .glass-offer-icon { display:block;margin:45px 0 40px;color:#ededed; }
@@ -77,8 +76,7 @@ body.reference-layout .glass-offer-card h3 { font-size:30px;line-height:1.13;fon
  body.reference-layout .glass-offer-card:hover,body.reference-layout .glass-offer-card-02:hover { transform:translateY(-4px); }
  .glass-offer-icon { margin:35px 0 30px; }
  body.reference-layout .glass-offer-card h3 { font-size:31px; }
- .glass-offer-backdrop { top:2%;left:0;width:100%;height:95%;opacity:.3; }
- .glass-expertise-bottom { display:block;margin-top:28px; }
+  .glass-expertise-bottom { display:block;margin-top:28px; }
  .glass-expertise-bottom a { margin-top:15px; }
 }
 @media(max-height:620px) and (min-width:761px) {
@@ -91,7 +89,7 @@ body.reference-layout .glass-offer-card h3 { font-size:30px;line-height:1.13;fon
 @media(prefers-reduced-motion:reduce) {
  body.reference-layout .glass-offer-card { transition:none; }
  body.reference-layout .glass-offer-card:hover { transform:none; }
- body.reference-layout .glass-offer-card-02,body.reference-layout .glass-offer-card-02:hover { transform:translateY(-22px); }
+ body.reference-layout .glass-offer-card-02,body.reference-layout .glass-offer-card-02:hover { transform:none; }
 }
 @media(prefers-reduced-motion:reduce) and (max-width:760px) {
  body.reference-layout .glass-offer-card-02,body.reference-layout .glass-offer-card-02:hover { transform:none; }
@@ -100,4 +98,19 @@ body.studio-refresh.reference-layout .editorial-hero::after {
   -webkit-mask-image:var(--photo-edge-mask);mask-image:var(--photo-edge-mask);
   -webkit-mask-size:100% 100%;mask-size:100% 100%;
   -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+
+/* Final polish: all hero copy bottom-left; only the network headline remains. */
+body.reference-layout .editorial-photo-credit { left:6.5%;right:auto;bottom:24px; }
+body.reference-layout .network-copy { width:46%;max-width:590px; }
+body.studio-refresh.reference-layout .network-interlude h2 { max-width:590px;font-size:clamp(42px,4.3vw,68px);line-height:1.07;letter-spacing:-.055em; }
+@media(max-width:760px) {
+ body.studio-refresh.reference-layout .editorial-hero { align-items:flex-end; }
+ body.reference-layout .editorial-photo-credit { left:7%;right:auto;bottom:22px; }
+ body.reference-layout .network-copy { width:100%;max-width:none; }
+ body.studio-refresh.reference-layout .network-interlude h2 { font-size:36px;max-width:330px;line-height:1.1; }
+}
+@media(max-height:620px) and (min-width:761px) {
+ body.studio-refresh.reference-layout .editorial-hero { padding-bottom:55px; }
+ body.reference-layout .editorial-photo-credit { bottom:15px; }
 }
