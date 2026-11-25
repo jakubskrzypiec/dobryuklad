@@ -39,6 +39,7 @@ jobs:
           node scripts/check-home-journey.mjs
           node scripts/check-portfolio-walk.mjs
           node scripts/check-2d-refresh.mjs
+          node scripts/check-client-materials.mjs
           node scripts/check-entrance-walk.mjs
           node scripts/check-demo-frame-stability.mjs
       - name: Configure Pages

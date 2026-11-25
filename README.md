@@ -1,3 +1,5 @@
+**Materiały studia — 25 listopada 2026:** zachowana zaakceptowana jasna wersja ze spacerem. Dodano dwa zdjęcia grupowe i osiem podpisanych portretów (w tym portret Sandry w sekcji założycielki), zdjęcie zespołu na głównej oraz 13 projektów z 347 unikalnymi wizualizacjami, filtrami i powiększaniem. Cztery identyczne kopie pominięto w galeriach. Folder REALIZACJE był pusty — wizualizacje są opisane jako projekty. [Inwentarz materiałów i źródeł](references/client-materials-20261125.json). Oryginały przeskalowano bez filtrów kolorystycznych, kadry w pełnych galeriach zachowują proporcje.
+
 [Wersja 2D — aktualnie poprawiany projekt](https://jakubskrzypiec.github.io/dobryuklad/wersja-2d/) — osobny podgląd oparty na wersji ze screena.
 
 **Wykończenie wejścia v4:** większe logo z miękką poświatą, „Scroll down”, krótki tekst i sociale w lewym dolnym rogu; kadr przycięty o dolne 76 px bez widocznego watermarku. Łagodniejsze przyspieszanie i hamowanie kamery, dwukrotnie dłuższy odcinek końcowego hero. Przyciski końcowe są przy dolnej krawędzi, w kolorze beżu i grafitu.
@@ -23,7 +25,7 @@ Strona główna studia projektowania wnętrz Sandry Białkowskiej.
 Materiały mapowe zachowane w repozytorium: granice i wybrzeża Natural Earth; wcześniejszy plan `dist/assets/planeta/koszalin-osm.json` — © OpenStreetMap contributors, ODbL. Bieżące wejście nie pobiera planu ulic. Nocny eksperyment pozostaje w `planeta.html`.
 **[Otwórz podgląd strony](https://jakubskrzypiec.github.io/dobryuklad/)**
 
-[Podstrona O nas](https://jakubskrzypiec.github.io/dobryuklad/o-nas.html) — dwa zdjęcia Sandry, trzy zespołowe, osiem portretów i kontakt. Fotografie oraz podpisy portretów czekają na materiały studia.
+[Podstrona O nas](https://jakubskrzypiec.github.io/dobryuklad/o-nas.html) — portret Sandry, dwa zdjęcia grupowe i osiem podpisanych portretów zespołu z materiałów studia.
 
 ## Pliki i publikowanie
 
